@@ -1,0 +1,25 @@
+{
+  "$GMSound":"",
+  "%Name":"Sd_bgm",
+  "audioGroupId":{
+    "name":"audiogroup_default",
+    "path":"audiogroups/audiogroup_default",
+  },
+  "bitDepth":1,
+  "bitRate":128,
+  "compression":0,
+  "conversionMode":0,
+  "duration":282.35294,
+  "name":"Sd_bgm",
+  "parent":{
+    "name":"サウンド",
+    "path":"folders/サウンド.yy",
+  },
+  "preload":false,
+  "resourceType":"GMSound",
+  "resourceVersion":"2.0",
+  "sampleRate":44100,
+  "soundFile":"Sd_bgm.ogg",
+  "type":0,
+  "volume":0.4,
+}
