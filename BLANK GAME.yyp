@@ -39,6 +39,7 @@
     {"id":{"name":"Obj_bullet","path":"objects/Obj_bullet/Obj_bullet.yy",},},
     {"id":{"name":"Obj_enemy","path":"objects/Obj_enemy/Obj_enemy.yy",},},
     {"id":{"name":"Obj_player","path":"objects/Obj_player/Obj_player.yy",},},
+    {"id":{"name":"Obj_spawn","path":"objects/Obj_spawn/Obj_spawn.yy",},},
     {"id":{"name":"Obj_wall","path":"objects/Obj_wall/Obj_wall.yy",},},
     {"id":{"name":"Rm_game","path":"rooms/Rm_game/Rm_game.yy",},},
     {"id":{"name":"Spr_atk","path":"sprites/Spr_atk/Spr_atk.yy",},},
