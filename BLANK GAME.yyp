@@ -35,6 +35,7 @@
   },
   "name":"BLANK GAME",
   "resources":[
+<<<<<<< HEAD
     {"id":{"name":"o_player","path":"objects/o_player/o_player.yy",},},
     {"id":{"name":"o_solid","path":"objects/o_solid/o_solid.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
@@ -44,11 +45,31 @@
     {"id":{"name":"s_player_walk","path":"sprites/s_player_walk/s_player_walk.yy",},},
     {"id":{"name":"s_player","path":"sprites/s_player/s_player.yy",},},
     {"id":{"name":"s_solid","path":"sprites/s_solid/s_solid.yy",},},
+=======
+    {"id":{"name":"Ft_score","path":"fonts/Ft_score/Ft_score.yy",},},
+    {"id":{"name":"Obj_atk","path":"objects/Obj_atk/Obj_atk.yy",},},
+    {"id":{"name":"Obj_bullet","path":"objects/Obj_bullet/Obj_bullet.yy",},},
+    {"id":{"name":"Obj_enemy","path":"objects/Obj_enemy/Obj_enemy.yy",},},
+    {"id":{"name":"Obj_player","path":"objects/Obj_player/Obj_player.yy",},},
+    {"id":{"name":"Obj_spawn","path":"objects/Obj_spawn/Obj_spawn.yy",},},
+    {"id":{"name":"Obj_wall","path":"objects/Obj_wall/Obj_wall.yy",},},
+    {"id":{"name":"Rm_game","path":"rooms/Rm_game/Rm_game.yy",},},
+    {"id":{"name":"Spr_atk","path":"sprites/Spr_atk/Spr_atk.yy",},},
+    {"id":{"name":"Spr_bullet","path":"sprites/Spr_bullet/Spr_bullet.yy",},},
+    {"id":{"name":"Spr_enemy","path":"sprites/Spr_enemy/Spr_enemy.yy",},},
+    {"id":{"name":"Spr_player_dash","path":"sprites/Spr_player_dash/Spr_player_dash.yy",},},
+    {"id":{"name":"Spr_player","path":"sprites/Spr_player/Spr_player.yy",},},
+    {"id":{"name":"Spr_wall","path":"sprites/Spr_wall/Spr_wall.yy",},},
+>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda
   ],
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
+<<<<<<< HEAD
     {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+=======
+    {"roomId":{"name":"Rm_game","path":"rooms/Rm_game/Rm_game.yy",},},
+>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda
   ],
   "templateType":"game",
   "TextureGroups":[

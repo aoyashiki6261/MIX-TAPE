@@ -1,0 +1,28 @@
+{
+  "FolderOrderSettings":[
+    {"name":"Particle Systems","order":15,"path":"folders/Particle Systems.yy",},
+    {"name":"player","order":16,"path":"folders/player.yy",},
+    {"name":"アニメーションカーブ","order":12,"path":"folders/アニメーションカーブ.yy",},
+    {"name":"オブジェクト","order":9,"path":"folders/オブジェクト.yy",},
+    {"name":"サウンド","order":3,"path":"folders/サウンド.yy",},
+    {"name":"シーケンス","order":11,"path":"folders/シーケンス.yy",},
+    {"name":"シェーダー","order":6,"path":"folders/シェーダー.yy",},
+    {"name":"スクリプト","order":5,"path":"folders/スクリプト.yy",},
+    {"name":"スプライト","order":1,"path":"folders/スプライト.yy",},
+    {"name":"タイムライン","order":8,"path":"folders/タイムライン.yy",},
+    {"name":"タイルセット","order":2,"path":"folders/タイルセット.yy",},
+    {"name":"パス","order":4,"path":"folders/パス.yy",},
+    {"name":"フォント","order":7,"path":"folders/フォント.yy",},
+    {"name":"メモ","order":13,"path":"folders/メモ.yy",},
+    {"name":"ルーム","order":10,"path":"folders/ルーム.yy",},
+    {"name":"拡張機能","order":14,"path":"folders/拡張機能.yy",},
+  ],
+  "ResourceOrderSettings":[
+    {"name":"o_player","order":3,"path":"objects/o_player/o_player.yy",},
+    {"name":"o_solid","order":1,"path":"objects/o_solid/o_solid.yy",},
+    {"name":"s_payer_dead","order":6,"path":"sprites/s_payer_dead/s_payer_dead.yy",},
+    {"name":"s_player_idle","order":4,"path":"sprites/s_player_idle/s_player_idle.yy",},
+    {"name":"s_player_walk","order":5,"path":"sprites/s_player_walk/s_player_walk.yy",},
+    {"name":"s_solid","order":1,"path":"sprites/s_solid/s_solid.yy",},
+  ],
+}
