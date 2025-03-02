@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"player_processes",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"player_processes",
+  "parent":{
+    "name":"スクリプト",
+    "path":"folders/スクリプト.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
