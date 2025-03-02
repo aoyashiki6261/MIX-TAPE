@@ -35,10 +35,12 @@
   },
   "name":"BLANK GAME",
   "resources":[
+    {"id":{"name":"o_attack","path":"objects/o_attack/o_attack.yy",},},
     {"id":{"name":"o_player","path":"objects/o_player/o_player.yy",},},
     {"id":{"name":"o_solid","path":"objects/o_solid/o_solid.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"player_processes","path":"scripts/player_processes/player_processes.yy",},},
+    {"id":{"name":"s_attack1","path":"sprites/s_attack1/s_attack1.yy",},},
     {"id":{"name":"s_cursor","path":"sprites/s_cursor/s_cursor.yy",},},
     {"id":{"name":"s_player_dead","path":"sprites/s_player_dead/s_player_dead.yy",},},
     {"id":{"name":"s_player_idle","path":"sprites/s_player_idle/s_player_idle.yy",},},
