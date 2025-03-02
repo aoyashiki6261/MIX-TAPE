@@ -12,22 +12,14 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-<<<<<<<< HEAD:sprites/s_solid/s_solid.yy
     {"$GMSpriteFrame":"","%Name":"55f1a73f-036f-4af8-b5ee-8105fa7ead28","name":"55f1a73f-036f-4af8-b5ee-8105fa7ead28","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-========
-    {"$GMSpriteFrame":"","%Name":"89b52322-9521-4995-80a4-74b5d5ebded9","name":"89b52322-9521-4995-80a4-74b5d5ebded9","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
->>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda:流浪＿テンプレ/sprites/s_solid/s_solid.yy
   ],
   "gridX":0,
   "gridY":0,
   "height":16,
   "HTile":false,
   "layers":[
-<<<<<<<< HEAD:sprites/s_solid/s_solid.yy
     {"$GMImageLayer":"","%Name":"4d90dba6-b69f-40db-bfca-cc98529c5cea","blendMode":0,"displayName":"default","isLocked":false,"name":"4d90dba6-b69f-40db-bfca-cc98529c5cea","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
-========
-    {"$GMImageLayer":"","%Name":"ddebe817-246b-4f3b-8b2e-61766ed3d39e","blendMode":0,"displayName":"default","isLocked":false,"name":"ddebe817-246b-4f3b-8b2e-61766ed3d39e","opacity":100.0,"resourceType":"GMImageLayer","resourceVersion":"2.0","visible":true,},
->>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda:流浪＿テンプレ/sprites/s_solid/s_solid.yy
   ],
   "name":"s_solid",
   "nineSlice":null,
@@ -77,13 +69,8 @@
     "tracks":[
       {"$GMSpriteFramesTrack":"","builtinName":0,"events":[],"inheritsTrackColour":true,"interpolation":1,"isCreationTrack":false,"keyframes":{"$KeyframeStore<SpriteFrameKeyframe>":"","Keyframes":[
             {"$Keyframe<SpriteFrameKeyframe>":"","Channels":{
-<<<<<<<< HEAD:sprites/s_solid/s_solid.yy
                 "0":{"$SpriteFrameKeyframe":"","Id":{"name":"55f1a73f-036f-4af8-b5ee-8105fa7ead28","path":"sprites/s_solid/s_solid.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
               },"Disabled":false,"id":"9c9aaf88-e651-415a-876b-8dfbbb677c8b","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
-========
-                "0":{"$SpriteFrameKeyframe":"","Id":{"name":"89b52322-9521-4995-80a4-74b5d5ebded9","path":"sprites/s_solid/s_solid.yy",},"resourceType":"SpriteFrameKeyframe","resourceVersion":"2.0",},
-              },"Disabled":false,"id":"7d7af105-7243-4064-9f0e-729f9bf44d6b","IsCreationKey":false,"Key":0.0,"Length":1.0,"resourceType":"Keyframe<SpriteFrameKeyframe>","resourceVersion":"2.0","Stretch":false,},
->>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda:流浪＿テンプレ/sprites/s_solid/s_solid.yy
           ],"resourceType":"KeyframeStore<SpriteFrameKeyframe>","resourceVersion":"2.0",},"modifiers":[],"name":"frames","resourceType":"GMSpriteFramesTrack","resourceVersion":"2.0","spriteId":null,"trackColour":0,"tracks":[],"traits":0,},
     ],
     "visibleRange":null,

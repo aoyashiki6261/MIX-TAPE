@@ -35,13 +35,10 @@
   "spriteId":{
     "name":"s_player_idle",
     "path":"sprites/s_player_idle/s_player_idle.yy",
-<<<<<<<< HEAD:objects/o_player/o_player.yy
   },
   "spriteMaskId":{
     "name":"s_player_idle",
     "path":"sprites/s_player_idle/s_player_idle.yy",
-========
->>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda:流浪＿テンプレ/objects/o_player/o_player.yy
   },
   "visible":true,
 }

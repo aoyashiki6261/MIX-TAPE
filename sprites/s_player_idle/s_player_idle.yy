@@ -3,15 +3,9 @@
   "%Name":"s_player_idle",
   "bboxMode":2,
   "bbox_bottom":29,
-<<<<<<<< HEAD:sprites/s_player_idle/s_player_idle.yy
   "bbox_left":13,
   "bbox_right":27,
   "bbox_top":4,
-========
-  "bbox_left":16,
-  "bbox_right":25,
-  "bbox_top":7,
->>>>>>>> 54cf7e7219a02493daf8868509506b7958c1efda:流浪＿テンプレ/sprites/s_player_idle/s_player_idle.yy
   "collisionKind":1,
   "collisionTolerance":0,
   "DynamicTexturePage":false,
