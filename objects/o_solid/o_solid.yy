@@ -1,9 +1,9 @@
 {
   "$GMObject":"",
-  "%Name":"o_solid",
+  "%Name":"O_Solid",
   "eventList":[],
   "managed":true,
-  "name":"o_solid",
+  "name":"O_Solid",
   "overriddenProperties":[],
   "parent":{
     "name":"オブジェクト",
@@ -28,8 +28,8 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"s_solid",
-    "path":"sprites/s_solid/s_solid.yy",
+    "name":"S_Solid",
+    "path":"sprites/S_Solid/S_Solid.yy",
   },
   "spriteMaskId":null,
   "visible":true,

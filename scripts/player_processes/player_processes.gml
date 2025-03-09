@@ -58,10 +58,10 @@ function collision(){
 	
 	//solidにぶつかる前にxとyでできるだけ遠くまで移動
 	repeat(_disx) {
-		if !place_meeting(x + sign(_tx - x), y, o_solid) x += sign(_tx - x);
+		if !place_meeting(x + sign(_tx - x), y, O_Solid) x += sign(_tx - x);
 	}
 	repeat(_disx){
-		if !place_meeting(x, y + sign(_ty - y), o_solid) y += sign(_ty - y);
+		if !place_meeting(x, y + sign(_ty - y), O_Solid) y += sign(_ty - y);
 	
 	}
 
@@ -69,9 +69,9 @@ function collision(){
 function anim(){
 	
 	if hmove != 0 or vmove != 0 {
-		sprite_index = s_player_walk;
+		sprite_index = S_Player_Walk;
 	} else {
-		sprite_index = s_player_idle;
+		sprite_index = S_Player_Idle;
 	}
 	
 }

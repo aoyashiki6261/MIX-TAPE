@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Player_Processes",
+  "%Name":"Player_State_Free",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Player_Processes",
+  "name":"Player_State_Free",
   "parent":{
     "name":"player",
     "path":"folders/player.yy",

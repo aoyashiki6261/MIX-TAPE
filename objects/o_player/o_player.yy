@@ -1,14 +1,15 @@
 {
   "$GMObject":"",
-  "%Name":"o_player",
+  "%Name":"O_Player",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":{"name":"o_solid","path":"objects/o_solid/o_solid.yy",},"eventNum":0,"eventType":4,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":{"name":"O_Solid","path":"objects/O_Solid/O_Solid.yy",},"eventNum":0,"eventType":4,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"o_player",
+  "name":"O_Player",
   "overriddenProperties":[],
   "parent":{
     "name":"player",
@@ -33,12 +34,12 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"s_player_idle",
-    "path":"sprites/s_player_idle/s_player_idle.yy",
+    "name":"S_Player_Idle",
+    "path":"sprites/S_Player_Idle/S_Player_Idle.yy",
   },
   "spriteMaskId":{
-    "name":"s_player_idle",
-    "path":"sprites/s_player_idle/s_player_idle.yy",
+    "name":"S_Player_Idle",
+    "path":"sprites/S_Player_Idle/S_Player_Idle.yy",
   },
   "visible":true,
 }
