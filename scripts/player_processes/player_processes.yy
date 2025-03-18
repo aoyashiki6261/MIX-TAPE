@@ -6,7 +6,7 @@
   "name":"Player_Processes",
   "parent":{
     "name":"player",
-    "path":"folders/player.yy",
+    "path":"folders/Entitiy/player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

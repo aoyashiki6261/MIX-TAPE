@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Player_State_Attack_Slash",
+  "%Name":"Check_For_Player",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Player_State_Attack_Slash",
+  "name":"Check_For_Player",
   "parent":{
     "name":"player",
-    "path":"folders/player.yy",
+    "path":"folders/Entitiy/player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

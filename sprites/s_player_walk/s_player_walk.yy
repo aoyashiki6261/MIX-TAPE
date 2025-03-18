@@ -34,7 +34,7 @@
   "origin":9,
   "parent":{
     "name":"player",
-    "path":"folders/player.yy",
+    "path":"folders/Entitiy/player.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",
