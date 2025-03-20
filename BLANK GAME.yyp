@@ -40,11 +40,12 @@
   "resources":[
     {"id":{"name":"O_Enemy_Par","path":"objects/O_Enemy_Par/O_Enemy_Par.yy",},},
     {"id":{"name":"O_Enemy","path":"objects/O_Enemy/O_Enemy.yy",},},
+    {"id":{"name":"O_Entity_Par","path":"objects/O_Entity_Par/O_Entity_Par.yy",},},
     {"id":{"name":"O_Game","path":"objects/O_Game/O_Game.yy",},},
     {"id":{"name":"O_Player","path":"objects/O_Player/O_Player.yy",},},
     {"id":{"name":"O_Solid","path":"objects/O_Solid/O_Solid.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
-    {"id":{"name":"Check_For_Player","path":"scripts/Check_For_Player/Check_For_Player.yy",},},
+    {"id":{"name":"Enemy_Processes","path":"scripts/Enemy_Processes/Enemy_Processes.yy",},},
     {"id":{"name":"Player_Processes","path":"scripts/Player_Processes/Player_Processes.yy",},},
     {"id":{"name":"S_Attack1","path":"sprites/S_Attack1/S_Attack1.yy",},},
     {"id":{"name":"S_Cursor","path":"sprites/S_Cursor/S_Cursor.yy",},},

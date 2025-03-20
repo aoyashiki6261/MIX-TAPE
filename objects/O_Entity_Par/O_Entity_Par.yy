@@ -1,21 +1,18 @@
 {
   "$GMObject":"",
-  "%Name":"O_Enemy_Par",
+  "%Name":"O_Entity_Par",
   "eventList":[
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":12,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"O_Enemy_Par",
+  "name":"O_Entity_Par",
   "overriddenProperties":[],
   "parent":{
-    "name":"Enemy",
-    "path":"folders/Entitiy/Enemy.yy",
+    "name":"Entitiy",
+    "path":"folders/Entitiy.yy",
   },
-  "parentObjectId":{
-    "name":"O_Entity_Par",
-    "path":"objects/O_Entity_Par/O_Entity_Par.yy",
-  },
+  "parentObjectId":null,
   "persistent":false,
   "physicsAngularDamping":0.1,
   "physicsDensity":0.5,
@@ -33,13 +30,7 @@
   "resourceType":"GMObject",
   "resourceVersion":"2.0",
   "solid":false,
-  "spriteId":{
-    "name":"S_Enemy_Idle",
-    "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
-  },
-  "spriteMaskId":{
-    "name":"S_Enemy_Idle",
-    "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
-  },
+  "spriteId":null,
+  "spriteMaskId":null,
   "visible":true,
 }

@@ -1,3 +1,4 @@
+event_inherited();
 //プレイヤーを追いかけているのか？
 alert = false;
 

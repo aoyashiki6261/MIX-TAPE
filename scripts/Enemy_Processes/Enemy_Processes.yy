@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Check_For_Player",
+  "%Name":"Enemy_Processes",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Check_For_Player",
+  "name":"Enemy_Processes",
   "parent":{
-    "name":"player",
-    "path":"folders/Entitiy/player.yy",
+    "name":"Enemy",
+    "path":"folders/Entitiy/Enemy.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

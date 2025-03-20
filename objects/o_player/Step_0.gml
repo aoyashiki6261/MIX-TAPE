@@ -1,12 +1,12 @@
-var keyAttack = keyboard_check_pressed(ord("H")) || keyboard_check_pressed(ord("Z"));
+switch(state){
+		default:
+		reset_variables();
 
-reset_variables();
+		get_input();
 
-get_input();
+		Calc_movement();
 
-Calc_movement();
-
-anim();
-
-
+		anim();
+	break;
+}
 

@@ -24,7 +24,7 @@
   ],
   "name":"S_Enemy_Attack",
   "nineSlice":null,
-  "origin":4,
+  "origin":9,
   "parent":{
     "name":"Enemy",
     "path":"folders/Entitiy/Enemy.yy",
@@ -80,7 +80,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":32,
-    "yorigin":32,
+    "yorigin":36,
   },
   "swatchColours":null,
   "swfPrecision":0.5,
