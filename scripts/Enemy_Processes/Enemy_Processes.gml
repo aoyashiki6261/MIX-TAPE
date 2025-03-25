@@ -1,9 +1,33 @@
+function calc_entity_movement(){
+	//敵を移動し、ドラッグ(時間の経過とともに敵の速度を遅くすること)を適用
+
+
+	//移動速度(xsp,hsp)の初期化
+	hsp = 0;
+	vsp = 0;
+
+	//動きを適用
+	x += hsp;
+	y += vsp;
+	
+	//遅くする
+	hsp *= global.drag;
+	vsp *= global.drag;
+	
+	check_if_stopped();
+}
+
+function check_if_stopped(){
+	if abs(hsp) < 0.1 hsp = 0;
+	if abs(vsp) < 0.1 vsp = 0;
+}
 
 function check_facing(){
-	//@desc check which way we are moving and set facing
-	
+	//どちらの方向に進んでいるか確認し、向きを設定
+	if knockback_time <= 0{
 	var _facing = sign(x - xp);
 	if _facing != 0 facing = _facing;
+	}
 
 }
 
@@ -37,9 +61,11 @@ function Enemy_anim(){
 switch(state){
 	case states.IDLE:
 		sprite_index = S_Idle;
+		show_hurt();
 	break;
 	case states.MOVE:
 		sprite_index = S_Walk;
+		show_hurt();
 	break;
 	case states.ATTACK:
 		sprite_index = S_Attack;
@@ -48,9 +74,16 @@ switch(state){
 		sprite_index = S_Dead;
 	break;
 	}
-	//update previous position
+	//深度の設定
+	depth = -bbox_bottom;
+	//前の位置を更新
 	xp = x;
 	yp = y;
+}
+
+function show_hurt(){
+	//ノックバック時にダメージを受けたスプライトを表示
 	
-	
+	if knockback_time-- > 0 sprite_index = S_Hurt;
+
 }

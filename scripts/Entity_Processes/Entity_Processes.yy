@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Entity_Processes",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Entity_Processes",
+  "parent":{
+    "name":"Entitiy",
+    "path":"folders/Entitiy.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

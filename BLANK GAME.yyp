@@ -46,6 +46,7 @@
     {"id":{"name":"O_Solid","path":"objects/O_Solid/O_Solid.yy",},},
     {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
     {"id":{"name":"Enemy_Processes","path":"scripts/Enemy_Processes/Enemy_Processes.yy",},},
+    {"id":{"name":"Entity_Processes","path":"scripts/Entity_Processes/Entity_Processes.yy",},},
     {"id":{"name":"Player_Processes","path":"scripts/Player_Processes/Player_Processes.yy",},},
     {"id":{"name":"S_Attack1","path":"sprites/S_Attack1/S_Attack1.yy",},},
     {"id":{"name":"S_Cursor","path":"sprites/S_Cursor/S_Cursor.yy",},},
