@@ -1,23 +1,3 @@
-
-function reset_variables(){
-	left = 0;
-	right = 0;
-	up = 0;
-	down = 0;
-	vmome = 0;
-	hmove = 0;
-	
-}
-
-function get_input(){
-	if keyboard_check(ord("A"))	left	=	1;
-	if keyboard_check(ord("D"))	right	=	1;
-	if keyboard_check(ord("W"))	up		=	1;
-	if keyboard_check(ord("S"))	down	=	1;
-	if keyboard_check_pressed(vk_space) dash = true;
-	
-}
-
 function Calc_movement(){
 	hmove = right - left;
 	vmove = down - up;
@@ -67,16 +47,24 @@ function collision(){
 
 }
 function anim(){
-	
 	if hmove != 0 or vmove != 0 {
 		sprite_index = S_Player_Walk;
 	} else {
 		sprite_index = S_Player_Idle;
 	}
-	
+	if(keyboard_check_pressed(vk_space)){
+	}
+	}
+
+	mouseAttack = false;
+
+	if (mouse_check_button_pressed(mb_left)) {
+    mouseAttack = true;
+	} else {
+    mouseAttack = false;
+	}
+
+	if (mouseAttack) {
+    state = PLAYERSTATE.ATTACK_SLASH;
 }
-
-
-
-
-
+	mouseAttack = false;  // 攻撃状態をリセット

@@ -84,6 +84,6 @@ switch(state){
 function show_hurt(){
 	//ノックバック時にダメージを受けたスプライトを表示
 	
-	if knockback_time-- > 0 sprite_index = S_Hurt;
+	if knockback_time-- > 0 sprite_index = S_Enemy_Hit;
 
 }

@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Player_State_Free",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Player_State_Free",
+  "parent":{
+    "name":"player",
+    "path":"folders/Entitiy/player.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}

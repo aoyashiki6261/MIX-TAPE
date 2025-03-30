@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Player_Processes",
+  "%Name":"ProcessAttack",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Player_Processes",
+  "name":"ProcessAttack",
   "parent":{
     "name":"player",
     "path":"folders/Entitiy/player.yy",
