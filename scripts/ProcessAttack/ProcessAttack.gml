@@ -31,6 +31,4 @@ function ProcessAttack(argument0, argument1) {
 	mask_index = S_Player_Idle;
 
 
-
-
 }

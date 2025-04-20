@@ -7,3 +7,6 @@ hsp = 0;
 vsp = 0;
 //どれくらいの時間Entityはノックバックされているか
 knockback_time = 0;
+
+damage = 1;
+hitConfirm = false;

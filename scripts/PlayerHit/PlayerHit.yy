@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"EnemyState_Hit",
+  "%Name":"PlayerHit",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"EnemyState_Hit",
+  "name":"PlayerHit",
   "parent":{
-    "name":"Enemy",
-    "path":"folders/Entitiy/Enemy.yy",
+    "name":"Entitiy",
+    "path":"folders/Entitiy.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

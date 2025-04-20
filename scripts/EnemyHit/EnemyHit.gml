@@ -1,3 +1,5 @@
+			
+
 function EnemyHit(argument0) {
 	var _damage = argument0;
 	hp -= _damage;
@@ -9,6 +11,9 @@ function EnemyHit(argument0) {
 	}
 	else
 	{
+	show_debug_message("敵が死亡しました");
+	state = states.DEAD;
+	}
+		
 		state = states.DEAD;
 	}
-}

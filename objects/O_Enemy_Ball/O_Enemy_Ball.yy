@@ -1,22 +1,20 @@
 {
   "$GMObject":"",
-  "%Name":"O_Enemy",
+  "%Name":"O_Enemy_Ball",
   "eventList":[
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
     {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":0,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":1,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
-    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":8,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
+    {"$GMEvent":"v1","%Name":"","collisionObjectId":null,"eventNum":0,"eventType":3,"isDnD":false,"name":"","resourceType":"GMEvent","resourceVersion":"2.0",},
   ],
   "managed":true,
-  "name":"O_Enemy",
+  "name":"O_Enemy_Ball",
   "overriddenProperties":[],
   "parent":{
     "name":"Enemy",
     "path":"folders/Entitiy/Enemy.yy",
   },
   "parentObjectId":{
-    "name":"O_Enemy_Par",
-    "path":"objects/O_Enemy_Par/O_Enemy_Par.yy",
+    "name":"O_DamagePlayer",
+    "path":"objects/O_DamagePlayer/O_DamagePlayer.yy",
   },
   "persistent":false,
   "physicsAngularDamping":0.1,
@@ -36,12 +34,9 @@
   "resourceVersion":"2.0",
   "solid":false,
   "spriteId":{
-    "name":"S_Enemy_Idle",
-    "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
+    "name":"S_Enemy_Ball",
+    "path":"sprites/S_Enemy_Ball/S_Enemy_Ball.yy",
   },
-  "spriteMaskId":{
-    "name":"S_Enemy_Idle",
-    "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
-  },
+  "spriteMaskId":null,
   "visible":true,
 }

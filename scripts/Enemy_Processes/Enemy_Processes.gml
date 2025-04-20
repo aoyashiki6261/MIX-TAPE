@@ -1,3 +1,28 @@
+function Enemy_anim(){
+switch(state){
+	case states.IDLE:
+		sprite_index = S_Enemy_Idle;
+		show_hurt();
+	break;
+	case states.MOVE:
+		sprite_index = S_Enemy_Walk;
+		show_hurt();
+	break;
+	case states.ATTACK:
+		sprite_index = S_Enemy_Attack;
+	break
+	case states.DEAD:
+		sprite_index = S_Enemy_Dead;
+	　  image_speed = 0.2;
+	break;
+	}
+	//深度の設定
+	depth = -bbox_bottom;
+	//前の位置を更新
+	xp = x;
+	yp = y;
+}
+
 function calc_entity_movement(){
 	//敵を移動し、ドラッグ(時間の経過とともに敵の速度を遅くすること)を適用
 
@@ -13,6 +38,7 @@ function calc_entity_movement(){
 	//遅くする
 	hsp *= global.drag;
 	vsp *= global.drag;
+	
 	
 	check_if_stopped();
 }
@@ -31,7 +57,20 @@ function check_facing(){
 
 }
 
+function show_hurt(){
+	//ノックバック時にダメージを受けたスプライトを表示
+	
+	if knockback_time-- > 0 sprite_index = S_Enemy_Hit;
+
+}
+
+
 function Check_For_Player(){
+	
+	//移動ステートじゃなければ何もしない
+	if state != states.MOVE {
+		return;
+	}
 	
 	///敵が追いかけ始めるのにプレイヤーに十分近いかをチェック
 	var _dis = distance_to_object(O_Player);
@@ -55,35 +94,4 @@ function Check_For_Player(){
 	if _dis <= attack_dis{
 		path_end();
 	}
-}
-
-function Enemy_anim(){
-switch(state){
-	case states.IDLE:
-		sprite_index = S_Idle;
-		show_hurt();
-	break;
-	case states.MOVE:
-		sprite_index = S_Walk;
-		show_hurt();
-	break;
-	case states.ATTACK:
-		sprite_index = S_Attack;
-	break
-	case states.DEAD:
-		sprite_index = S_Dead;
-	break;
-	}
-	//深度の設定
-	depth = -bbox_bottom;
-	//前の位置を更新
-	xp = x;
-	yp = y;
-}
-
-function show_hurt(){
-	//ノックバック時にダメージを受けたスプライトを表示
-	
-	if knockback_time-- > 0 sprite_index = S_Enemy_Hit;
-
 }

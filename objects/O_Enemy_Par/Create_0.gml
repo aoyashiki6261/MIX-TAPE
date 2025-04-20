@@ -1,4 +1,6 @@
 event_inherited();
+get_damaged_create();
+
 hp_max = 1
 hp = hp_max;
 //プレイヤーを追いかけているのか？

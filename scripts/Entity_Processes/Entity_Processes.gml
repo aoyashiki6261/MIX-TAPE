@@ -1,3 +1,15 @@
+enum states{
+	IDLE,
+	MOVE,
+	HIT,
+	ATTACK,
+	DEAD,
+
+}
+
+global.mp_grid = 0;
+global.drag = 0.93;
+
 // ターゲットにダメージを与え、デッド状態を返す
 function damage_entity( _tid, _sid, _damage, _time){
 	//tid	  = ターゲットID(tid)
@@ -20,7 +32,7 @@ function damage_entity( _tid, _sid, _damage, _time){
 		return _dead;
 	}
 }
-//これを実行しているインスタンスが停止しているかどうかを確認するか?
+//これを実行しているインスタンスが停止しているかどうかを確認
 function is_dead(){
 
 	if state != states.DEAD{
