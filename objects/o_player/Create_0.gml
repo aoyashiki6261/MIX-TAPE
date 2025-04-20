@@ -9,9 +9,12 @@ window_set_cursor(cr_none);
 state = PLAYERSTATE.FREE;
 mouseAttack = false;
 hitByAttack = ds_list_create();
+death_timer = 0;
+deadanimstarted = false;
 
 enum PLAYERSTATE{
 	FREE,
 	ATTACK_SLASH,
-	ATTACK_COMBO
+	ATTACK_COMBO,
+	DEAD
 }

@@ -57,13 +57,5 @@ function anim(){
 	}
 
 
-	if (mouse_check_button_pressed(mb_left)) {
-    mouseAttack = true;
-	} else {
-    mouseAttack = false;
-	}
 
-	if (mouseAttack) {
-    state = PLAYERSTATE.ATTACK_SLASH;
-}
-	mouseAttack = false;  // 攻撃状態をリセット
+	
