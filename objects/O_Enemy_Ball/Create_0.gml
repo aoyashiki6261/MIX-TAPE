@@ -2,7 +2,7 @@
 event_inherited();
 
 dir = 0;
-spd = 2;
+spd = 0.1;
 xspd = 0;
 yspd = 0;
 

@@ -1,140 +1,122 @@
 if (state == states.DEAD) {
-	Enemy_anim(); // 死亡用アニメーション再生
-	hsp = 0;
-	vsp = 0;
-	path_end(); // 移動停止
-
-	death_timer++;
-	if (death_timer > 900) {//敵の死体が消えるまでのカウント(1秒="60")
-		instance_destroy(); // 死体を一定時間後に削除
-	}
-	return; // 以降の処理をスキップ
+    Enemy_anim();
+    hsp = 0;
+    vsp = 0;
+    path_end();
+    death_timer++;
+	
+	// 弾がまだ存在していたら一緒に削除
+    if (instance_exists(self.myball)) {
+    with (self.myball) {
+    instance_destroy();
+        }
+    }
+	
+    if (death_timer > 900) {
+        instance_destroy();
+    }
+    return;
 }
 
-switch(state){
-	case states.IDLE:
-		calc_entity_movement();
-		if (instance_exists(O_Player)) {
-		    Check_For_Player();
-		}
-		if path_index != -1 state = states.MOVE;
-		Enemy_anim();
-	break;
+switch (state) {
+    case states.IDLE:
+    calc_entity_movement();
+    if (instance_exists(O_Player)) {
+        Check_For_Player(); // ← IDLE中にもチェックを行う
+    }
+    if (path_index != -1) state = states.MOVE;
+    Enemy_anim();
+break;
+
 	case states.MOVE:
-		calc_entity_movement();
-		if (instance_exists(O_Player)) {
-		    Check_For_Player();
-		}
-		check_facing();
-		if path_index == -1 state = states.IDLE;
-		Enemy_anim();
+	    calc_entity_movement();
+
+	    if (instance_exists(O_Player)) {
+	        var _dis = distance_to_object(O_Player);
+
+	        // 攻撃可能距離に入ったらステート移行
+	        if (_dis <= attack_dis) {
+	            path_end();
+	            shootTimer = 0;
+	            state = states.ATTACK;
+	            break; 
+	        }
+
+	        // 攻撃距離外ならパスを更新
+	        Check_For_Player();
+	    }
+
+	    check_facing();
+
+	    if (path_index == -1) state = states.IDLE;
+
+	    Enemy_anim();
 	break;
-	case states.DEAD:
-		calc_entity_movement();
-		hsp = 0;// 動きを完全に止める
-		vsp = 0;
-	    path_end();
-		 // タイマー加算して、一定時間後に消える
-		death_timer++;
-		if (death_timer > 90) // 90フレーム = 1.5秒
-		{ 
-		instance_destroy();
+
+    case states.ATTACK:
+        calc_entity_movement();
+        Enemy_anim();
+
+        // プレイヤーの方向取得
+        if (instance_exists(O_Player)) {
+            dir = point_direction(x, y, O_Player.x, O_Player.y);
+        }
+
+        spd = 0;
+        image_index = 0;
+
+        shootTimer++;
+
+        // 弾を作成（1フレーム目のみ）
+        if (shootTimer == 1) {
+            myball = instance_create_depth(x, y, depth, O_Enemy_Ball);
+            if (instance_exists(O_Player)) {
+                myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
+                myball.spd = 4;
+                myball.state = 0; // 最初は待機状態
+            }
+        }
+
+        // 弾を敵の前に保持（windup中）
+        if (shootTimer <= windupTime && instance_exists(self.myball)) {
+	   // dir に基づいた角度方向の補正（例：32ピクセル前に出す）
+		var offset = 16;
+		self.myball.x = x + lengthdir_x(offset, dir);
+		self.myball.y = y + lengthdir_y(offset, dir);
 		}
-	break;
-	case states.ATTACK:
-		calc_entity_movement();
-		Enemy_anim();
-	break;
-			}
-			
-#region
-		
-		//プレイヤーの方向取得
-			if instance_exists(O_Player)
-			{
-				dir = point_direction(x,y,O_Player.x,O_Player.y);
-			}
-		
-		//正しい速度に設定
-			spd = 0;
-			
-		//アニメーションの停止(画像インデックスを手動で設定)
-		image_index = 0;
-		
-		//弾を発射
-		    shootTimer = irandom(cooldownTime);
-			shootTimer++;
-		
-				//弾を作成
-				if shootTimer == 1
-				{
-					state = states.ATTACK; 
-					 var ballInst = instance_create_depth(x, y, depth, O_Enemy_Ball);// ローカル変数として弾を生成（他の敵と干渉しない）
 
+        // windup が終わったら発射
+        if (shootTimer == windupTime && instance_exists(myball)) {
+            myball.state = 1;
+        }
 
-			    // プレイヤーの方向に向かって飛ばす角度を計算して代入
-			    if instance_exists(O_Player)
-			    {
-			         ballInst.dir = point_direction(x, y, O_Player.x, O_Player.y);
-					 ballInst.spd = 1;  // 弾の速度を設定
-					 ballInst.state = 1;  // 弾の状態をに切り替え
-			    }
+        // 攻撃後、追跡に戻る
+        if (shootTimer > windupTime + recoverTime) {
+            state = states.MOVE;
+            shootTimer = 0;
+            myball = noone;
+			break;
+        }
+    
+}
 
-			    // 弾の移動スピード
-			    ballInst.spd = 4;
+// 画面内にいるときだけタイマーを進める
+var _camLeft = camera_get_view_x(view_camera[0]);
+var _camRight = _camLeft + camera_get_view_width(view_camera[0]);
+var _camTop = camera_get_view_y(view_camera[0]);
+var _camBottom = _camTop + camera_get_view_height(view_camera[0]);
 
-			    // この敵の弾として記録（あとで state=1 にするため）
-			    self.myball = ballInst;
-				}
-				
-				//弾を敵の保持
-				if shootTimer <= windupTime && instance_exists(self.myball)
-				{
-					self.myball.x = x + ballXoff * face;
-					self.myball.y = y + ballYoff;
-				}
-				
-				//準備時間が終わったら弾を発射
-				if shootTimer == windupTime && instance_exists(self.myball)
-				{
-					//弾を移動状態に設定。
-					self.myball.state = 1;
-				}
-			
-				//回復してプレイヤーの追跡状態に戻る。
-				if shootTimer > windupTime + recoverTime
-				{
-					//プレイヤーへの追跡再開
-					state = states.MOVE;
-					
-					//タイマーをリセットして再び使用できるようにする
-					shootTimer = 0;
-					
-					// 弾の参照をクリア（次回発射用に）
-					self.myball = noone;
-				}
-				
-#endregion
+if (bbox_right > _camLeft && bbox_left < _camRight && bbox_bottom > _camTop && bbox_top < _camBottom) {
+    if (state != states.ATTACK) shootTimer++;
+}
 
-
-		//射撃ステートに移行
-		var _camLeft = camera_get_view_x(view_camera[0]);
-		var _camRight = _camLeft + camera_get_view_width(view_camera[0]);
-		var _camTop = camera_get_view_y(view_camera[0]);
-		var _camBottom = _camTop + camera_get_view_height(view_camera[0]);
-				
-		//画面に表示されている場合のみタイマーに追加
-		if bbox_right > _camLeft && bbox_left < _camRight && bbox_bottom > _camTop && bbox_top < _camBottom
-		{		
-			shootTimer++;
-		}
-		
-		
-		if shootTimer > cooldownTime
-		{
-			state = states.MOVE;
-			
-			//タイマーをリセットし、射撃状態を再使用できるようにする
-			shootTimer = 0;
-		}
-		
+// クールダウン経過後に攻撃可能な距離なら再攻撃
+if (shootTimer > cooldownTime) {
+    if (state != states.ATTACK) {
+        var _dis = distance_to_object(O_Player);
+        if (_dis <= attack_dis) {
+            state = states.ATTACK;
+            shootTimer = 0;
+        }
+    }
+}
