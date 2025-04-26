@@ -9,8 +9,8 @@ S_Dead = S_Enemy_Dead;
 S_Hit = S_Enemy_Hit;
 
 
-spd = .5;
-chaseSpd = .5;
+spd = 0.01;
+chaseSpd = 0.01;
 dir = 0;
 xspd = 0;
 yspd = 0;
@@ -27,8 +27,8 @@ state = 0;
 	//弾の発射ステータス
 	cooldownTime = 4*60;
 	shootTimer = irandom(cooldownTime);
-	windupTime = 60;
-	recoverTime = 45;
+	windupTime = 90;
+	recoverTime = 120;
 	ballInst = noone;
 	myball = noone; // 敵ごとに発射中の弾を記録する用
 	ballXoff = 5;
