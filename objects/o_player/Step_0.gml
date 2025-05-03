@@ -1,3 +1,6 @@
+// 描画順をプレイヤーが常に一番手前に表示
+depth = -100000;
+
 function reset_variables() {
 	left = 0;
 	right = 0;
@@ -42,17 +45,32 @@ switch(state) {
 			dodge_cooldown = dodge_cooldown_max;
 			invincible = true;
 			
-			// 最終入力方向へ緊急回避
+			// 最終入力方向を取得
 			var dir = point_direction(0, 0, right - left, down - up);
-			x += lengthdir_x(dodge_distance, dir);
-			y += lengthdir_y(dodge_distance, dir);
 
-			sprite_index = S_Player_Dodge;
-			image_index = 0;
-			image_speed = 1;
-			break;
+			// 目標地点を計算
+			var new_x = x + lengthdir_x(dodge_distance, dir);
+			var new_y = y + lengthdir_y(dodge_distance, dir);
+
+			// 目標地点に障害物がなければそのまま移動（優先）
+			if (!place_meeting(new_x, new_y, O_Solid)) {
+			    x = new_x;
+			    y = new_y;
+			} else {
+			    // 壁があるなら、1ドットずつ前進（被らない範囲まで）
+			    var dx = lengthdir_x(1, dir);
+			    var dy = lengthdir_y(1, dir);
+			    for (var i = 0; i < dodge_distance; i++) {
+			        if (!place_meeting(x + dx, y + dy, O_Solid)) {
+			            x += dx;
+			            y += dy;
+			        } else {
+			            break; // 壁に当たるなら停止
+			        }
+			    }
+			}
 		}
-
+		
 		if (mouse_check_button_pressed(mb_left)) {
 			state = PLAYERSTATE.ATTACK_SLASH;
 		}

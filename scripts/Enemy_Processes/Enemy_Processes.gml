@@ -95,7 +95,7 @@ function Check_For_Player(){
 
 	//プレイヤーに到達できるならパスを開始
     if (_found_player) {
-        path_start(path, move_spd, path_action_stop, false);
+        path_start(path, spd, path_action_stop, false);
     }
 }
 	//攻撃範囲なら攻撃ステートへ移行

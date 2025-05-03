@@ -13,7 +13,7 @@ alert_dis = 160;
 attack_dis = 64;
 
 //プレイヤーを追いかける速度
-move_spd = 0.5;
+spd = 0.5;
 
 //パスリソースを作成
 path = path_add();

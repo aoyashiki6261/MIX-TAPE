@@ -1,7 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-//assign sprites
+//スプライトの割り当て
 S_Idle = S_Enemy_Idle;
 S_Walk = S_Enemy_Walk;
 S_Attack = S_Enemy_Attack;
@@ -9,7 +9,7 @@ S_Dead = S_Enemy_Dead;
 S_Hit = S_Enemy_Hit;
 
 
-spd = 0.01;
+spd = 1;
 chaseSpd = 0.01;
 dir = 0;
 xspd = 0;
@@ -35,10 +35,9 @@ state = 0;
 	ballYoff = -8;
 
 
-//スポーン時に mp_grid 内かデバッグ
+// 【デバッグメッセージ】敵が障害物（O_Solid）と重なってスポーンしていないか確認。
 var _cx = x div TS;
 var _cy = y div TS;
-if (!mp_grid_get_cell(global.mp_grid, _cx, _cy)) {
-    show_debug_message("スポーン位置がグリッドに塞がれています: " + string(_cx) + "," + string(_cy));
+if (mp_grid_get_cell(global.mp_grid, _cx, _cy) == false) {
+    show_debug_message("スポーン位置が通れない: " + string(x) + "," + string(y));	
 }
-		

@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"PlayerHit",
   "parent":{
-    "name":"Entitiy",
-    "path":"folders/Entitiy.yy",
+    "name":"player",
+    "path":"folders/Entitiy/player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

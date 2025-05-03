@@ -72,7 +72,6 @@ break;
             myball = instance_create_depth(x, y, depth, O_Enemy_Ball);
             if (instance_exists(O_Player)) {
                 myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
-                myball.spd = 4;
                 myball.state = 0; // 最初は待機状態
             }
         }

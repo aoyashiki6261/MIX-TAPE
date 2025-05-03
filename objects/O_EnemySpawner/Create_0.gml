@@ -1,3 +1,2 @@
-// スポーン間隔（フレーム数）
-spawn_timer = 120;
-
+spawn_interval = 30;// 最初スポーンする敵のカウント
+spawn_timer = spawn_interval;
