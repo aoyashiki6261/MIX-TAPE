@@ -1,7 +1,7 @@
 spawn_timer--;
 
 if (spawn_timer <= 0) {
-    spawn_timer = 360; // スポーン間隔（フレーム） 例：1秒ごとにスポーン（60fps × 1秒）
+    spawn_timer = 480; // スポーン間隔（フレーム） 例：1秒ごとにスポーン（60fps × 1秒）
 
     // スポナー一覧を作成
     var spawner_list = array_create(0);

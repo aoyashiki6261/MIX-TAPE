@@ -10,7 +10,7 @@ alert = false;
 alert_dis = 160;
 
 //プレイヤーから停止する距離を設定
-attack_dis = 64;
+attack_dis = 65;
 
 //プレイヤーを追いかける速度
 spd = 0.5;

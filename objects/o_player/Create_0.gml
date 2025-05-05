@@ -17,11 +17,11 @@ deadanimstarted = false;
 
 //緊急回避関連
 dodge_duration = 5;           // 無敵＋移動が続くフレーム数
-dodge_cooldown_max = 15;        // クールダウンの長さ（60 = 1秒）
+dodge_cooldown_max = 14;        // クールダウンの長さ（60 = 1秒）
 dodge_cooldown = 0;             // カウントダウン管理用
 dodge_timer = 0;                // 残り回避フレーム
 invincible = false;            // 無敵状態かどうか
-dodge_distance = sprite_width; // プレイヤーの幅分移動
+dodge_distance = 40; // プレイヤーの幅分移動
 dash = false;
 
 facing_dir = 0;                 // 向き
