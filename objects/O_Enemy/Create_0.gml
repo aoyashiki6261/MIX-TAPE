@@ -9,7 +9,7 @@ S_Dead = S_Enemy_Dead;
 S_Hit = S_Enemy_Hit;
 
 
-spd = 0.3;
+spd = 0.31;
 dir = 0;
 xspd = 0;
 yspd = 0;
