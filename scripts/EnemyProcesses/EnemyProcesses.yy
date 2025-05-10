@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"ProcessAttack",
+  "%Name":"EnemyProcesses",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"ProcessAttack",
+  "name":"EnemyProcesses",
   "parent":{
-    "name":"player",
-    "path":"folders/Entitiy/player.yy",
+    "name":"Enemy",
+    "path":"folders/Entitiy/Enemy.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

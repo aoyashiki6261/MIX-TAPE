@@ -8,8 +8,8 @@
   "name":"O_DamagePlayer",
   "overriddenProperties":[],
   "parent":{
-    "name":"Entitiy",
-    "path":"folders/Entitiy.yy",
+    "name":"player",
+    "path":"folders/Entitiy/player.yy",
   },
   "parentObjectId":{
     "name":"O_DamageParent",
