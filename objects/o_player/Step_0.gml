@@ -17,6 +17,24 @@ function get_input() {
 	if keyboard_check(ord("W"))	up = 1;
 	if keyboard_check(ord("S"))	down = 1;
 	if keyboard_check_pressed(vk_space) dash = true;
+
+	// ゲームパッド対応（左スティックで方向、×で回避）
+	var gp = 0;
+	if (gamepad_is_connected(gp)) {
+		var stick_x = gamepad_axis_value(gp, gp_axislh);
+		var stick_y = gamepad_axis_value(gp, gp_axislv);
+		var threshold = 0.5;
+
+		if (stick_x < -threshold) left = 1;
+		if (stick_x > threshold) right = 1;
+		if (stick_y < -threshold) up = 1;
+		if (stick_y > threshold) down = 1;
+
+		// ×ボタンで回避（gp_face2）
+		if (gamepad_button_check_pressed(gp, gp_face2)) {
+			dash = true;
+		}
+	}
 }
 
 // クールダウン減算
@@ -32,46 +50,67 @@ switch(state) {
 
 		// 回避条件：スペース押下＋クールダウン完了
 		if (dash && dodge_cooldown <= 0) {
-			state = PLAYERSTATE.DODGE;
 
-			// スプライトをS_Player_Dodgeに切り替えて再生（最初にやる）
-			sprite_index = S_Player_Dodge;
-			image_index = 0;
-			image_speed = 0.5;
+			// 入力された方向を計算（未入力時は回避しない）
+			var dir_x = right - left;
+			var dir_y = down - up;
 
-			// 状態変更＆無敵化
-			state = PLAYERSTATE.DODGE;
-			dodge_timer = dodge_duration;
-			dodge_cooldown = dodge_cooldown_max;
-			invincible = true;
-			
-			// 最終入力方向を取得
-			var dir = point_direction(0, 0, right - left, down - up);
+			if (dir_x != 0 || dir_y != 0) { // ← 入力があるときだけ回避
+				state = PLAYERSTATE.DODGE;
 
-			// 目標地点を計算
-			var new_x = x + lengthdir_x(dodge_distance, dir);
-			var new_y = y + lengthdir_y(dodge_distance, dir);
+				// スプライトをS_Player_Dodgeに切り替えて再生（最初にやる）
+				sprite_index = S_Player_Dodge;
+				image_index = 0;
+				image_speed = 0.5;
 
-			// 目標地点に障害物がなければそのまま移動（優先）
-			if (!place_meeting(new_x, new_y, O_Solid)) {
-			    x = new_x;
-			    y = new_y;
-			} else {
-			    // 壁があるなら、1ドットずつ前進（被らない範囲まで）
-			    var dx = lengthdir_x(1, dir);
-			    var dy = lengthdir_y(1, dir);
-			    for (var i = 0; i < dodge_distance; i++) {
-			        if (!place_meeting(x + dx, y + dy, O_Solid)) {
-			            x += dx;
-			            y += dy;
-			        } else {
-			            break; // 壁に当たるなら停止
-			        }
-			    }
+				// 状態変更＆無敵化
+				state = PLAYERSTATE.DODGE;
+				dodge_timer = dodge_duration;
+				dodge_cooldown = dodge_cooldown_max;
+				invincible = true;
+
+				// 最終入力方向を取得
+				var dir = point_direction(0, 0, dir_x, dir_y);
+
+				// 目標地点を計算
+				var new_x = x + lengthdir_x(dodge_distance, dir);
+				var new_y = y + lengthdir_y(dodge_distance, dir);
+
+				// 目標地点に障害物がなければそのまま移動（優先）
+				if (!place_meeting(new_x, new_y, O_Solid)) {
+					x = new_x;
+					y = new_y;
+				} else {
+					// 壁があるなら、1ドット未満のステップで前進（被らない範囲まで）
+					var dx = lengthdir_x(1, dir);
+					var dy = lengthdir_y(1, dir);
+					var temp_x = x;
+					var temp_y = y;
+
+					// 浮動小数点誤差の回避（上方向などで判定が通らないのを防ぐ）
+					var fudge = 0.1;
+					if (!place_meeting(temp_x + dx * fudge, temp_y + dy * fudge, O_Solid)) {
+						for (var i = 0; i < dodge_distance; i++) {
+							var next_x = temp_x + dx;
+							var next_y = temp_y + dy;
+
+							if (!place_meeting(next_x, next_y, O_Solid)) {
+								temp_x = next_x;
+								temp_y = next_y;
+							} else {
+								break; // 壁に当たるなら停止
+							}
+						}
+					}
+
+					x = temp_x;
+					y = temp_y;
+				}
 			}
 		}
 		
-		if (mouse_check_button_pressed(mb_left)) {
+		// 攻撃入力処理（□ボタンも対応）
+		if (mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face1)) {
 			state = PLAYERSTATE.ATTACK_SLASH;
 		}
 
@@ -80,16 +119,16 @@ switch(state) {
 	break;
 
 	case PLAYERSTATE.DODGE:
-    visible = true;
-    image_alpha = 1;
-    sprite_index = S_Player_Dodge;
-    image_speed = 1;
+		visible = true;
+		image_alpha = 1;
+		sprite_index = S_Player_Dodge;
+		image_speed = 1;
 
-    dodge_timer--;
-    if (dodge_timer <= 0) {
-        invincible = false;
-        state = PLAYERSTATE.FREE;
-	    }
+		dodge_timer--;
+		if (dodge_timer <= 0) {
+			invincible = false;
+			state = PLAYERSTATE.FREE;
+		}
 	break;
 
 	case PLAYERSTATE.ATTACK_SLASH:
@@ -119,7 +158,7 @@ switch(state) {
 }
 
 // 攻撃入力処理（緊急回避中でも受付）
-mouseAttack = mouse_check_button_pressed(mb_left);
+mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face1);
 
 if (mouseAttack && state != PLAYERSTATE.DEAD) {
 	state = PLAYERSTATE.ATTACK_SLASH;
