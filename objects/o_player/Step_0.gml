@@ -30,7 +30,7 @@ function get_input() {
 		if (stick_y < -threshold) up = 1;
 		if (stick_y > threshold) down = 1;
 
-		// ×ボタンで回避（gp_face2）
+		// ×ボタンで回避
 		if (gamepad_button_check_pressed(gp, gp_face2)) {
 			dash = true;
 		}
@@ -81,25 +81,21 @@ switch(state) {
 					x = new_x;
 					y = new_y;
 				} else {
-					// 壁があるなら、1ドット未満のステップで前進（被らない範囲まで）
+					// 壁があるなら、1ピクセルずつ前進（被らない範囲まで）
 					var dx = lengthdir_x(1, dir);
 					var dy = lengthdir_y(1, dir);
 					var temp_x = x;
 					var temp_y = y;
 
-					// 浮動小数点誤差の回避（上方向などで判定が通らないのを防ぐ）
-					var fudge = 0.1;
-					if (!place_meeting(temp_x + dx * fudge, temp_y + dy * fudge, O_Solid)) {
-						for (var i = 0; i < dodge_distance; i++) {
-							var next_x = temp_x + dx;
-							var next_y = temp_y + dy;
+					for (var i = 0; i < dodge_distance; i++) {
+						var next_x = temp_x + dx;
+						var next_y = temp_y + dy;
 
-							if (!place_meeting(next_x, next_y, O_Solid)) {
-								temp_x = next_x;
-								temp_y = next_y;
-							} else {
-								break; // 壁に当たるなら停止
-							}
+						if (!place_meeting(next_x, next_y, O_Solid)) {
+							temp_x = next_x;
+							temp_y = next_y;
+						} else {
+							break; // 壁に当たるなら停止
 						}
 					}
 
@@ -107,11 +103,6 @@ switch(state) {
 					y = temp_y;
 				}
 			}
-		}
-		
-		// 攻撃入力処理（□ボタンも対応）
-		if (mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face1)) {
-			state = PLAYERSTATE.ATTACK_SLASH;
 		}
 
 		Calc_movement();
@@ -158,7 +149,8 @@ switch(state) {
 }
 
 // 攻撃入力処理（緊急回避中でも受付）
-mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face1);
+// □ボタンで攻撃
+mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face4);
 
 if (mouseAttack && state != PLAYERSTATE.DEAD) {
 	state = PLAYERSTATE.ATTACK_SLASH;
