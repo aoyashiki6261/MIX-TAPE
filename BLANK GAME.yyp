@@ -29,6 +29,7 @@
   "resources":[
     {"id":{"name":"O_DamageParent","path":"objects/O_DamageParent/O_DamageParent.yy",},},
     {"id":{"name":"O_DamagePlayer","path":"objects/O_DamagePlayer/O_DamagePlayer.yy",},},
+    {"id":{"name":"O_DebugController","path":"objects/O_DebugController/O_DebugController.yy",},},
     {"id":{"name":"O_Enemy_Ball","path":"objects/O_Enemy_Ball/O_Enemy_Ball.yy",},},
     {"id":{"name":"O_Enemy_Par","path":"objects/O_Enemy_Par/O_Enemy_Par.yy",},},
     {"id":{"name":"O_Enemy","path":"objects/O_Enemy/O_Enemy.yy",},},
@@ -37,7 +38,8 @@
     {"id":{"name":"O_Game","path":"objects/O_Game/O_Game.yy",},},
     {"id":{"name":"O_Player","path":"objects/O_Player/O_Player.yy",},},
     {"id":{"name":"O_Solid","path":"objects/O_Solid/O_Solid.yy",},},
-    {"id":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"id":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
+    {"id":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
     {"id":{"name":"animation_end","path":"scripts/animation_end/animation_end.yy",},},
     {"id":{"name":"EnemyHit","path":"scripts/EnemyHit/EnemyHit.yy",},},
     {"id":{"name":"EnemyProcesses","path":"scripts/EnemyProcesses/EnemyProcesses.yy",},},
@@ -66,7 +68,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Room1","path":"rooms/Room1/Room1.yy",},},
+    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
+    {"roomId":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

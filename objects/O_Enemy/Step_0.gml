@@ -1,57 +1,81 @@
+// AI無効時は移動と攻撃をスキップする（デバッグルーム限定）
+if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled) {
+    // パス移動停止（この1行が重要）
+    path_end();
+
+    // その場に静止（移動停止）
+    hsp = 0;
+    vsp = 0;
+
+    // アニメーション停止
+    image_speed = 0;
+
+    // 静止状態のスプライトに設定（必要に応じて変更可）
+    sprite_index = S_Enemy_Idle;
+
+    // 被弾演出などは反映
+    Enemy_anim();
+
+    // 残りの処理をスキップ
+    return;
+}
+
+// 死亡時の処理
 if (state == states.DEAD) {
     Enemy_anim();
     hsp = 0;
     vsp = 0;
     path_end();
     death_timer++;
-	
-	// 弾がまだ存在していたら一緒に削除
+
+    // 弾がまだ存在していたら一緒に削除
     if (instance_exists(self.myball)) {
-    with (self.myball) {
-    instance_destroy();
+        with (self.myball) {
+            instance_destroy();
         }
     }
-	
+
     if (death_timer > 900) {
         instance_destroy();
     }
     return;
 }
 
+// 各ステートのAI処理（IDLE / MOVE / ATTACK）
 switch (state) {
     case states.IDLE:
-    calc_entity_movement();
-    if (instance_exists(O_Player)) {
-        Check_For_Player(); // ← IDLE中にもチェックを行う
-    }
-    if (path_index != -1) state = states.MOVE;
-    Enemy_anim();
-break;
+        calc_entity_movement();
+        if (instance_exists(O_Player)) {
+            Check_For_Player(); // IDLE中にもプレイヤーの位置をチェック
+        }
+        if (path_index != -1) state = states.MOVE;
+        Enemy_anim();
+    break;
 
-	case states.MOVE:
-	    calc_entity_movement();
+    case states.MOVE:
+        calc_entity_movement();
 
-	    if (instance_exists(O_Player)) {
-	        var _dis = distance_to_object(O_Player);
+        if (instance_exists(O_Player)) {
+            var _dis = distance_to_object(O_Player);
 
-	        // 攻撃可能距離に入ったらステート移行
-	        if (_dis <= attack_dis) {
-	            path_end();
-	            shootTimer = 0;
-	            state = states.ATTACK;
-	            break; 
-	        }
+            // 攻撃可能距離に入ったらステート移行
+            if (_dis <= attack_dis) {
+                path_end();
+                shootTimer = 0;
+                state = states.ATTACK;
+                break;
+            }
 
-	        // 攻撃距離外ならパスを更新
-	        Check_For_Player();
-	    }
+            // 攻撃距離外ならパスを更新
+            Check_For_Player();
+        }
 
-	    check_facing();
+        check_facing();
 
-	    if (path_index == -1) state = states.IDLE;
+        if (path_index == -1) state = states.IDLE;
 
-	    Enemy_anim();
-	break;
+        Enemy_anim();
+    break;
 
     case states.ATTACK:
         calc_entity_movement();
@@ -78,11 +102,10 @@ break;
 
         // 弾を敵の前に保持（windup中）
         if (shootTimer <= windupTime && instance_exists(self.myball)) {
-	   // dir に基づいた角度方向の補正（例：32ピクセル前に出す）
-		var offset = 16;
-		self.myball.x = x + lengthdir_x(offset, dir);
-		self.myball.y = y + lengthdir_y(offset, dir);
-		}
+            var offset = 16; // 弾の前方オフセット
+            self.myball.x = x + lengthdir_x(offset, dir);
+            self.myball.y = y + lengthdir_y(offset, dir);
+        }
 
         // windup が終わったら発射
         if (shootTimer == windupTime && instance_exists(myball)) {
@@ -94,12 +117,12 @@ break;
             state = states.MOVE;
             shootTimer = 0;
             myball = noone;
-			break;
+            break;
         }
-    
+    break;
 }
 
-// 画面内にいるときだけタイマーを進める
+// 画面内にいるときだけタイマーを進める（ATTACK以外）
 var _camLeft = camera_get_view_x(view_camera[0]);
 var _camRight = _camLeft + camera_get_view_width(view_camera[0]);
 var _camTop = camera_get_view_y(view_camera[0]);
