@@ -1,45 +1,38 @@
-// AI無効時は移動と攻撃をスキップする（デバッグルーム限定）
-if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled) {
-    // パス移動停止（この1行が重要）
+// AI無効時は移動と攻撃をスキップする（デバッグルーム限定、ただし死亡している敵は除外）
+if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state != states.DEAD) {
     path_end();
-
-    // その場に静止（移動停止）
     hsp = 0;
     vsp = 0;
-
-    // アニメーション停止
     image_speed = 0;
-
-    // 静止状態のスプライトに設定（必要に応じて変更可）
-    sprite_index = S_Enemy_Idle;
-
-    // 被弾演出などは反映
+    sprite_index = S_Enemy_Idle; // 通常待機スプライト
     Enemy_anim();
-
-    // 残りの処理をスキップ
     return;
 }
 
-// 死亡時の処理
-if (state == states.DEAD) {
-    Enemy_anim();
+// AI無効時かつ死亡状態のときは、死亡アニメのみ反映して停止
+if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state == states.DEAD) {
+    path_end();
     hsp = 0;
     vsp = 0;
-    path_end();
+    image_speed = 0.2;              // 死亡アニメ進行（0なら停止）
+    sprite_index = S_Enemy_Dead;    // 死亡スプライト
     death_timer++;
 
-    // 弾がまだ存在していたら一緒に削除
+    // 弾がまだ存在していたら削除
     if (instance_exists(self.myball)) {
         with (self.myball) {
             instance_destroy();
         }
     }
 
+    // 死亡タイマーが過ぎたら削除
     if (death_timer > 900) {
         instance_destroy();
     }
-    return;
+
+    return; // 他の処理をスキップ
 }
+
 
 // 各ステートのAI処理（IDLE / MOVE / ATTACK）
 switch (state) {
