@@ -155,4 +155,5 @@ mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_presse
 if (mouseAttack && state != PLAYERSTATE.DEAD) {
 	state = PLAYERSTATE.ATTACK_SLASH;
 }
+
 mouseAttack = false;
