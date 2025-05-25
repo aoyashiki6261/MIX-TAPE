@@ -31,7 +31,7 @@ function get_input() {
 		if (stick_y > threshold) down = 1;
 
 		// ×ボタンで回避
-		if (gamepad_button_check_pressed(gp, gp_face3)) {
+		if (gamepad_button_check_pressed(gp, gp_face1)) {
 			dash = true;
 		}
 	}
@@ -150,7 +150,7 @@ switch(state) {
 
 // 攻撃入力処理（緊急回避中でも受付）
 // □ボタンで攻撃
-mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face1);
+mouseAttack = mouse_check_button_pressed(mb_left) || gamepad_button_check_pressed(0, gp_face3);
 
 if (mouseAttack && state != PLAYERSTATE.DEAD) {
 	state = PLAYERSTATE.ATTACK_SLASH;
