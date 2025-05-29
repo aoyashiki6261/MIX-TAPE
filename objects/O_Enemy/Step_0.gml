@@ -9,13 +9,20 @@ if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state != stat
     return;
 }
 
-// AI無効時かつ死亡状態のときは、死亡アニメのみ反映して停止
-if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state == states.DEAD) {
+// --- 死亡処理は全ルームで共通処理として分離 ---
+if (state == states.DEAD) {
+    // 移動やAI処理停止
     path_end();
     hsp = 0;
     vsp = 0;
-    image_speed = 0.2;              // 死亡アニメ進行（0なら停止）
-    sprite_index = S_Enemy_Dead;    // 死亡スプライト
+
+    // 死亡スプライト・アニメーションをセット（最初のみ）
+    if (sprite_index != S_Enemy_Dead) {
+        sprite_index = S_Enemy_Dead;
+        image_index = 0;
+        image_speed = 0.2; // 死亡アニメ進行速度（止めないこと）
+    }
+
     death_timer++;
 
     // 弾がまだ存在していたら削除
@@ -25,7 +32,7 @@ if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state == stat
         }
     }
 
-    // 死亡タイマーが過ぎたら削除
+    // 一定時間後に敵を削除（消滅処理）
     if (death_timer > 900) {
         instance_destroy();
     }
@@ -33,11 +40,10 @@ if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state == stat
     return; // 他の処理をスキップ
 }
 
-
 // 各ステートのAI処理（IDLE / MOVE / ATTACK）
 switch (state) {
     case states.IDLE:
-        calc_entity_movement();
+        // calc_entity_movement() は削除
         if (instance_exists(O_Player)) {
             Check_For_Player(); // IDLE中にもプレイヤーの位置をチェック
         }
@@ -45,33 +51,38 @@ switch (state) {
         Enemy_anim();
     break;
 
-    case states.MOVE:
-        calc_entity_movement();
+case states.MOVE:
+	spd = 0.31;
 
-        if (instance_exists(O_Player)) {
-            var _dis = distance_to_object(O_Player);
 
-            // 攻撃可能距離に入ったらステート移行
-            if (_dis <= attack_dis) {
-                path_end();
-                shootTimer = 0;
-                state = states.ATTACK;
-                break;
-            }
+    if (instance_exists(O_Player)) {
+        var _dis = distance_to_object(O_Player);
 
-            // 攻撃距離外ならパスを更新
-            Check_For_Player();
+        // 攻撃可能距離に入ったらステート移行
+        if (_dis <= attack_dis) {
+            path_end();
+            shootTimer = 0;
+            state = states.ATTACK;
+            break;
         }
 
-        check_facing();
+        // 攻撃距離外ならパスを更新
+        Check_For_Player();
 
-        if (path_index == -1) state = states.IDLE;
+    }
 
-        Enemy_anim();
-    break;
+    check_facing();
+    Enemy_anim();
+
+    // パスがなければIDLEに戻す（Check_For_Player の後に判断）
+    if (path_index == -1) {
+        state = states.IDLE;
+    }
+
+break;
 
     case states.ATTACK:
-        calc_entity_movement();
+        // calc_entity_movement() は削除
         Enemy_anim();
 
         // プレイヤーの方向取得
@@ -110,7 +121,15 @@ switch (state) {
             state = states.MOVE;
             shootTimer = 0;
             myball = noone;
-            break;
+
+	   // パスをすぐ再計算させるためにタイマーをリセット
+			calc_path_timer = 0;
+
+	   // 追跡用のパスを再設定
+			Check_For_Player();
+
+    break;
+
         }
     break;
 }

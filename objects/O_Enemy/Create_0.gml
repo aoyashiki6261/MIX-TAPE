@@ -21,6 +21,9 @@ calc_path_timer = 0; // 最初からプレイヤーをチェックさせるた�
 calc_path_delay = 15; // 何フレームに1回パスを再計算するか(プレイヤーに向かってくるためのチェックを何フレームの頻度で行うか)
 path = path_add();
 
+path_speed = spd;
+path_position = 0;
+
 //ステートマシン
 state = 0;
 	//弾の発射ステータス
@@ -34,9 +37,5 @@ state = 0;
 	ballYoff = -8;
 
 
-// 【デバッグメッセージ】敵が障害物（O_Solid）と重なってスポーンしていないか確認。
-var _cx = x div TS;
-var _cy = y div TS;
-if (mp_grid_get_cell(global.mp_grid, _cx, _cy) == false) {
-    show_debug_message("スポーン位置が通れない: " + string(x) + "," + string(y));	
-}
+
+

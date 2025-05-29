@@ -50,7 +50,8 @@ function Enemy_anim(){
 	yp = y;
 }
 
-function calc_entity_movement(){
+function calc_entity_movement() {
+    if (path_index == -1) {
 	// 敵を移動し、ドラッグ（時間の経過とともに敵の速度を遅くすること）を適用
 
 	// 移動速度（xsp, hsp）の初期化
@@ -64,7 +65,7 @@ function calc_entity_movement(){
 	// 遅くする
 	hsp *= global.drag;
 	vsp *= global.drag;
-
+	}
 	check_if_stopped();
 }
 
@@ -88,42 +89,28 @@ function show_hurt(){
 }
 
 function Check_For_Player(){
-	// 移動ステートじゃなければ何もしない
-	if (state != states.MOVE && state != states.IDLE) {
-		return;
-	}
 
-	// 敵が追いかけ始めるのにプレイヤーに十分近いかをチェック
-	var _dis = 99999; // デフォルトの大きい距離
+	var _dis = 99999;
 	if (instance_exists(O_Player)) {
 		_dis = distance_to_object(O_Player);
 	}
 
-	// パスを計算する必要があるかを確認
 	if calc_path_timer-- <= 0 {
-		// タイマーをリセット
 		calc_path_timer = calc_path_delay;
 
-		// プレイヤーへのパスを作成できるか？
 		if (instance_exists(O_Player)) {
 			var _type = (x == xp and y == yp) ? 0 : 1;
 			var _found_player = mp_grid_path(global.mp_grid, path, x, y, O_Player.x, O_Player.y, _type);
 
-			// 成功/失敗をデバッグ出力
-			show_debug_message("プレイヤーの方向を正しく取得できてます(パスを正常に取得): " + string(_found_player));
-
-			// プレイヤーに到達できるならパスを開始
 			if (_found_player) {
 				path_start(path, spd, path_action_stop, false);
 			}
 		}
 
-		// 攻撃範囲なら攻撃ステートへ移行
 		if (_dis <= attack_dis) {
 			path_end();
 			state = states.ATTACK;
 		}
 	}
 }
-
 
