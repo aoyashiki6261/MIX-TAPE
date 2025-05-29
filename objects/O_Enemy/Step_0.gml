@@ -1,3 +1,47 @@
+// --- 実行制御: 一時停止モード（フレーム送り対応） ---
+if (variable_global_exists("gamePaused") && global.gamePaused) {
+    // アニメーション停止（image_speedを止める）
+    image_speed = 0;
+
+    if (variable_global_exists("stepAdvance") && global.stepAdvance) {
+        global.stepAdvance = false; // 1フレームだけ進める
+    } else {
+        return; // 一時停止中は以降の処理をスキップ
+    }
+} else {
+    // 通常時はアニメーションを有効化（必要に応じて調整）
+    image_speed = 1;
+}
+
+// デバッグモード: Oキーで方向固定の弾を撃つ（上・左・下・右・OFF切替）
+// global.enemyFireDirection: 0=上, 1=左, 2=下, 3=右, 4=OFF
+if (state != states.DEAD && variable_global_exists("enemyFireDirection") && global.enemyFireDirection != 4) {
+    // 強制停止（移動＆パスキャンセル）
+    path_end();
+    hsp = 0;
+    vsp = 0;
+    spd = 0;
+
+    // 弾を一定間隔で撃つ（例：30フレームごと）
+    if (shootTimer % 30 == 0) {
+        var fire_dir;
+
+        switch (global.enemyFireDirection) {
+            case 0: fire_dir = 90; break;   // 上
+            case 1: fire_dir = 180; break;  // 左
+            case 2: fire_dir = 270; break;  // 下
+            case 3: fire_dir = 0; break;    // 右
+        }
+
+        var b = instance_create_depth(x, y, depth, O_Enemy_Ball);
+        b.dir = fire_dir;
+        b.state = 1; // 発射状態
+    }
+
+    shootTimer++; // デバッグ用カウンタ進行
+    return; // 通常のAI処理はスキップ
+}
+
 // AI無効時は移動と攻撃をスキップする（デバッグルーム限定、ただし死亡している敵は除外）
 if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state != states.DEAD) {
     path_end();

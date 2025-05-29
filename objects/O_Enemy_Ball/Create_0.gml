@@ -14,3 +14,4 @@ state =0;
 //クリーンアップ
 destroy = false;
 playerDestroy = true;
+

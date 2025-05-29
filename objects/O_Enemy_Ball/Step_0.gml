@@ -1,3 +1,15 @@
+// --- 実行制御: 一時停止モード（フレーム送り対応） ---
+if (variable_global_exists("gamePaused") && global.gamePaused) {
+    image_speed = 0; // アニメーション停止
+    if (variable_global_exists("stepAdvance") && global.stepAdvance) {
+        global.stepAdvance = false; // 1フレームだけ進行
+    } else {
+        return; // 一時停止中は処理スキップ
+    }
+} else {
+    image_speed = 1; // 通常時はアニメーション再生
+}
+
 // ステートマシーン
 switch (state) {
 
