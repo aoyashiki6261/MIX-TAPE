@@ -18,16 +18,35 @@ if (keyboard_check_pressed(ord("O"))) {
     global.enemyFireDirection = (global.enemyFireDirection + 1) mod 5;
 
     var dir_names = ["上", "左", "下", "右", "OFF"];
-    show_debug_message("🔁 敵弾の発射方向を変更: " + dir_names[global.enemyFireDirection]);
+    show_debug_message("敵弾の発射方向を変更: " + dir_names[global.enemyFireDirection]);
 }
 
-// Tキー：時間の一時停止/再開
+// Tキーで一時停止のON/OFF切替
 if (keyboard_check_pressed(ord("T"))) {
     global.gamePaused = !global.gamePaused;
+    global.stepAdvance = false; // OFF直後のYキーを無効にする
     show_debug_message("ゲーム " + (global.gamePaused ? "一時停止" : "再開"));
 }
 
-// Yキー：停止中のみ、1フレームだけ進める
-if (global.gamePaused && keyboard_check_pressed(ord("Y"))) {
-    global.advanceOneFrame = true;
+// Yキー短押し or 長押しで1フレーム進行（停止中のみ）
+if (global.gamePaused) {
+    if (keyboard_check_pressed(ord("Y"))) {
+        // 短押し：押した瞬間に1フレーム進行
+        global.stepAdvance = true;
+        global.stepAdvanceTimer = 0;
+        show_debug_message("▶ 1フレーム進行（stepAdvance = true）");
+    } else if (keyboard_check(ord("Y"))) {
+        // 長押し：押しっぱなしで間隔付き進行
+        global.stepAdvanceTimer++;
+        if (global.stepAdvanceTimer > 15 && global.stepAdvanceTimer mod 4 == 0) {
+            global.stepAdvance = true;
+            show_debug_message("▶ 1フレーム進行（stepAdvance = true）");
+        } else {
+            global.stepAdvance = false;
+        }
+    } else {
+        // Yキーが離されたとき
+        global.stepAdvanceTimer = 0;
+        global.stepAdvance = false;
+    }
 }

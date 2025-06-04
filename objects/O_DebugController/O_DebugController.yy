@@ -9,8 +9,8 @@
   "name":"O_DebugController",
   "overriddenProperties":[],
   "parent":{
-    "name":"Entitiy",
-    "path":"folders/Entitiy.yy",
+    "name":"Control",
+    "path":"folders/Control.yy",
   },
   "parentObjectId":null,
   "persistent":false,

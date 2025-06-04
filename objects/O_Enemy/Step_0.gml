@@ -1,18 +1,22 @@
 // --- 実行制御: 一時停止モード（フレーム送り対応） ---
 if (variable_global_exists("gamePaused") && global.gamePaused) {
-    // アニメーション停止（image_speedを止める）
-    image_speed = 0;
-
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        global.stepAdvance = false; // 1フレームだけ進める
+        global.stepAdvance = false; // このフレームだけ処理許可
+        // 処理は続行
     } else {
-        return; // 一時停止中は以降の処理をスキップ
-    }
-} else {
-    // 通常時はアニメーションを有効化（必要に応じて調整）
-    image_speed = 1;
-}
+        // 一時停止中は image_speed も止める
+        image_speed = 0;
 
+        // 弾を保持中は向きだけ維持（windup中など）
+        if (instance_exists(myball) && myball.state == 0) {
+            var offset = 16;
+            myball.x = x + lengthdir_x(offset, dir);
+            myball.y = y + lengthdir_y(offset, dir);
+        }
+
+        return; // 通常処理はスキップ
+    }
+}
 // デバッグモード: Oキーで方向固定の弾を撃つ（上・左・下・右・OFF切替）
 // global.enemyFireDirection: 0=上, 1=左, 2=下, 3=右, 4=OFF
 if (state != states.DEAD && variable_global_exists("enemyFireDirection") && global.enemyFireDirection != 4) {
@@ -95,85 +99,81 @@ switch (state) {
         Enemy_anim();
     break;
 
-case states.MOVE:
-	spd = 0.31;
+    case states.MOVE:
+        spd = 0.31;
 
+        if (instance_exists(O_Player)) {
+            var _dis = distance_to_object(O_Player);
 
-    if (instance_exists(O_Player)) {
-        var _dis = distance_to_object(O_Player);
+            // 攻撃可能距離に入ったらステート移行
+            if (_dis <= attack_dis) {
+                path_end();
+                shootTimer = 0;
+                state = states.ATTACK;
+                break;
+            }
 
-        // 攻撃可能距離に入ったらステート移行
-        if (_dis <= attack_dis) {
-            path_end();
-            shootTimer = 0;
-            state = states.ATTACK;
-            break;
+            // 攻撃距離外ならパスを更新
+            Check_For_Player();
         }
 
-        // 攻撃距離外ならパスを更新
-        Check_For_Player();
+        check_facing();
+        Enemy_anim();
 
-    }
-
-    check_facing();
-    Enemy_anim();
-
-    // パスがなければIDLEに戻す（Check_For_Player の後に判断）
-    if (path_index == -1) {
-        state = states.IDLE;
-    }
-
-break;
+        // パスがなければIDLEに戻す（Check_For_Player の後に判断）
+        if (path_index == -1) {
+            state = states.IDLE;
+        }
+    break;
 
     case states.ATTACK:
         // calc_entity_movement() は削除
         Enemy_anim();
-
-        // プレイヤーの方向取得
+		
+		if (!global.gamePaused || global.stepAdvance) {
         if (instance_exists(O_Player)) {
-            dir = point_direction(x, y, O_Player.x, O_Player.y);
-        }
-
+             dir = point_direction(x, y, O_Player.x, O_Player.y);
+            }
         spd = 0;
         image_index = 0;
 
+    //一時停止中でも1フレームだけ shootTimer を進行
+    var do_step = (!global.gamePaused || global.stepAdvance);
+    if (do_step) {
         shootTimer++;
 
-        // 弾を作成（1フレーム目のみ）
-        if (shootTimer == 1) {
-            myball = instance_create_depth(x, y, depth, O_Enemy_Ball);
-            if (instance_exists(O_Player)) {
-                myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
-                myball.state = 0; // 最初は待機状態
+            // 弾を作成（1フレーム目のみ）
+		    if (shootTimer == 1) {
+		        myball = instance_create_depth(x, y, depth, O_Enemy_Ball);
+		        if (instance_exists(O_Player)) {
+		            myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
+		            myball.state = 0; // 待機状態
+		        }
+		    }
+            // 弾を敵の前に保持（windup中）
+            if (shootTimer <= windupTime && instance_exists(self.myball)) {
+                var offset = 16; // 弾の前方オフセット
+                self.myball.x = x + lengthdir_x(offset, dir);
+                self.myball.y = y + lengthdir_y(offset, dir);
             }
-        }
 
-        // 弾を敵の前に保持（windup中）
-        if (shootTimer <= windupTime && instance_exists(self.myball)) {
-            var offset = 16; // 弾の前方オフセット
-            self.myball.x = x + lengthdir_x(offset, dir);
-            self.myball.y = y + lengthdir_y(offset, dir);
-        }
+            // windup が終わったら発射
+            if (shootTimer == windupTime && instance_exists(myball)) {
+                myball.state = 1;
+            }
 
-        // windup が終わったら発射
-        if (shootTimer == windupTime && instance_exists(myball)) {
-            myball.state = 1;
-        }
+            // 攻撃後、追跡に戻る
+            if (shootTimer > windupTime + recoverTime) {
+                state = states.MOVE;
+                shootTimer = 0;
+                myball = noone;
 
-        // 攻撃後、追跡に戻る
-        if (shootTimer > windupTime + recoverTime) {
-            state = states.MOVE;
-            shootTimer = 0;
-            myball = noone;
+                // パスをすぐ再計算させるためにタイマーをリセット
+                calc_path_timer = 0;
 
-	   // パスをすぐ再計算させるためにタイマーをリセット
-			calc_path_timer = 0;
-
-	   // 追跡用のパスを再設定
-			Check_For_Player();
-
-    break;
-
+                // 追跡用のパスを再設定
+                Check_For_Player();
+            }
         }
     break;
 }
@@ -192,9 +192,6 @@ if (bbox_right > _camLeft && bbox_left < _camRight && bbox_bottom > _camTop && b
 if (shootTimer > cooldownTime) {
     if (state != states.ATTACK) {
         var _dis = distance_to_object(O_Player);
-        if (_dis <= attack_dis) {
-            state = states.ATTACK;
-            shootTimer = 0;
-        }
-    }
+	}
+}
 }

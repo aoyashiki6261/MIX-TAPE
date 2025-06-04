@@ -1,74 +1,87 @@
 // --- 実行制御: 一時停止モード（フレーム送り対応） ---
+var doStep = true;
 if (variable_global_exists("gamePaused") && global.gamePaused) {
-    image_speed = 0; // アニメーション停止
+    image_speed = 0;
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        global.stepAdvance = false; // 1フレームだけ進行
+        global.stepAdvance = false; // 1フレーム分だけ許可
     } else {
-        return; // 一時停止中は処理スキップ
+        doStep = false; // 停止
     }
 } else {
-    image_speed = 1; // 通常時はアニメーション再生
+    image_speed = 1;
 }
 
-// ステートマシーン
-switch (state) {
-
-	// 敵が打つまで待機（弾を停止、敵が打つまで待機の状態）
-	case 0:
-		// プレイヤーを狙う
-		if instance_exists(O_Player) {
-			dir = point_direction(x, y, O_Player.x, O_Player.y);
-		}
-
-		// 弾が目立つように敵よりも高い位置で深度を設定
-		depth = -y - 50;
-	break;
-
-	// 弾の発射 / 移動
-	case 1:
-		// 移動のコーディング
-		xspd = lengthdir_x(spd, dir);
-		yspd = lengthdir_y(spd, dir);
-		x += xspd;
-		y += yspd;
-
-		// 深度の更新
-		depth = -y;
-
-		// プレイヤーとの当たり判定（1撃で死亡）
-		if instance_exists(O_Player) && place_meeting(x, y, O_Player) {
-			var target = instance_place(x, y, O_Player);
-			if (target != noone) {
-				with (target) {
-					if (state != PLAYERSTATE.DEAD && !deadanimstarted) {
-						state = PLAYERSTATE.DEAD;
-					}
-				}
-				instance_destroy(); // 弾を削除
-			}
-		}
-	break;
-}
-　
-// クリーンアップ
-
-// 画面外で削除
-var _pad = 16;
-if bbox_right < -_pad || bbox_left > room_width + _pad || bbox_bottom < -_pad || bbox_top > room_height + _pad {
-	destroy = true;
+// --- 構え中（state == 0）は、位置更新だけ許可 ---
+if (state == 0) {
+    if instance_exists(O_Player) {
+        dir = point_direction(x, y, O_Player.x, O_Player.y);
+    }
+    depth = -y - 50;
 }
 
-// プレイヤーとのフラグによる削除（任意機能）
-if hitConfirm == true && playerDestroy == true {
-	destroy = true;
-}
+// --- 残りの処理は doStep が true のときのみ進行 ---
+if (doStep) {
 
-// 壁との当たり判定（削除）
-if place_meeting(x, y, O_Solid) {
-	destroy = true;
-}
+    // ステートマシーン
+    switch (state) {
 
-// 実際に削除
-if destroy == true {
-	instance_destroy();
+        // 敵が打つまで待機（弾を停止、敵が打つまで待機の状態）
+        case 0:
+            // プレイヤーを狙う
+            if instance_exists(O_Player) {
+                dir = point_direction(x, y, O_Player.x, O_Player.y);
+            }
+
+            // 弾が目立つように敵よりも高い位置で深度を設定
+            depth = -y - 50;
+        break;
+
+        // 弾の発射 / 移動
+        case 1:
+            // 移動のコーディング
+            xspd = lengthdir_x(spd, dir);
+            yspd = lengthdir_y(spd, dir);
+            x += xspd;
+            y += yspd;
+
+            // 深度の更新
+            depth = -y;
+
+            // プレイヤーとの当たり判定（1撃で死亡）
+            if instance_exists(O_Player) && place_meeting(x, y, O_Player) {
+                var target = instance_place(x, y, O_Player);
+                if (target != noone) {
+                    with (target) {
+                        if (state != PLAYERSTATE.DEAD && !deadanimstarted) {
+                            state = PLAYERSTATE.DEAD;
+                        }
+                    }
+                    instance_destroy(); // 弾を削除
+                }
+            }
+        break;
+    }
+
+    // クリーンアップ
+
+    // 画面外で削除
+    var _pad = 16;
+    if bbox_right < -_pad || bbox_left > room_width + _pad || bbox_bottom < -_pad || bbox_top > room_height + _pad {
+        destroy = true;
+    }
+
+    // プレイヤーとのフラグによる削除（任意機能）
+    if hitConfirm == true && playerDestroy == true {
+        destroy = true;
+    }
+
+    // 壁との当たり判定（削除）
+    if place_meeting(x, y, O_Solid) {
+        destroy = true;
+    }
+
+    // 実際に削除
+    if destroy == true {
+        instance_destroy();
+    }
 }

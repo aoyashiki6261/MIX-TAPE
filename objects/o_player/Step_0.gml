@@ -1,16 +1,13 @@
 // --- 実行制御: 一時停止モード（フレーム送り対応） ---
 if (variable_global_exists("gamePaused") && global.gamePaused) {
-    // スプライトアニメーションを止める
-    image_speed = 0;
-
+    image_speed = 0; // アニメーションも停止
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        global.stepAdvance = false; // 1フレームだけ進める
+        global.stepAdvance = false; // 1フレーム分だけ許可
     } else {
-        return; // 一時停止中はそれ以降の処理をスキップ
+        return; // 停止中は以降の処理をスキップ
     }
 } else {
-    // 通常時はスプライトアニメーションを有効化
-    image_speed = 1;
+    image_speed = 1; // 通常時はアニメーション再生
 }
 
 // 描画順をプレイヤーが常に一番手前に表示
