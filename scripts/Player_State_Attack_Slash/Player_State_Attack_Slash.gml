@@ -1,6 +1,11 @@
-function Player_State_Attack_Slash() {
+function Player_State_Attack_Slash(do_step) {
     // 死亡していたら攻撃処理を一切しない
     if (state == PLAYERSTATE.DEAD) {
+        return;
+    }
+
+    // --- 一時停止時の処理スキップ ---
+    if (!do_step) {
         return;
     }
 
@@ -32,10 +37,9 @@ function Player_State_Attack_Slash() {
 
     // アニメーション終了後、待機状態に戻す
     if (animation_end()) {
-    if (state != PLAYERSTATE.DEAD) { // ← このチェックを追加！
-        state = PLAYERSTATE.FREE;
-        sprite_index = S_Player_Idle;
+        if (state != PLAYERSTATE.DEAD) {
+            state = PLAYERSTATE.FREE;
+            sprite_index = S_Player_Idle;
+        }
     }
-	}
 }
-

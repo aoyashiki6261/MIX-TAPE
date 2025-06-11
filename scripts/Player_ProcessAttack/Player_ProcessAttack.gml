@@ -1,4 +1,9 @@
-function ProcessAttack(argument0, argument1) {
+function Player_ProcessAttack(argument0, argument1) {
+    // --- 一時停止時の処理スキップ ---
+    if (global.gamePaused && !global.stepAdvance) {
+        return;
+    }
+
 	//Start of the attack
 	if (sprite_index != argument0)
 	{
@@ -29,6 +34,4 @@ function ProcessAttack(argument0, argument1) {
 	}
 	ds_list_destroy(hitByAttackNow);
 	mask_index = S_Player_Idle;
-
-
 }
