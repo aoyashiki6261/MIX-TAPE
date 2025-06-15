@@ -1,7 +1,6 @@
 // --- 実行制御: 一時停止モード（フレーム送り対応） ---
 if (variable_global_exists("gamePaused") && global.gamePaused) {
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        global.stepAdvance = false; // このフレームだけ処理許可
         // 処理は続行
     } else {
         // 一時停止中は image_speed も止める

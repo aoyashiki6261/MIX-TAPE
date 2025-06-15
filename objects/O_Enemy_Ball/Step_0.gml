@@ -3,7 +3,6 @@ var doStep = true;
 if (variable_global_exists("gamePaused") && global.gamePaused) {
     image_speed = 0;
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        global.stepAdvance = false; // 1フレーム分だけ許可
     } else {
         doStep = false; // 停止
     }
