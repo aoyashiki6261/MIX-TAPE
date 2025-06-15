@@ -6,12 +6,12 @@ if (!variable_global_exists("gamePaused")) {
     global.gamePaused = false;
 }
 
-// ✅ デバッグルームでのみ表示
-if (room_get_name(room) == "Rm_Debug") {
+// ✅ デバッグルームでのみ表示 + 右スティック押し込みデバッグONのときのみ表示
+if (room_get_name(room) == "Rm_Debug" && global.gamepadDebugEnabled) {
 
     // 敵AIのON/OFF表示
     var status = global.enemyAIEnabled ? "ON" : "OFF";
-    var text_ai = "[Pkey_EnemyAI: " + status + "]";
+    var text_ai = "[ZR button(Pkey)_EnemyAI: " + status + "]";
 
     // 固定発射方向の状態表示
     var fire_status = "OFF";
@@ -22,27 +22,44 @@ if (room_get_name(room) == "Rm_Debug") {
         case 3: fire_status = "RIGHT"; break;
         case 4: fire_status = "OFF"; break;
     }
-    var text_fire = "[Okey_EnemyFire: " + fire_status + "]";
+    var text_fire = "[ZL button(Okey)_EnemyFire: " + fire_status + "]";
 
     // ポーズ状態（Tキー）表示
     var pause_status = global.gamePaused ? "PAUSE" : "PLAY";
-    var text_pause = "[Tkey_Pause: " + pause_status + "]";
+    var text_pause = "[L button(Tkey)_Pause: " + pause_status + "]";
+
+    // 1フレーム進行状態（Yキー / R1ボタン）表示
+    var stepadvance_status = global.stepAdvance ? "" : "1frame";
+    var text_stepadvance = "[R button(Ykey)_StepAdvance: " + stepadvance_status + "]";
 
     // 共通描画設定
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
 
     // 描画位置設定（左下から順に）
-    var base_y = room_height + 440; // 一番下の行から上に積む
+    var base_y = room_height + 420; // 一番下の行から上に積む
 
-    // 1. ポーズ状態
+    // 1. 1フレーム進行状態
+    draw_set_color(global.stepAdvance ? c_red : c_green);
+    draw_text(0, base_y, text_stepadvance);
+
+    // 2. ポーズ状態
     draw_set_color(global.gamePaused ? c_red : c_green);
-    draw_text(0, base_y, text_pause);
+    draw_text(0, base_y + 20, text_pause);
 
-    // 2. 固定発射方向
-    draw_set_color(c_green);
-    draw_text(0, base_y + 20, text_fire);
+    // 3. 固定発射方向（OFF以外は赤字）
+    draw_set_color(global.enemyFireDirection != 4 ? c_red : c_green);
+    draw_text(0, base_y + 40, text_fire);
 
-    // 3. 敵AI状態
-    draw_text(0, base_y + 40, text_ai);
+    // 4. 敵AI状態（OFFのときは赤字）
+    draw_set_color(global.enemyAIEnabled ? c_green : c_red);
+    draw_text(0, base_y + 60, text_ai);
+}
+
+// ✅ デバッグルームで右スティック押し込みOFFのときのみヒント表示
+if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_bottom);
+    draw_set_color(c_white);
+    draw_text(0, room_height + 480, "[R3 button : debug mode]");
 }

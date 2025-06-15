@@ -2,8 +2,10 @@
 if (variable_global_exists("gamePaused") && global.gamePaused) {
     if (variable_global_exists("stepAdvance") && global.stepAdvance) {
         // 処理は続行
-    } else {
+        path_speed = spd; // ← ★ コマ送り時は速度を復元
+       } else {
         // 一時停止中は image_speed も止める
+        path_speed = 0; 
         image_speed = 0;
 
         // 弾を保持中は向きだけ維持（windup中など）
