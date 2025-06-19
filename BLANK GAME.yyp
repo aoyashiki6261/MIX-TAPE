@@ -61,7 +61,7 @@
     {"id":{"name":"S_Player_Attack","path":"sprites/S_Player_Attack/S_Player_Attack.yy",},},
     {"id":{"name":"S_Player_Dead","path":"sprites/S_Player_Dead/S_Player_Dead.yy",},},
     {"id":{"name":"S_Player_Dodge_End","path":"sprites/S_Player_Dodge_End/S_Player_Dodge_End.yy",},},
-    {"id":{"name":"S_Player_Dodge_Loop","path":"sprites/S_Player_Dodge_Loop/S_Player_Dodge_Loop.yy",},},
+    {"id":{"name":"S_Player_Dodge_Roll","path":"sprites/S_Player_Dodge_Roll/S_Player_Dodge_Roll.yy",},},
     {"id":{"name":"S_Player_Dodge_Start","path":"sprites/S_Player_Dodge_Start/S_Player_Dodge_Start.yy",},},
     {"id":{"name":"S_Player_Idle","path":"sprites/S_Player_Idle/S_Player_Idle.yy",},},
     {"id":{"name":"S_Player_Walk","path":"sprites/S_Player_Walk/S_Player_Walk.yy",},},
@@ -70,8 +70,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
     {"roomId":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
+    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
