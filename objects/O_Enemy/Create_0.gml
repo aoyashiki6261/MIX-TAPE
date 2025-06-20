@@ -8,6 +8,8 @@ S_Attack = S_Enemy_Attack;
 S_Dead = S_Enemy_Dead;
 S_Hit = S_Enemy_Hit;
 
+orig_blend = image_blend;  // ← 元のブレンド色を保存
+
 
 spd = 0.35;
 dir = 0;
