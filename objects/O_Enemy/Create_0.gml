@@ -31,7 +31,7 @@ state = 0;
 	//弾の発射ステータス
 	cooldownTime = 4*60;
 	shootTimer = irandom(cooldownTime);
-	windupTime = 60; //弾を撃つまでの構える時間
+	windupTime = 90; //弾を撃つまでの構える時間
 	recoverTime = 120; //弾を撃った後の硬直時間
 	ballInst = noone;
 	myball = noone; // 敵ごとに発射中の弾を記録する用

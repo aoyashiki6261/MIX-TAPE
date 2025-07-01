@@ -1,5 +1,5 @@
 event_inherited();
-walk_spd = 0.5;
+walk_spd = 0.75;
 facing_dir        = 0; // スプライトの向き
 
 // --- 攻撃関連 ---
@@ -10,9 +10,9 @@ death_timer = 0;
 deadanimstarted = false;
 
 // --- 緊急回避関連(★緊急回避の数値を変えるのはこの部分) ---
-dodge_duration     = 15;          // 移動が続くフレーム数
-dodge_speed        = 3;           // 緊急回避の移動距離
-dodge_cooldown_max = 14;          // クールダウンの長さ（60 = 1秒）
+dodge_duration     = 10;          // 移動が続くフレーム数
+dodge_speed        = 8;           // 緊急回避の移動距離
+dodge_cooldown_max = 0;          // クールダウンの長さ（60 = 1秒）
 
 // --- 緊急回避関連(×初期化用なので以下の数値は基本触らないこと) ---
 dodge_cooldown    = 0;           // カウントダウン管理用
