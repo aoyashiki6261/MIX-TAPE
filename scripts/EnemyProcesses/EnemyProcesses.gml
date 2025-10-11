@@ -70,8 +70,12 @@ function calc_entity_movement() {
 }
 
 function check_if_stopped(){
-	if abs(hsp) < 0.1 hsp = 0;
-	if abs(vsp) < 0.1 vsp = 0;
+
+    if (is_undefined(hsp)) hsp = 0;
+    if (is_undefined(vsp)) vsp = 0;
+
+    if (abs(hsp) < 0.1) hsp = 0;
+    if (abs(vsp) < 0.1) vsp = 0;
 }
 
 function check_facing(){
@@ -84,33 +88,42 @@ function check_facing(){
 }
 
 function show_hurt(){
-	// ノックバック時にダメージを受けたスプライトを表示
-	if knockback_time-- > 0 sprite_index = S_Enemy_Hit;
+    // ノックバック時にダメージを受けたスプライトを表示
+    if (is_undefined(knockback_time)) knockback_time = 0; // 念のため保険
+
+    if (knockback_time > 0) {
+        sprite_index = S_Enemy_Hit;
+        knockback_time--; // ← 条件式の外で減算
+    }
 }
 
 function Check_For_Player(){
 
-	var _dis = 99999;
-	if (instance_exists(O_Player)) {
-		_dis = distance_to_object(O_Player);
-	}
+    var _dis = 99999;
+    if (instance_exists(O_Player)) {
+        _dis = distance_to_object(O_Player);
+    }
 
-	if calc_path_timer-- <= 0 {
-		calc_path_timer = calc_path_delay;
+    if (is_undefined(calc_path_timer)) calc_path_timer = 0;   // 念のため保険
+    if (is_undefined(calc_path_delay)) calc_path_delay = 15;  // 念のため保険
 
-		if (instance_exists(O_Player)) {
-			var _type = (x == xp and y == yp) ? 0 : 1;
-			var _found_player = mp_grid_path(global.mp_grid, path, x, y, O_Player.x, O_Player.y, _type);
+    if (calc_path_timer <= 0) {            // ← 先に判定
+        calc_path_timer = calc_path_delay; // ← それからリセット
 
-			if (_found_player) {
-				path_start(path, spd, path_action_stop, false);
-			}
-		}
+        if (instance_exists(O_Player)) {
+            var _type = (x == xp && y == yp) ? 0 : 1;
+            var _found_player = mp_grid_path(global.mp_grid, path, x, y, O_Player.x, O_Player.y, _type);
 
-		if (_dis <= attack_dis) {
-			path_end();
-			state = states.ATTACK;
-		}
-	}
+            if (_found_player) {
+                path_start(path, spd, path_action_stop, false);
+            }
+        }
+
+        if (_dis <= attack_dis) {
+            path_end();
+            state = states.ATTACK;
+        }
+    }
+
+    calc_path_timer--; // ← 判定の後に減算
 }
-

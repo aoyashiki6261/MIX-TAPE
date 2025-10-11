@@ -1,12 +1,12 @@
 {
   "$GMScript":"v1",
-  "%Name":"Player_State_Attack_Combo",
+  "%Name":"Player_State_Dead",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Player_State_Attack_Combo",
+  "name":"Player_State_Dead",
   "parent":{
-    "name":"player",
-    "path":"folders/Entitiy/player.yy",
+    "name":"Player_State",
+    "path":"folders/Entitiy/player/Player_State.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -13,7 +13,6 @@ deadanimstarted = false;
 enum PLAYERSTATE {
     FREE,
     ATTACK_SLASH,
-    ATTACK_COMBO,
     DEAD,
     DODGE
 }
@@ -128,7 +127,6 @@ function buffer_clear() {
 function buffer_accept_window() {
     switch (state) {
         case PLAYERSTATE.ATTACK_SLASH:
-        case PLAYERSTATE.ATTACK_COMBO:
             // 攻撃アニメの残りフレーム数で判定
             var remaining = sprite_get_number(sprite_index) - image_index;
             return (remaining <= buffer_window);

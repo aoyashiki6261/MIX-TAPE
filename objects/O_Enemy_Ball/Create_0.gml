@@ -3,8 +3,8 @@ event_inherited();
 
 dir = 0;
 spd = 4.5;
-xspd = 0;
-yspd = 0;
+hsp = 0;
+vsp = 0;
 
 //ステートコントロール
 state =0;

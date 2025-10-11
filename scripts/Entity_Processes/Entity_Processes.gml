@@ -22,7 +22,7 @@ function damage_entity( _tid, _sid, _damage, _time){
 		var _dead = is_dead();
 		path_end();
 		//ノックバック距離を設定
-		if _dead var _dis = 4 else var _dis =1;
+		var _dis = (_dead ? 4 : 1);
 		var _dir = point_direction(_sid.x, _sid.y, x, y);
 		hsp +=lengthdir_x(_dis, _dir);
 		vsp +=lengthdir_y(_dis, _dir);
@@ -42,15 +42,16 @@ function is_dead(){
 			image_index = 0;
 			//死亡時のsound設定
 			switch(object_index){	
-				default:	
-				//死亡時のsoundを再生
+				default://死亡時のsoundを再生
 				break;
 				case O_Player:
 				//プレイヤー死亡時のsoundを再生
 				break;
-			}
-			return true;
-		}	
-	}return true;
-	
-}
+				}
+				return true;
+			}	
+			return false;//生存中
+		}
+		
+		return true; // 既に死亡
+}		

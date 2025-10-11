@@ -28,8 +28,8 @@
   ],
   "name":"Rm_Debug",
   "parent":{
-    "name":"BLANK GAME",
-    "path":"BLANK GAME.yyp",
+    "name":"ルーム",
+    "path":"folders/ルーム.yy",
   },
   "parentRoom":null,
   "physicsSettings":{

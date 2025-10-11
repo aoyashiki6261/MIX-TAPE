@@ -38,10 +38,10 @@ if (doStep) {
         // 弾の発射 / 移動
         case 1:
             // 移動のコーディング
-            xspd = lengthdir_x(spd, dir);
-            yspd = lengthdir_y(spd, dir);
-            x += xspd;
-            y += yspd;
+            hsp = lengthdir_x(spd, dir);
+            vsp = lengthdir_y(spd, dir);
+            x += hsp;
+            y += vsp;
 
             // 深度の更新
             depth = -y;

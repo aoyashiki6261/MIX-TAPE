@@ -1,5 +1,4 @@
 /// @description Calc_movement + collision + anim（Player_State_Free用）
-
 function Calc_movement(do_step) {
     // --- 一時停止対応 ---
     if (!do_step) return;
@@ -85,5 +84,52 @@ function anim(do_step) {
     // 追加のキーアニメ（必要なら）
     if (keyboard_check_pressed(vk_space)) {
         // 回避などのアニメ対応
+    }
+}
+
+/// （移動の方向処理・アニメ―ション反映・回避入力）
+/// @param {bool} do_step デバッグ用：一時停止中でも1フレーム進めるときに trueとする。
+
+function Player_State_Free(do_step) {
+    // --- 一時停止対応 ---
+    if (!do_step) return;
+
+    // 通常移動処理: 入力に応じて移動と衝突補正
+    Calc_movement(do_step);
+
+    // アニメ更新（※既存の実装をそのまま呼ぶ）
+    anim(do_step);
+
+    //直近の移動方向を更新（入力があるフレームだけ）
+    {
+        var _dx = right - left;
+        var _dy = down  - up;
+        if (_dx != 0 || _dy != 0) {
+            var _len = point_distance(0,0,_dx,_dy);
+            if (_len != 0) {
+                last_move_dir_x = _dx / _len;
+                last_move_dir_y = _dy / _len;
+            }
+        }
+    }
+
+    // --- 回避入力判定 ---
+   if (dash && dodge_cooldown <= 0) {
+
+        // ★ 方向決定は共通ヘルパに一本化（方向なし＝単押しは回避しない）
+        if (!choose_dodge_dir_from_input()) {
+            dash = false;   // 入力は消費（お好みで）
+            return;         // DODGEへ遷移しない
+        }
+
+        // ★ 念のためゼロ方向対策（安全網）
+        var _m = point_distance(0,0,dodge_dir_x,dodge_dir_y);
+        if (_m <= 0.0001) {
+            dash = false;
+            return;
+        }
+
+        // ★ 初期化は共通関数へ
+        Player_StartDodge();
     }
 }

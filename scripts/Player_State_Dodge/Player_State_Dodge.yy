@@ -1,9 +1,9 @@
 {
   "$GMScript":"v1",
-  "%Name":"Player_State_Free",
+  "%Name":"Player_State_Dodge",
   "isCompatibility":false,
   "isDnD":false,
-  "name":"Player_State_Free",
+  "name":"Player_State_Dodge",
   "parent":{
     "name":"Player_State",
     "path":"folders/Entitiy/player/Player_State.yy",

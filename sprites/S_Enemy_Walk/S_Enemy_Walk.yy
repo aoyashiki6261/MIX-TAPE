@@ -45,8 +45,8 @@
   },
   "origin":9,
   "parent":{
-    "name":"Enemy",
-    "path":"folders/Entitiy/Enemy.yy",
+    "name":"Enemy_Sprite",
+    "path":"folders/Entitiy/Enemy/Enemy_Sprite.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

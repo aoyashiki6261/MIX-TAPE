@@ -55,19 +55,17 @@ function Player_State_Attack_Slash(do_step) {
                 state = PLAYERSTATE.ATTACK_SLASH;   //攻撃
                 return;
             } else if (buffered_action == ACTION.DODGE) {
+            // ★ 共通ヘルパで方向必須 → 初期化共通化
+            if (!choose_dodge_dir_from_input()) {
                 buffer_clear();
-                state = PLAYERSTATE.DODGE;          // 回避へ
-
-                // 回避初期化（FREE時と同じセットをする場合はここに）
-                sprite_index   = S_Player_Dodge_Start;
-                image_index    = 0;
-                image_speed    = 1;
-                dodge_timer    = dodge_duration;
-                dodge_cooldown = dodge_cooldown_max;
-                invincible     = true;
-                dash           = false;
+                state        = PLAYERSTATE.FREE;
+                sprite_index = S_Player_Idle;
                 return;
             }
+            buffer_clear();
+            Player_StartDodge();
+            return;
+        }
 
             // 予約なしならFREEへ
             state = PLAYERSTATE.FREE;
