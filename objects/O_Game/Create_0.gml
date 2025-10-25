@@ -12,4 +12,23 @@ if (!variable_global_exists("gamePaused")) {
 }
 if (!variable_global_exists("stepAdvance")) {
     global.stepAdvance = false;
+	
+global.kills = 0;                 // 新規ゲーム開始で 0 にリセット
+#macro KILL_MAX 9999              //★ 上限	
+display_set_gui_maximize(); // GUIサイズをウィンドウに合わせる（安全策）
+
+/// @description New Game相当の初期化（キル数リセット＋シーン切替）
+function Game_Reset_NewGame(_go_first_room = false) {
+    // ★ キルカウンタを0へ
+    global.kills = 0;
+
+    // ★ 好みのリセット動作を選択
+    if (_go_first_room) {
+        room_goto(Rm_main);
+    } else {
+        // 現在のルームを再スタート
+        room_restart();
+    }
+}
+	
 }

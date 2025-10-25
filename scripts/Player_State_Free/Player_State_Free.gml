@@ -3,7 +3,7 @@ function Calc_movement(do_step) {
     // --- 一時停止対応 ---
     if (!do_step) return;
 
-    // --- スティック遊び値 (デッドゾーン) の設定 ---
+    // --- スティック遊び値の設定 ---
     var deadzone = 0.1;              // 0.1＝10% まで入力を無視したい場合
     var gp       = 0;
     var sx       = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislh) : 0;

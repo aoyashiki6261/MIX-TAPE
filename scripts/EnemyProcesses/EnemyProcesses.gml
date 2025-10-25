@@ -126,4 +126,17 @@ function Check_For_Player(){
     }
 
     calc_path_timer--; // ← 判定の後に減算
+	
+/// @description この敵のキルを一度だけ加算する
+function Enemy_MarkKill() {
+    // ★ 既にカウント済み or まだインスタンスが有効でないなら何もしない
+    if (kill_counted) return;
+
+    global.kills = min(global.kills + 1, 9999);
+    kill_counted = true;
+
+    // ★ デバッグ（原因追跡用）
+    show_debug_message("[KILL] id=" + string(id)
+        + " total=" + string(global.kills));
+	}
 }

@@ -19,6 +19,7 @@ spd = 0.35;
 dir = 0;
 face = 1;
 death_timer = 0;
+kill_counted = false;   // 敵のキルカウントの定義
 knockback_time  = 0;   // show_hurt() の knockback_time-- 用
 
 //プレイヤーに向かう

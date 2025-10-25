@@ -5,6 +5,10 @@ if (!variable_global_exists("enemyFireDirection")) {
 if (!variable_global_exists("gamePaused")) {
     global.gamePaused = false;
 }
+// ★ キルカウンタ用の安全初期化（ルーム開始直後でも落ちないように）
+if (!variable_global_exists("kills")) {
+    global.kills = 0;
+}
 
 // ✅ デバッグルームでのみ表示 + 右スティック押し込みデバッグONのときのみ表示
 if (room_get_name(room) == "Rm_Debug" && global.gamepadDebugEnabled) {
@@ -62,4 +66,40 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     draw_set_valign(fa_bottom);
     draw_set_color(c_white);
     draw_text(0, room_height + 480, "[R3 button : debug mode]");
+    
+    //キルカウンターのテキスト表示
+    var xx_dbg = display_get_gui_width() - 80;  //★ 右上表示のX
+    var yy_dbg = 20;                             //★ Y
+    var txt_dbg = string(global.kills);
+    var scale_ui_dbg = 2.0;                      // ★ 拡大倍率（1=等倍, 2=2倍 など）
+
+    // 影付きで視認性アップ（拡大描画）
+    draw_set_color(c_black);
+    draw_text_transformed(xx_dbg+2, yy_dbg+2, txt_dbg, scale_ui_dbg, scale_ui_dbg, 0);
+    draw_set_color(c_white);
+    draw_text_transformed(xx_dbg, yy_dbg, txt_dbg, scale_ui_dbg, scale_ui_dbg, 0);
+}
+
+//以下はキルカウンターの描画設定
+{
+    // セーフティ：描画状態をリセット
+    gpu_set_blendmode(bm_normal);
+    draw_set_alpha(1);
+    draw_set_color(c_white);
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
+
+    var gw = display_get_gui_width();
+    if (gw <= 0) gw = room_width; // 念のためフォールバック
+    var xx = gw - 570;             //★ 表示位置X
+    var yy = 20;                  //★ 表示位置Y
+
+    var txt = string(global.kills);
+    var scale_ui = 4.0;           // ★ 拡大倍率（ここを変えれば一括で大きさ調整）
+
+    // 影付きで見やすく（拡大描画）
+    draw_set_color(c_black);
+    draw_text_transformed(xx+2, yy+2, txt, scale_ui, scale_ui, 0);
+    draw_set_color(c_white);
+    draw_text_transformed(xx, yy, txt, scale_ui, scale_ui, 0);
 }

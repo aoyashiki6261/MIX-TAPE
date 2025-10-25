@@ -28,3 +28,5 @@ calc_path_timer = irandom(60);
 // パス移動を有効にするための初期設定（GameMakerに移動させてもらう）
 path_position = 0;
 path_speed = spd;
+
+kill_counted = false;   // 敵のキルカウントの定義

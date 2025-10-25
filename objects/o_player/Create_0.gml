@@ -18,7 +18,7 @@ enum PLAYERSTATE {
 }
 
 // --- 緊急回避関連(★緊急回避の数値を変えるのはこの部分) ---
-dodge_duration     = 10;          // 移動が続くフレーム数
+dodge_duration     = 10;          // 緊急回避が続くフレーム数
 dodge_speed        = 8;           // 緊急回避の移動距離
 dodge_cooldown_max = 0;           // クールダウンの長さ（60 = 1秒）
 

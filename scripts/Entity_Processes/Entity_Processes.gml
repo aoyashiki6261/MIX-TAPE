@@ -19,6 +19,7 @@ function damage_entity( _tid, _sid, _damage, _time){
 	
 	with(_tid){
 		hp -= _damage;
+		show_debug_message("[damage/entity] hp=" + string(hp) + " id=" + string(id));
 		var _dead = is_dead();
 		path_end();
 		//ノックバック距離を設定
@@ -35,23 +36,25 @@ function damage_entity( _tid, _sid, _damage, _time){
 //これを実行しているインスタンスが停止しているかどうかを確認
 function is_dead(){
 
-	if state != states.DEAD{
-		if hp <= 0{
-			state = states.DEAD;
-			hp = 0;
-			image_index = 0;
-			//死亡時のsound設定
-			switch(object_index){	
-				default://死亡時のsoundを再生
-				break;
-				case O_Player:
-				//プレイヤー死亡時のsoundを再生
-				break;
-				}
-				return true;
-			}	
-			return false;//生存中
-		}
-		
-		return true; // 既に死亡
-}		
+    // 既にDEADなら true（ここで終了）
+    if (state == states.DEAD) return true;
+
+    if (hp <= 0){
+		show_debug_message("[is_dead] state->DEAD id=" + string(id));
+        state       = states.DEAD;
+        hp          = 0;
+        image_index = 0;
+
+        // ★ キル加算
+        Enemy_MarkKill();
+
+        //死亡時のsound設定（既存）
+        switch(object_index){	
+            default:   break; // 死亡時のsoundを再生
+            case O_Player: break; // プレイヤー死亡時のsoundを再生
+        }
+        return true;
+    }
+
+    return false; // 生存中
+}
