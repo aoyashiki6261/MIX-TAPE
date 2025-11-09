@@ -40,9 +40,6 @@
     "name":"S_Enemy_Idle",
     "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
   },
-  "spriteMaskId":{
-    "name":"S_Enemy_Idle",
-    "path":"sprites/S_Enemy_Idle/S_Enemy_Idle.yy",
-  },
+  "spriteMaskId":null,
   "visible":true,
 }

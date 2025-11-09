@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"S_Enemy_Hit",
   "bboxMode":0,
   "bbox_bottom":47,
@@ -12,7 +12,7 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"4d935f6f-aa7d-4d5c-8c3c-18227c273af8","name":"4d935f6f-aa7d-4d5c-8c3c-18227c273af8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"4d935f6f-aa7d-4d5c-8c3c-18227c273af8","name":"4d935f6f-aa7d-4d5c-8c3c-18227c273af8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -23,7 +23,7 @@
   ],
   "name":"S_Enemy_Hit",
   "nineSlice":null,
-  "origin":9,
+  "origin":7,
   "parent":{
     "name":"Enemy_Sprite",
     "path":"folders/Entitiy/Enemy/Enemy_Sprite.yy",
@@ -78,7 +78,7 @@
     "visibleRange":null,
     "volume":1.0,
     "xorigin":32,
-    "yorigin":36,
+    "yorigin":64,
   },
   "swatchColours":null,
   "swfPrecision":0.5,

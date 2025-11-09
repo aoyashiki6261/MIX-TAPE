@@ -32,7 +32,7 @@ function Enemy_anim(){
 			show_hurt();
 		break;
 		case states.ATTACK:
-			sprite_index = S_Enemy_Attack;
+			sprite_index = S_Enemy_Charge;
 		break;
 		case states.DEAD:
 			sprite_index = S_Enemy_Dead;

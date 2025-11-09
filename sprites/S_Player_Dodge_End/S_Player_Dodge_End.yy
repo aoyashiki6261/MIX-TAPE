@@ -1,5 +1,5 @@
 {
-  "$GMSprite":"",
+  "$GMSprite":"v2",
   "%Name":"S_Player_Dodge_End",
   "bboxMode":0,
   "bbox_bottom":46,
@@ -12,8 +12,8 @@
   "edgeFiltering":false,
   "For3D":false,
   "frames":[
-    {"$GMSpriteFrame":"","%Name":"a3658ddf-9870-4ac1-a077-bd8eff19eab8","name":"a3658ddf-9870-4ac1-a077-bd8eff19eab8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
-    {"$GMSpriteFrame":"","%Name":"29c16988-b964-4110-abf7-96676b5c550b","name":"29c16988-b964-4110-abf7-96676b5c550b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"a3658ddf-9870-4ac1-a077-bd8eff19eab8","name":"a3658ddf-9870-4ac1-a077-bd8eff19eab8","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
+    {"$GMSpriteFrame":"v1","%Name":"29c16988-b964-4110-abf7-96676b5c550b","name":"29c16988-b964-4110-abf7-96676b5c550b","resourceType":"GMSpriteFrame","resourceVersion":"2.0",},
   ],
   "gridX":0,
   "gridY":0,
@@ -81,8 +81,8 @@
     ],
     "visibleRange":null,
     "volume":1.0,
-    "xorigin":30,
-    "yorigin":36,
+    "xorigin":15,
+    "yorigin":18,
   },
   "swatchColours":null,
   "swfPrecision":0.5,
