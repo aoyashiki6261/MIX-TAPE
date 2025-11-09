@@ -32,7 +32,9 @@ function Enemy_anim(){
 			show_hurt();
 		break;
 		case states.ATTACK:
-			sprite_index = S_Enemy_Charge;
+			// ★ ATTACK中はStep側が S_Enemy_Charge / S_Enemy_Shot / Idle を制御するため、ここでは上書きしない
+			//   （必要なら show_hurt() だけは通してOK）
+			show_hurt();
 		break;
 		case states.DEAD:
 			sprite_index = S_Enemy_Dead;

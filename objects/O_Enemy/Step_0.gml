@@ -170,10 +170,9 @@ switch (state) {
             // 一時停止中でも1フレームだけ shootTimer を進行
 			var do_step = (!global.gamePaused || global.stepAdvance);
 			if (do_step) {
-			    shootTimer++;
 
 			    //スプライト遷移を自然にする（Charge → Shot → Idle）
-				var _shot_frames_to_show = max(1, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
+				var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
 				
 			    // ※ 溜め尺 windupTime に対し、Charge は1回だけ進むように手動でフレームを進行させる
 			    if (shootTimer < windupTime) {
@@ -199,7 +198,7 @@ switch (state) {
 			        self.myball.image_angle = dir;
 			    }
 
-			} else if (shootTimer == windupTime) {
+			} else if (shootTimer >= windupTime && shootTimer < windupTime + 1) {
 			    // 2) 発射の瞬間：S_Enemy_Shot に切替えて即発射
 			    if (sprite_index != S_Enemy_Shot) {
 			        sprite_index = S_Enemy_Shot; 
@@ -217,7 +216,7 @@ switch (state) {
 			        myball.state = 1;
 			    }
 
-			} else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
+			} else if (shootTimer >= windupTime + 1 && shootTimer <= (windupTime + _shot_frames_to_show)) {
 			    // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける（アニメ再生させる）
 			    if (sprite_index != S_Enemy_Shot) {               // 念のため
 			        sprite_index = S_Enemy_Shot;
@@ -289,6 +288,9 @@ switch (state) {
 			        // 追跡用のパスを再設定
 			        Check_For_Player();
 			    }
+
+                // フレーム末尾で進める
+                shootTimer++;
 			}
 
             //ここで最後に汎用アニメ処理を軽く呼ぶ（深度やフラッシュの反映目的）
