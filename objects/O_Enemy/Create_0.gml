@@ -8,8 +8,7 @@ S_Attack = S_Enemy_Charge;
 S_Dead = S_Enemy_Dead;
 S_Hit = S_Enemy_Hit;
 
-draw_scale = 0.5; // スプライトサイズを縮小して表示
-mask_index = S_Enemy_Mask; // 32相当の当たり判定
+draw_scale = 1; // スプライトサイズ
 
 orig_blend = image_blend;  // ← 元のブレンド色を保存
 

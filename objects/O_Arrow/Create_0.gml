@@ -1,8 +1,7 @@
 // Inherit the parent event
 event_inherited();
 
-draw_scale = 0.5; // スプライトサイズを縮小して表示
-mask_index = S_Arrow_Mask;  // 当たり判定の設定
+draw_scale = 1; // スプライトサイズ
 
 dir = 0;
 spd = 4.5;
@@ -17,7 +16,5 @@ state =0;
 //クリーンアップ
 destroy = false;
 playerDestroy = true;
-
-mask_index = S_Arrow_Mask;	//スプライトから当たり判定の設定
 
 image_angle = dir;	//角度を見た目にも反映

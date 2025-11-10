@@ -14,18 +14,15 @@ if (variable_global_exists("gamePaused") && global.gamePaused) {
         image_speed = 0;
 
         // 弾を保持中は向きだけ維持（windup中など）
-        if (instance_exists(myball) && myball.state == 0) {
-			
-		    var _draw_scale = (variable_instance_exists(id, "draw_scale") ? draw_scale : 1);
-		    var base_hold_offset = 16;  // 元の基準距離（32px想定からの半身/手前くらい）
-		    var offset = base_hold_offset * _draw_scale;
-			
-            myball.x = x + lengthdir_x(offset, dir);
-            myball.y = y + lengthdir_y(offset, dir);
+		if (instance_exists(myball) && myball.state == 0) {
+		    var base_hold_offset = 16;  // 等倍前提の固定値
+		    var offset = base_hold_offset;
 
-            //構え中は見た目の角度も維持（Preciseマスクの回転一致）
-            myball.image_angle = dir;
-        }
+		    myball.x = x + lengthdir_x(offset, dir);
+		    myball.y = y + lengthdir_y(offset, dir);
+		    myball.image_angle = dir;
+		    myball.visible = false; // ←（前回の仕様どおり）溜め中は非表示
+		}
 
         return; // 通常処理はスキップ
     }
@@ -189,21 +186,21 @@ switch (state) {
 			    image_index = min(_frames - 1, floor(_t * _frames / windupTime));
 
 			    // 弾を敵の前に保持（windup中）
-			    if (instance_exists(self.myball)) {
-			        var _draw_scale = (variable_instance_exists(id, "draw_scale") ? draw_scale : 1);
-			        var base_hold_offset = 16;
-			        var offset = base_hold_offset * _draw_scale;
-			        self.myball.x = x + lengthdir_x(offset, dir);
-			        self.myball.y = y + lengthdir_y(offset, dir);
-			        self.myball.image_angle = dir;
-			    }
+			    if (shootTimer <= windupTime && instance_exists(self.myball)) {
+				    var base_hold_offset = 16;
+				    var offset = base_hold_offset;
 
-			} else if (shootTimer >= windupTime && shootTimer < windupTime + 1) {
+				    self.myball.x = x + lengthdir_x(offset, dir);
+				    self.myball.y = y + lengthdir_y(offset, dir);
+				    self.myball.image_angle = dir;  // 構え中の見た目角度
+				}
+
+						} else if (shootTimer == windupTime) {
 			    // 2) 発射の瞬間：S_Enemy_Shot に切替えて即発射
 			    if (sprite_index != S_Enemy_Shot) {
-			        sprite_index = S_Enemy_Shot; 
-			        image_index = 0; 
-			        image_speed = 1;
+			        sprite_index = S_Enemy_Shot;
+			        image_index = 0;     // ← ショットを先頭コマから
+			        image_speed = 1;     // ← 再生開始
 			    }
 
 			    // windup が終わったら発射（最終エイム反映）
@@ -213,7 +210,7 @@ switch (state) {
 			            myball.dir = _final_dir;
 			            myball.image_angle = _final_dir; // 見た目も一致
 			        }
-			        myball.state = 1;
+			        myball.state = 1; // ← このステップで発射に移行
 			    }
 
 			} else if (shootTimer >= windupTime + 1 && shootTimer <= (windupTime + _shot_frames_to_show)) {
@@ -241,10 +238,6 @@ switch (state) {
 			            myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
 			            myball.state = 0; // 待機状態
 			        }
-
-                    //発射元の見た目スケールを矢へ継承（方式A）
-                    myball.image_xscale = image_xscale;
-                    myball.image_yscale = image_yscale;
 
                     //発生直後から見た目角度を一致
                     myball.image_angle = myball.dir;
