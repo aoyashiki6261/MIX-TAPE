@@ -76,8 +76,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
     {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
+    {"roomId":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
