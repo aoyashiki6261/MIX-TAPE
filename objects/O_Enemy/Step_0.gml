@@ -1,77 +1,31 @@
-// --- オリジナルのimage_blendを保持 ---
+/// O_Enemy Step イベント（暫定・デバッグ用）
+
+// ★ 一旦、敵は必ずフルに処理を行う（ポーズ・AIフラグ無視）
+image_speed = 1;
+// -----------------------------
+// デバッグルーム用：敵AI停止フラグ
+// -----------------------------
+if (room_get_name(room) == "Rm_Debug"
+ && variable_global_exists("enemyAIEnabled")
+ && !global.enemyAIEnabled
+ && state != states.DEAD) {
+
+    // ★ここで「完全に凍結」させる★
+    // いまの移動は x += lengthdir_x(...) なので、
+    // hsp / vsp は念のため0にしておく程度でOK
+    hsp        = 0;
+    vsp        = 0;
+    spd        = 0;
+    path_speed = 0;
+    image_speed = 0; // アニメも止める
+
+    // 必要なら、構え中の矢を手元にキープしたい等の処理をここに書く
+
+    return; // ★このフレームはこれ以上何もしない（IDLE/MOVE/ATTACK に入らない）
+}
+// （必要なら）orig_blend の保持だけ残してOK
 if (!variable_instance_exists(id, "orig_blend")) {
     orig_blend = image_blend;
-}
-
-// --- 実行制御: 一時停止モード（フレーム送り対応） ---
-if (variable_global_exists("gamePaused") && global.gamePaused) {
-    if (variable_global_exists("stepAdvance") && global.stepAdvance) {
-        // 処理は続行
-        path_speed = spd; //コマ送り時は速度を復元
-    } else {
-        // 一時停止中は image_speed も止める
-        path_speed = 0; 
-        image_speed = 0;
-
-        // 弾を保持中は向きだけ維持（windup中など）
-		if (instance_exists(myball) && myball.state == 0) {
-		    var base_hold_offset = 16;  // 等倍前提の固定値
-		    var offset = base_hold_offset;
-
-		    myball.x = x + lengthdir_x(offset, dir);
-		    myball.y = y + lengthdir_y(offset, dir);
-		    myball.image_angle = dir;
-		    myball.visible = false; // ←（前回の仕様どおり）溜め中は非表示
-		}
-
-        return; // 通常処理はスキップ
-    }
-}
-
-// デバッグモード: Oキーで方向固定の弾を撃つ（上・左・下・右・OFF切替）
-// global.enemyFireDirection: 0=上, 1=左, 2=下, 3=右, 4=OFF
-if (state != states.DEAD && variable_global_exists("enemyFireDirection") && global.enemyFireDirection != 4) {
-    // 強制停止（移動＆パスキャンセル）
-    path_end();
-    hsp = 0;
-    vsp = 0;
-    spd = 0;
-
-    // 弾を一定間隔で撃つ（例：30フレームごと）
-    if (shootTimer % 30 == 0) {
-        var fire_dir;
-
-        switch (global.enemyFireDirection) {
-            case 0: fire_dir = 90; break;   // 上
-            case 1: fire_dir = 180; break;  // 左
-            case 2: fire_dir = 270; break;  // 下
-            case 3: fire_dir = 0; break;    // 右
-        }
-
-        var b = instance_create_depth(x, y, depth, O_Arrow);
-        b.dir = fire_dir;
-        b.state = 1; // 発射状態
-
-        // ★★ 追加: デバッグ発射時も見た目スケールを矢へ継承
-        b.image_xscale = image_xscale;
-        b.image_yscale = image_yscale;
-        // ★★ 追加: 角度も見た目に適用
-        b.image_angle = b.dir;
-    }
-
-    shootTimer++; // デバッグ用カウンタ進行
-    return; // 通常のAI処理はスキップ
-}
-
-// AI無効時は移動と攻撃をスキップする（デバッグルーム限定、ただし死亡している敵は除外）
-if (room_get_name(room) == "Rm_Debug" && !global.enemyAIEnabled && state != states.DEAD) {
-    path_end();
-    hsp = 0;
-    vsp = 0;
-    image_speed = 0;
-    sprite_index = S_Enemy_Idle; // 通常待機スプライト
-    Enemy_anim();
-    return;
 }
 
 // --- 死亡処理は全ルームで共通処理として分離 ---
@@ -105,43 +59,58 @@ if (state == states.DEAD) {
     return; // 他の処理をスキップ
 }
 
+// --- 念のため：不正なステートならIDLEに戻す ---
+if (state != states.IDLE
+ && state != states.MOVE
+ && state != states.ATTACK
+ && state != states.DEAD) {
+    state = states.IDLE;
+}
 // 各ステートのAI処理（IDLE / MOVE / ATTACK）
 switch (state) {
+    // -------------------------
+    // IDLE：プレイヤーを見つけたらMOVEへ
+    // -------------------------
     case states.IDLE:
-        // calc_entity_movement() は削除
-        if (instance_exists(O_Player)) {
-            Check_For_Player(); // IDLE中にもプレイヤーの位置をチェック
-        }
-        if (path_index != -1) state = states.MOVE;
-        Enemy_anim();
-    break;
-
-    case states.MOVE:
-        spd = 0.31;
+        Enemy_anim(); // 待機アニメ
 
         if (instance_exists(O_Player)) {
-            var _dis = distance_to_object(O_Player);
-
-            // 攻撃可能距離に入ったらステート移行
-            if (_dis <= attack_dis) {
-                path_end();
-                shootTimer = 0;
-                state = states.ATTACK;
-                break;
-            }
-
-            // 攻撃距離外ならパスを更新
-            Check_For_Player();
-        }
-
-        check_facing();
-        Enemy_anim();
-
-        // パスがなければIDLEに戻す（Check_For_Player の後に判断）
-        if (path_index == -1) {
-            state = states.IDLE;
+            // とりあえずプレイヤーがいればMOVEに移行
+            state = states.MOVE;
         }
     break;
+
+    // -------------------------
+    // MOVE：プレイヤーに向かって直進で追尾
+    // -------------------------
+	   case states.MOVE:
+	    if (instance_exists(O_Player)) {
+	        var _dis = point_distance(x, y, O_Player.x, O_Player.y);
+	        var _dir = point_direction(x, y, O_Player.x, O_Player.y);
+
+	        // 向き更新
+	        dir = _dir;
+	        check_facing();
+
+	        // 攻撃可能距離に入ったらATTACKへ
+	        if (_dis <= attack_dis) {
+	            path_end();     // 古いパスが残っていても一応終了
+	            shootTimer = 0;
+	            state = states.ATTACK;
+	        } else {
+	            // ★シンプル追尾移動★
+	            var move_speed = 0.8; // 足の速さ。お好みで調整
+	            x += lengthdir_x(move_speed, _dir);
+	            y += lengthdir_y(move_speed, _dir);
+	        }
+	    } else {
+	        // プレイヤーがいなければIDLEへ戻す
+	        state = states.IDLE;
+	    }
+
+	    Enemy_anim();
+	break;
+
 
     case states.ATTACK:
         // --- シグナル点滅処理 (windup 中のみ) ---
@@ -286,10 +255,6 @@ switch (state) {
                 shootTimer++;
 			}
 
-            //ここで最後に汎用アニメ処理を軽く呼ぶ（深度やフラッシュの反映目的）
-            //ただし sprite_index は上の分岐でコントロールしているため、Enemy_anim は呼ばないか、
-            //呼ぶ場合は sprite_index を上書きしない設計にしておくこと。
-            // Enemy_anim(); // ← S_Enemy_Charge / S_Enemy_Shot / S_Enemy_Idle を上書きしたくない場合は呼ばない
         }
     break;
 }

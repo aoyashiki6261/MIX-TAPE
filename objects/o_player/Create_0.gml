@@ -1,5 +1,5 @@
 event_inherited();
-walk_spd = 0.75;
+walk_spd = 0.25;
 facing_dir        = 0; // スプライトの向き
 
 // --- 攻撃関連 ---

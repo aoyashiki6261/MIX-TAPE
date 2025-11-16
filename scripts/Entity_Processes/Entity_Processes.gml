@@ -33,14 +33,14 @@ function damage_entity( _tid, _sid, _damage, _time){
 		return _dead;
 	}
 }
-//これを実行しているインスタンスが停止しているかどうかを確認
+// これを実行しているインスタンスが死亡しているかどうかを確認
 function is_dead(){
 
     // 既にDEADなら true（ここで終了）
     if (state == states.DEAD) return true;
 
     if (hp <= 0){
-		show_debug_message("[is_dead] state->DEAD id=" + string(id));
+        show_debug_message("[is_dead] state->DEAD id=" + string(id));
         state       = states.DEAD;
         hp          = 0;
         image_index = 0;
@@ -50,8 +50,8 @@ function is_dead(){
 
         //死亡時のsound設定（既存）
         switch(object_index){	
-            default:   break; // 死亡時のsoundを再生
-            case O_Player: break; // プレイヤー死亡時のsoundを再生
+            default:   break;
+            case O_Player: break;
         }
         return true;
     }

@@ -27,7 +27,7 @@ function Player_ProcessAttack(argument0, argument1) {
 				ds_list_add(hitByAttack,hitID);
 				with (hitID)
 				{
-					EnemyHit(2);
+					with (hitID) EnemyHit(2);
 				}
 			}
 		}

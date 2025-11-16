@@ -33,24 +33,39 @@ if (do_step) buffer_update();
 if (do_step) {
     switch (state) {
         case PLAYERSTATE.FREE:
-			Player_State_Free(do_step);
-		    break;
+            Player_State_Free(do_step);
+            break;
 
         case PLAYERSTATE.DODGE:
-		    Player_State_Dodge(do_step);
-		    break;
+            Player_State_Dodge(do_step);
+            break;
 
         case PLAYERSTATE.ATTACK_SLASH:
             Player_State_Attack_Slash(do_step);
             break;
 
+        case PLAYERSTATE.DEAD:
+            Player_State_Dead(do_step);
+            break;
+    }
 
-       case PLAYERSTATE.DEAD:
-		    Player_State_Dead(do_step);
-		    break;
-		    }
-	
-	if (pressed_attack) Player_HandleAttackPress();
+    // ★攻撃マスク切り替え：攻撃アニメ5フレーム中の3〜4フレームだけHBを使う
+    if (state == PLAYERSTATE.ATTACK_SLASH) {
+        var frame = floor(image_index); // 0〜4 のどれかになる想定
+
+        if (frame == 2 || frame == 3) {
+            // 3・4フレーム目だけ、攻撃用マスクを使う
+            mask_index = S_Player_Attack_HB;
+        } else {
+            // それ以外のフレームでは通常マスクに戻す
+            mask_index = -1; // -1 = sprite_indexのマスクを使う
+        }
+    } else {
+        // 攻撃ステート以外では常に通常マスク
+        mask_index = -1;
+    }
+
+    if (pressed_attack) Player_HandleAttackPress();
 
     // 1フレーム進行フラグリセット
     if (global.stepAdvance) global.stepAdvance = false;
