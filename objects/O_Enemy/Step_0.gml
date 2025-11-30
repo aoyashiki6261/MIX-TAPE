@@ -112,9 +112,8 @@ switch (state) {
 	break;
 
 
-    case states.ATTACK:
+     case states.ATTACK:
         // --- シグナル点滅処理 (windup 中のみ) ---
-        // windupTime フレームの間だけ色を白⇔元に戻す
         if (shootTimer > 0 && shootTimer < windupTime) {
             var flashInterval = 8; // 8 フレームごとに切り替え
             if ((shootTimer div flashInterval) mod 2 == 0) {
@@ -128,136 +127,100 @@ switch (state) {
         }
 
         if (!global.gamePaused || global.stepAdvance) {
+
+            // 発射まではプレイヤーを追尾してエイム更新
             if (instance_exists(O_Player)) {
                 dir = point_direction(x, y, O_Player.x, O_Player.y);
             }
             spd = 0;
 
-            // 一時停止中でも1フレームだけ shootTimer を進行
-			var do_step = (!global.gamePaused || global.stepAdvance);
-			if (do_step) {
+            var do_step = (!global.gamePaused || global.stepAdvance);
+            if (do_step) {
 
-			    //スプライト遷移を自然にする（Charge → Shot → Idle）
-				var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
-				
-			    // ※ 溜め尺 windupTime に対し、Charge は1回だけ進むように手動でフレームを進行させる
-			    if (shootTimer < windupTime) {
-					
-			    // 1) 溜め中：S_Enemy_Charge を手動フレーム進行（ループさせない）
-			    if (sprite_index != S_Enemy_Charge) {
-			        sprite_index = S_Enemy_Charge;
-			        image_index = 0;
-			        image_speed = 0;   // ← 自動再生を止める（ループ防止）
-			    }
-			    // shootTimer に比例して0→(frames-1)へ（1周で止める）
-			    var _frames = max(1, sprite_get_number(S_Enemy_Charge));
-			    var _t = clamp(shootTimer, 0, windupTime - 1);
-			    image_index = min(_frames - 1, floor(_t * _frames / windupTime));
+                // Shotスプライトを見せるフレーム数
+                var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
 
-			    // 弾を敵の前に保持（windup中）
-			    if (shootTimer <= windupTime && instance_exists(self.myball)) {
-				    var base_hold_offset = 16;
-				    var offset = base_hold_offset;
+                // 1) 溜め中：S_Enemy_Charge を手動フレーム進行（ループさせない）
+                if (shootTimer < windupTime) {
 
-				    self.myball.x = x + lengthdir_x(offset, dir);
-				    self.myball.y = y + lengthdir_y(offset, dir);
-				    self.myball.image_angle = dir;  // 構え中の見た目角度
-				}
-
-						} else if (shootTimer == windupTime) {
-			    // 2) 発射の瞬間：S_Enemy_Shot に切替えて即発射
-			    if (sprite_index != S_Enemy_Shot) {
-			        sprite_index = S_Enemy_Shot;
-			        image_index = 0;     // ← ショットを先頭コマから
-			        image_speed = 1;     // ← 再生開始
-			    }
-
-			    // windup が終わったら発射（最終エイム反映）
-			    if (instance_exists(myball)) {
-			        if (instance_exists(O_Player)) {
-			            var _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
-			            myball.dir = _final_dir;
-			            myball.image_angle = _final_dir; // 見た目も一致
-			        }
-			        myball.state = 1; // ← このステップで発射に移行
-			    }
-
-			} else if (shootTimer >= windupTime + 1 && shootTimer <= (windupTime + _shot_frames_to_show)) {
-			    // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける（アニメ再生させる）
-			    if (sprite_index != S_Enemy_Shot) {               // 念のため
-			        sprite_index = S_Enemy_Shot;
-			        image_index = 0;
-			        image_speed = 1;
-			    }
-			    // ここでは何もしない（S_Enemy_Shot を再生して見せる時間）
-
-			} else if (shootTimer > (windupTime + _shot_frames_to_show) && shootTimer <= windupTime + recoverTime) {
-			    // 4) 発射後～硬直：Idle（必要なら Recover 用スプライトへ）
-			    if (sprite_index != S_Enemy_Idle) {
-			        sprite_index = S_Enemy_Idle;
-			        image_index = 0;
-			        image_speed = 1;
-			    }
-			}
-
-			    // 弾を作成（1フレーム目のみ）
-			    if (shootTimer == 1) {
-			        myball = instance_create_depth(x, y, depth, O_Arrow);
-			        if (instance_exists(O_Player)) {
-			            myball.dir = point_direction(x, y, O_Player.x, O_Player.y);
-			            myball.state = 0; // 待機状態
-			        }
-
-                    //発生直後から見た目角度を一致
-                    myball.image_angle = myball.dir;
-			    }
-
-			    // 弾を敵の前に保持（windup中）
-			    if (shootTimer <= windupTime && instance_exists(self.myball)) {
-				    var _draw_scale = (variable_instance_exists(id, "draw_scale") ? draw_scale : 1);
-				    var base_hold_offset = 16;
-				    var offset = base_hold_offset * _draw_scale;
-
-				    self.myball.x = x + lengthdir_x(offset, dir);
-				    self.myball.y = y + lengthdir_y(offset, dir);
-
-                    //構え中は見た目の角度も維持
-                    self.myball.image_angle = dir;
-				}
-
-			    // windup が終わったら発射（shootTimer==windupTime の瞬間）
-			    if (shootTimer == windupTime && instance_exists(myball)) {
-
-                    // ★★ 追加(5): 発射直前に“最終エイム”を反映してから撃つ
-                    if (instance_exists(O_Player)) {
-                        var _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
-                        myball.dir = _final_dir;
-                        myball.image_angle = _final_dir; // 見た目も一致
+                    if (sprite_index != S_Enemy_Charge) {
+                        sprite_index = S_Enemy_Charge;
+                        image_index = 0;
+                        image_speed = 0;   // 自動再生を止める（ループ防止）
                     }
 
-			        myball.state = 1;
-			    }
+                    var _frames = max(1, sprite_get_number(S_Enemy_Charge));
+                    var _t = clamp(shootTimer, 0, windupTime - 1);
+                    image_index = min(_frames - 1, floor(_t * _frames / windupTime));
 
-			    // 攻撃後、追跡に戻る
-			    if (shootTimer > windupTime + recoverTime) {
-			        state = states.MOVE;
-			        shootTimer = 0;
-			        myball = noone;
+                    // ★ここではもう矢は存在しない（事前出現をやめる）
 
-			        // パスをすぐ再計算させるためにタイマーをリセット
-			        calc_path_timer = 0;
+                }
+                // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
+                else if (shootTimer == windupTime) {
 
-			        // 追跡用のパスを再設定
-			        Check_For_Player();
-			    }
+                    // Shotスプライトに切り替え
+                    if (sprite_index != S_Enemy_Shot) {
+                        sprite_index = S_Enemy_Shot;
+                        image_index = 0;
+                        image_speed = 1;
+                    }
+
+                    // 最終エイム（このフレームのプレイヤー位置）を取得
+                    var _final_dir = dir;
+                    if (instance_exists(O_Player)) {
+                        _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
+                    }
+
+                    // 矢の出現位置（敵の少し前）
+                    var _spawn_offset = 16;
+                    var _sx = x + lengthdir_x(_spawn_offset, _final_dir);
+                    var _sy = y + lengthdir_y(_spawn_offset, _final_dir);
+
+                    // ★ここで初めて矢を生成＆即発射状態にする
+                    myball = instance_create_depth(_sx, _sy, depth, O_Arrow);
+                    myball.dir         = _final_dir;
+                    myball.image_angle = _final_dir;
+                    myball.state       = 1; // 発射状態（O_Arrow側で移動開始）
+
+                }
+                // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける
+                else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
+
+                    if (sprite_index != S_Enemy_Shot) {
+                        sprite_index = S_Enemy_Shot;
+                        image_index = 0;
+                        image_speed = 1;
+                    }
+                    // ここでは矢はすでに飛んでいるので、何もしない
+
+                }
+                // 4) 発射後～硬直：Idle（Recover的な時間）
+                else if (shootTimer > (windupTime + _shot_frames_to_show) && shootTimer <= windupTime + recoverTime) {
+
+                    if (sprite_index != S_Enemy_Idle) {
+                        sprite_index = S_Enemy_Idle;
+                        image_index = 0;
+                        image_speed = 1;
+                    }
+                }
+
+                // 5) 硬直終了 → 移動へ戻る
+                if (shootTimer > windupTime + recoverTime) {
+                    state = states.MOVE;
+                    shootTimer = 0;
+                    myball = noone;
+
+                    calc_path_timer = 0;
+                    Check_For_Player(); // 追跡用のパス/方向更新
+                }
 
                 // フレーム末尾で進める
                 shootTimer++;
-			}
-
+            }
         }
-    break;
-}
+		    break;
+		}
 
 // 画面内にいるときだけタイマーを進める（ATTACK以外）
 var _camLeft = camera_get_view_x(view_camera[0]);

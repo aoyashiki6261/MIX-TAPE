@@ -33,8 +33,8 @@
   ],
   "name":"Rm_main",
   "parent":{
-    "name":"ルーム",
-    "path":"folders/ルーム.yy",
+    "name":"BLANK GAME",
+    "path":"BLANK GAME.yyp",
   },
   "parentRoom":null,
   "physicsSettings":{

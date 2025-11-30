@@ -26,7 +26,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.0.207",
+    "IDEVersion":"2024.14.1.210",
   },
   "name":"BLANK GAME",
   "resources":[
@@ -77,8 +77,8 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
     {"roomId":{"name":"Rm_main","path":"rooms/Rm_main/Rm_main.yy",},},
+    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[
