@@ -29,22 +29,36 @@ calc_path_timer = 0; // 最初からプレイヤーをチェックさせるた�
 calc_path_delay = 15; // 何フレームに1回パスを再計算するか(プレイヤーに向かってくるためのチェックを何フレームの頻度で行うか)
 attack_dis      = 120;  //★近づいたら攻撃に遷移する距離
 
+
 path = path_add();
 path_speed = spd;
 path_position = 0;
 
 //ステートマシン
 state = 0;
-	//弾の発射ステータス
+	//矢の発射ステータス
 	cooldownTime = 4*60;
 	shootTimer = irandom(cooldownTime);
-	windupTime = 90; //★弾を撃つまでの構える時間
-	recoverTime = 120; //★弾を撃った後の硬直時間
+	windupTime = 90; //★矢を撃つまでの構える時間
+	recoverTime = 120; //★矢を撃った後の硬直時間
 	ballInst = noone;
-	myball = noone; // 敵ごとに発射中の弾を記録する用
+	myball = noone; // 敵ごとに発射中の矢を記録する用
 	ballXoff = 5;
 	ballYoff = -8;
 
-
-
-
+	// ★ 右向き用の攻撃シグナル出現位置
+	signal_offset_right_x = 16;   // 右方向
+	signal_offset_right_y = -3;  // 上方向
+	// ★ 左向き用攻撃シグナル出現位置
+	signal_offset_left_x  = -16;  // 左方向
+	signal_offset_left_y  = -3;  // 上方向
+	
+	// ★ 右向き用の矢の出現位置
+	arrow_offset_right_x = 30;
+	arrow_offset_right_y = -48;
+	// ★ 左向き用の矢の出現位置
+	arrow_offset_left_x  = -30;
+	arrow_offset_left_y  = -48;
+	
+	arrow_forward = 4;// 手元からちょっと前に矢を出す距離
+	attack_signal = noone; // 攻撃シグナル用
