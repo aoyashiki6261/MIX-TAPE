@@ -151,11 +151,12 @@ switch (state) {
             if (do_step) {
 
                 // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★
-                //    → windupTime の少し前から光り始め、発射フレームでは消える
-                var signal_frames = 16;                         // 何フレーム前から光らせるか（お好みで 3〜10 など）
-                var signal_start  = max(0, windupTime - signal_frames);
+                //    → signal_start_frame ～ signal_end_frame の間だけ表示
+                //    → その区間でアニメーションを 1 周させる（ループ禁止）
+                var sig_start = signal_start_frame;
+                var sig_end   = signal_end_frame;
 
-                if (shootTimer >= signal_start && shootTimer < windupTime) {
+                if (shootTimer >= sig_start && shootTimer <= sig_end) {
 
                     // シグナルの表示位置（左右で別のオフセットを使う）
                     var sx_sig, sy_sig;
@@ -175,17 +176,27 @@ switch (state) {
                         sy_sig = y + signal_offset_right_y;
                     }
 
-                    // シグナル生成（このフレーム帯で新しく出す／位置を追従させる）
+                    // シグナル生成（まだ無ければ作る）
                     if (!instance_exists(attack_signal)) {
                         attack_signal = instance_create_depth(sx_sig, sy_sig, depth - 1, O_Enemy_AttackSignal);
+                        attack_signal.image_speed = 0; // ★ ループさせたくないので自動再生は止める
                     } else {
                         attack_signal.x = sx_sig;
                         attack_signal.y = sy_sig;
                     }
+
+                    // ★ 開始〜終了フレームの進行率に応じて image_index を手動設定
+                    var frames_sig = sprite_get_number(S_Enemy_Attacksignal);
+                    if (frames_sig > 0) {
+                        var span  = max(1, sig_end - sig_start); // 0除算防止
+                        var t_sig = clamp((shootTimer - sig_start) / span, 0, 1);
+                        attack_signal.image_index = floor(t_sig * (frames_sig - 1));
+                    }
+
                     attack_signal.image_angle = 0;
 
                 } else {
-                    // ★ 発射の瞬間に既存シグナルが残っていたら消す（保険）
+                    // ★ 指定タイミング外ではシグナルを消す
                     if (instance_exists(attack_signal)) {
                         with (attack_signal) instance_destroy();
                     }
@@ -211,7 +222,7 @@ switch (state) {
                     // ★ここではもう矢は存在しない（事前出現をやめる）
 
                 }
-                // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
+                 // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
 				else if (shootTimer == windupTime) {
 
 				    // Shotスプライトに切り替え
@@ -291,5 +302,4 @@ switch (state) {
             }
         }
         break;
-
-}
+ }

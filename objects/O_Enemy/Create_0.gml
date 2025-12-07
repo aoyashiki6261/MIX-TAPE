@@ -53,6 +53,9 @@ state = 0;
 	signal_offset_left_x  = -16;  // 左方向
 	signal_offset_left_y  = -3;  // 上方向
 	
+	signal_start_frame = 70;        // ★ シグナルを出し始める shootTimer の値
+	signal_end_frame   = 90;        // ★ シグナルを終わらせる shootTimer の値（windupTime より前がオススメ）
+	
 	// ★ 右向き用の矢の出現位置
 	arrow_offset_right_x = 30;
 	arrow_offset_right_y = -48;
