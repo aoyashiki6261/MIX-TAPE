@@ -34,6 +34,10 @@ if (!variable_instance_exists(id, "orig_blend")) {
 
 // --- 死亡処理は全ルームで共通処理として分離 ---
 if (state == states.DEAD) {
+	
+	depth = 100;
+
+	
     // 移動やAI処理停止
     path_end();
     hsp = 0;
@@ -131,7 +135,7 @@ switch (state) {
 	break;
 
 
-    case states.ATTACK:
+        case states.ATTACK:
         if (!global.gamePaused || global.stepAdvance) {
 
             // ★ 攻撃中もプレイヤー方向にエイムを合わせておく（最終発射方向のベース）
@@ -142,53 +146,52 @@ switch (state) {
             }
             spd = 0;
 
-            // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★
-            var glow_frames = 30;                         // 何フレーム前から光らせるか（短めのサイン）
-            var glow_start  = max(0, windupTime - glow_frames);
-
-            if (shootTimer >= glow_start && shootTimer < windupTime) {
-                // 発射直前ゾーン：弓の先にシグナルを出す
-
-                // ★ シグナルの位置（左右で別のオフセットを使う）
-	            var sx, sy;
-
-	            // ★ プレイヤーが敵のどちら側にいるかで左右を決める
-	            var _is_left = false;
-	            if (instance_exists(O_Player)) {
-	                _is_left = (O_Player.x < x); // プレイヤーのXが敵より左ならtrue
-	            }
-
-	            if (_is_left) {
-	                // 左向き側（プレイヤーが左にいる）
-	                sx = x + signal_offset_left_x;
-	                sy = y + signal_offset_left_y;
-	            } else {
-	                // 右向き側（プレイヤーが右にいる or プレイヤー不在）
-	                sx = x + signal_offset_right_x;
-	                sy = y + signal_offset_right_y;
-	            }
-
-                // まだシグナルがなければ生成、あれば位置を追従
-                if (!instance_exists(attack_signal)) {
-                    attack_signal = instance_create_depth(sx, sy, depth - 1, O_Enemy_AttackSignal);
-                } else {
-                    attack_signal.x = sx;
-                    attack_signal.y = sy;
-                }
-
-                attack_signal.image_angle = 0;
-				
-            } else {
-                // 発射直前ゾーン以外ではシグナルを消す
-                if (instance_exists(attack_signal)) {
-                    with (attack_signal) instance_destroy();
-                }
-                attack_signal = noone;
-            }
-
   			// 一時停止中でも1フレームだけ shootTimer を進行
             var do_step = (!global.gamePaused || global.stepAdvance);
             if (do_step) {
+
+                // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★
+                //    → windupTime の少し前から光り始め、発射フレームでは消える
+                var signal_frames = 16;                         // 何フレーム前から光らせるか（お好みで 3〜10 など）
+                var signal_start  = max(0, windupTime - signal_frames);
+
+                if (shootTimer >= signal_start && shootTimer < windupTime) {
+
+                    // シグナルの表示位置（左右で別のオフセットを使う）
+                    var sx_sig, sy_sig;
+
+                    var _is_left_sig = false;
+                    if (instance_exists(O_Player)) {
+                        _is_left_sig = (O_Player.x < x); // プレイヤーが左側にいるかどうか
+                    }
+
+                    if (_is_left_sig) {
+                        // 左向き側
+                        sx_sig = x + signal_offset_left_x;
+                        sy_sig = y + signal_offset_left_y;
+                    } else {
+                        // 右向き側
+                        sx_sig = x + signal_offset_right_x;
+                        sy_sig = y + signal_offset_right_y;
+                    }
+
+                    // シグナル生成（このフレーム帯で新しく出す／位置を追従させる）
+                    if (!instance_exists(attack_signal)) {
+                        attack_signal = instance_create_depth(sx_sig, sy_sig, depth - 1, O_Enemy_AttackSignal);
+                    } else {
+                        attack_signal.x = sx_sig;
+                        attack_signal.y = sy_sig;
+                    }
+                    attack_signal.image_angle = 0;
+
+                } else {
+                    // ★ 発射の瞬間に既存シグナルが残っていたら消す（保険）
+                    if (instance_exists(attack_signal)) {
+                        with (attack_signal) instance_destroy();
+                    }
+                    attack_signal = noone;
+                }
+
                 // ★この下は「溜め／Shot／硬直」の処理。今まで書いていたものをそのまま残してOK
                 // Shotスプライトを見せるフレーム数
                 var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
@@ -208,57 +211,44 @@ switch (state) {
                     // ★ここではもう矢は存在しない（事前出現をやめる）
 
                 }
-                 // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
-                else if (shootTimer == windupTime) {
+                // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
+				else if (shootTimer == windupTime) {
 
-                    // ★ 発射の瞬間にシグナルを消す（保険）
-                    if (instance_exists(attack_signal)) {
-                        with (attack_signal) instance_destroy();
-                    }
-                    attack_signal = noone;
+				    // Shotスプライトに切り替え
+				    if (sprite_index != S_Enemy_Shot) {
+				        sprite_index = S_Enemy_Shot;
+				        image_index = 0;
+				        image_speed = 1;
+				    }
 
-                    // Shotスプライトに切り替え
-                    if (sprite_index != S_Enemy_Shot) {
-                        sprite_index = S_Enemy_Shot;
-                        image_index = 0;
-                        image_speed = 1;
-                    }
+				    // 最終エイム（このフレームのプレイヤー位置）を取得
+				    var _final_dir = dir;
+				    if (instance_exists(O_Player)) {
+				        _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
+				    }
 
-                    // 最終エイム（このフレームのプレイヤー位置）を取得
-                    var _final_dir = dir;
-                    if (instance_exists(O_Player)) {
-                        _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
-                    }
+				    // ★ 基準となる「矢の位置」（左右別オフセット）
+				    var bx, by;
+				    if (image_xscale >= 0) {
+				        // 右向き時の矢の出現基準
+				        bx = x + arrow_offset_right_x;
+				        by = y + arrow_offset_right_y;
+				    } else {
+				        // 左向き時の矢の出現基準
+				        bx = x + arrow_offset_left_x;
+				        by = y + arrow_offset_left_y;
+				    }
 
-                    // ★ 基準となる「矢の位置」（左右で別のオフセットを使う）
-                    //    プレイヤーがどちら側にいるかで左右判定（シグナルと同じロジック）
-                    var bx, by;
-                    var _is_left_arrow = false;
-                    if (instance_exists(O_Player)) {
-                        _is_left_arrow = (O_Player.x < x); // プレイヤーのXが敵より左ならtrue
-                    }
+				    // ★ 手の位置から、矢の向きに arrow_forward 分だけ前に出す
+				    var _sx = bx + lengthdir_x(arrow_forward, _final_dir);
+				    var _sy = by + lengthdir_y(arrow_forward, _final_dir);
 
-                    if (_is_left_arrow) {
-                        // 左向き時の矢の出現基準
-                        bx = x + arrow_offset_left_x;
-                        by = y + arrow_offset_left_y;
-                    } else {
-                        // 右向き時の矢の出現基準
-                        bx = x + arrow_offset_right_x;
-                        by = y + arrow_offset_right_y;
-                    }
-
-					// ★ 手の位置から、矢の向きに arrow_forward 分だけ前に出す
-					var _sx = bx + lengthdir_x(arrow_forward, _final_dir);
-					var _sy = by + lengthdir_y(arrow_forward, _final_dir);
-
-                    // ★ここで初めて矢を生成＆即発射状態にする
-                    myball = instance_create_depth(_sx, _sy, depth, O_Arrow);
-                    myball.dir         = _final_dir;
-                    myball.image_angle = _final_dir;
-                    myball.state       = 1; // 発射状態（O_Arrow側で移動開始）
-
-                }
+				    // ★ここで初めて矢を生成＆即発射状態にする
+				    myball = instance_create_depth(_sx, _sy, depth, O_Arrow);
+				    myball.dir         = _final_dir;
+				    myball.image_angle = _final_dir;
+				    myball.state       = 1; // 発射状態（O_Arrow側で移動開始）
+				}
                 // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける
                 else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
                     if (sprite_index != S_Enemy_Shot) {
@@ -301,22 +291,5 @@ switch (state) {
             }
         }
         break;
-		
-		}
 
-// 画面内にいるときだけタイマーを進める（ATTACK以外）
-var _camLeft = camera_get_view_x(view_camera[0]);
-var _camRight = _camLeft + camera_get_view_width(view_camera[0]);
-var _camTop = camera_get_view_y(view_camera[0]);
-var _camBottom = _camTop + camera_get_view_height(view_camera[0]);
-
-if (bbox_right > _camLeft && bbox_left < _camRight && bbox_bottom > _camTop && bbox_top < _camBottom) {
-    if (state != states.ATTACK) shootTimer++;
-}
-
-// クールダウン経過後に攻撃可能な距離なら再攻撃
-if (shootTimer > cooldownTime) {
-    if (state != states.ATTACK) {
-        var _dis = distance_to_object(O_Player);
-    }
 }
