@@ -38,6 +38,12 @@ if (state == states.DEAD) {
     path_end();
     hsp = 0;
     vsp = 0;
+	
+	// ★ 死亡時もシグナルを確実に消す
+    if (variable_instance_exists(id, "attack_signal") && instance_exists(attack_signal)) {
+        with (attack_signal) instance_destroy();
+    }
+    attack_signal = noone;
 
     // 死亡スプライト・アニメーションをセット（最初のみ）
     if (sprite_index != S_Enemy_Dead) {
@@ -70,6 +76,15 @@ if (state != states.IDLE
  && state != states.DEAD) {
     state = states.IDLE;
 }
+
+// ★ ATTACK 以外のステートでは攻撃シグナルを必ず消す（HIT/IDLE/MOVE に抜けたときの保険）
+if (state != states.ATTACK) {
+    if (variable_instance_exists(id, "attack_signal") && instance_exists(attack_signal)) {
+        with (attack_signal) instance_destroy();
+    }
+    attack_signal = noone;
+}
+
 // 各ステートのAI処理（IDLE / MOVE / ATTACK）
 switch (state) {
     // -------------------------
