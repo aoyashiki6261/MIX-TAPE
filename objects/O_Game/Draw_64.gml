@@ -10,6 +10,16 @@ if (!variable_global_exists("kills")) {
     global.kills = 0;
 }
 
+// ★ 1フレーム進行フラグの安全初期化（念のため）
+if (!variable_global_exists("stepAdvance")) {
+    global.stepAdvance = false;
+}
+
+// ★ ゲームオーバーフラグの安全初期化
+if (!variable_global_exists("gameOver")) {
+    global.gameOver = false;
+}
+
 // ✅ デバッグルームでのみ表示 + 右スティック押し込みデバッグONのときのみ表示
 if (room_get_name(room) == "Rm_Debug" && global.gamepadDebugEnabled) {
 
@@ -40,6 +50,9 @@ if (room_get_name(room) == "Rm_Debug" && global.gamepadDebugEnabled) {
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
 
+    // ★ デバッグテキスト用にUIフォントを固定
+    draw_set_font(Fnt_Ui);
+
     // 描画位置設定（左下から順に）
     var base_y = room_height + 420; // 一番下の行から上に積む
 
@@ -65,6 +78,10 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
     draw_set_color(c_white);
+
+    // ★ ここもUI用フォントを明示
+    draw_set_font(Fnt_Ui);
+
     draw_text(0, room_height + 480, "[R3 button : debug mode]");
     
     //キルカウンターのテキスト表示
@@ -72,6 +89,9 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     var yy_dbg = 20;                             //★ Y
     var txt_dbg = string(global.kills);
     var scale_ui_dbg = 2.0;                      // ★ 拡大倍率（1=等倍, 2=2倍 など）
+
+    // ★ デバッグ用のキル数表示はキルカウンタフォントに統一
+    draw_set_font(Fnt_KillCounter);
 
     // 影付きで視認性アップ（拡大描画）
     draw_set_color(c_black);
@@ -82,7 +102,7 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
 
 //以下はキルカウンターの描画設定
 {
-    // セーフティ：描画状態をリセット
+     // セーフティ：描画状態をリセット
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
     draw_set_color(c_white);
@@ -91,15 +111,50 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
 
     var gw = display_get_gui_width();
     if (gw <= 0) gw = room_width; // 念のためフォールバック
-    var xx = gw - 570;             //★ 表示位置X
+    var xx = gw - 680;             //★ 表示位置X
     var yy = 20;                  //★ 表示位置Y
 
     var txt = string(global.kills);
-    var scale_ui = 4.0;           // ★ 拡大倍率（ここを変えれば一括で大きさ調整）
+    var scale_ui = 1.0;           // ★ 拡大倍率（※今回は等倍にしてフォントサイズ側で調整）
 
-    // 影付きで見やすく（拡大描画）
+    // ★ キルカウンター用フォントを使用
+    draw_set_font(Fnt_KillCounter);
+
+    // 影付きで見やすく（等倍描画）
     draw_set_color(c_black);
-    draw_text_transformed(xx+2, yy+2, txt, scale_ui, scale_ui, 0);
+    draw_text(xx+2, yy+2, txt);   // 影
     draw_set_color(c_white);
-    draw_text_transformed(xx, yy, txt, scale_ui, scale_ui, 0);
+    draw_text(xx, yy, txt);       // 本体
+}
+
+// ★ GAME OVER オーバーレイの描画（最後に描いて上からかぶせる）
+if (variable_global_exists("gameOver") && global.gameOver) {
+
+    var gw_go = display_get_gui_width();
+    var gh_go = display_get_gui_height();
+
+    // 画面全体をうっすら暗くする
+    draw_set_alpha(0.6);
+    draw_set_color(c_black);
+    draw_rectangle(0, 0, gw_go, gh_go, false);
+    draw_set_alpha(1);
+
+    // テキスト描画設定
+    draw_set_halign(fa_center);
+    draw_set_valign(fa_middle);
+    draw_set_color(c_white);
+
+    // ★ GAME OVER用フォントに切り替え
+    draw_set_font(Fnt_GameOver);
+	
+	// GAME OVER（大きく中央に）
+    var y_go_title = gh_go * 0.4;
+    draw_text(gw_go * 0.5, y_go_title, "GAME OVER");
+
+    // ★ PRESS STARTをUiフォントに切り替え
+    draw_set_font(Fnt_Ui);
+
+    // PRESS START
+    var y_go_press = gh_go * 0.6;
+    draw_text(gw_go * 0.5, y_go_press, "PRESS START");
 }

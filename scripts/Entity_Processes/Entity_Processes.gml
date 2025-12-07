@@ -45,6 +45,11 @@ function is_dead(){
         hp          = 0;
         image_index = 0;
 
+		// ★ プレイヤーが死んだときだけゲームオーバーフラグON
+        if (object_index == O_Player) {
+            global.gameOver = true;
+        }
+
         // ★ キル加算
         Enemy_MarkKill();
 
@@ -52,6 +57,7 @@ function is_dead(){
         switch(object_index){	
             default:   break;
             case O_Player: break;
+	
         }
         return true;
     }

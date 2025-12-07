@@ -30,6 +30,8 @@
   },
   "name":"BLANK GAME",
   "resources":[
+    {"id":{"name":"Fnt_GameOver","path":"fonts/Fnt_GameOver/Fnt_GameOver.yy",},},
+    {"id":{"name":"Fnt_KillCounter","path":"fonts/Fnt_KillCounter/Fnt_KillCounter.yy",},},
     {"id":{"name":"Fnt_Title","path":"fonts/Fnt_Title/Fnt_Title.yy",},},
     {"id":{"name":"Fnt_Ui","path":"fonts/Fnt_Ui/Fnt_Ui.yy",},},
     {"id":{"name":"O_Arrow","path":"objects/O_Arrow/O_Arrow.yy",},},

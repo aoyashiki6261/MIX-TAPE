@@ -32,6 +32,5 @@ function Game_Reset_NewGame(_go_first_room = false) {
 }
 	
 }
-
-/// O_Game Create イベント
 global.killCount = 0;
+global.gameOver = false;

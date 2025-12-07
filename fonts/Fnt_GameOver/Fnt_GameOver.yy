@@ -1,6 +1,6 @@
 {
   "$GMFont":"",
-  "%Name":"Fnt_Title",
+  "%Name":"Fnt_GameOver",
   "AntiAlias":1,
   "applyKerning":0,
   "ascender":56,
@@ -840,7 +840,7 @@
   "last":0,
   "lineHeight":80,
   "maintainGms1Font":false,
-  "name":"Fnt_Title",
+  "name":"Fnt_GameOver",
   "parent":{
     "name":"オブジェクト",
     "path":"folders/オブジェクト.yy",

@@ -69,4 +69,10 @@ if (do_step) {
 
     // 1フレーム進行フラグリセット
     if (global.stepAdvance) global.stepAdvance = false;
+	
+	// プレイヤーが死亡ステートになっていたら GAME OVER フラグを立てる
+	//（do_step に関係なく毎フレームチェック）
+	if (state == PLAYERSTATE.DEAD) {
+	    global.gameOver = true;
+}
 }
