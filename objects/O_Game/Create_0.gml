@@ -24,7 +24,7 @@ function Game_Reset_NewGame(_go_first_room = false) {
 
     // ★ 好みのリセット動作を選択
     if (_go_first_room) {
-        room_goto(Rm_main);
+        room_goto(Rm_Main);
     } else {
         // 現在のルームを再スタート
         room_restart();
