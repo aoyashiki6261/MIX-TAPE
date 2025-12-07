@@ -106,25 +106,33 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
     draw_set_color(c_white);
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
+    draw_set_halign(fa_center); // ★ 横は中央揃え
+    draw_set_valign(fa_top);    // ★ 縦は上基準
 
     var gw = display_get_gui_width();
     if (gw <= 0) gw = room_width; // 念のためフォールバック
-    var xx = gw - 680;             //★ 表示位置X
-    var yy = 20;                  //★ 表示位置Y
+
+    var gh = display_get_gui_height();
+    if (gh <= 0) gh = room_height; // 念のためフォールバック
+
+    // ★ 画面の「上中央」に配置
+    var xx = gw * 0.5;  //★ 画面中央X
+    var yy = 10;        //★ 画面上からの余白ピクセル（お好みで調整）
 
     var txt = string(global.kills);
-    var scale_ui = 1.0;           // ★ 拡大倍率（※今回は等倍にしてフォントサイズ側で調整）
 
-    // ★ キルカウンター用フォントを使用
+    // ★ キルカウンター用のフォントを使用
     draw_set_font(Fnt_KillCounter);
 
     // 影付きで見やすく（等倍描画）
     draw_set_color(c_black);
-    draw_text(xx+2, yy+2, txt);   // 影
+    draw_text(xx+2, yy+2, txt); // 影
     draw_set_color(c_white);
-    draw_text(xx, yy, txt);       // 本体
+    draw_text(xx, yy, txt);     // 本体
+
+    // 他の描画に影響しないように戻しておく（お好みで）
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
 }
 
 // ★ GAME OVER オーバーレイの描画（最後に描いて上からかぶせる）
