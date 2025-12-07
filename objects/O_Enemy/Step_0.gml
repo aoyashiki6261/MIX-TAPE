@@ -151,12 +151,11 @@ switch (state) {
             if (do_step) {
 
                 // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★
-                //    → signal_start_frame ～ signal_end_frame の間だけ表示
-                //    → その区間でアニメーションを 1 周させる（ループ禁止）
-                var sig_start = signal_start_frame;
-                var sig_end   = signal_end_frame;
+                //    → signal_start_frame ～ windupTime の少し手前まで表示
+                //    → 終わりは必ず「矢が出る瞬間（windupTime）」で消える
+                var sig_start = signal_start_frame; // ← Create で決めた開始フレーム
 
-                if (shootTimer >= sig_start && shootTimer <= sig_end) {
+                if (shootTimer >= sig_start && shootTimer < windupTime) {
 
                     // シグナルの表示位置（左右で別のオフセットを使う）
                     var sx_sig, sy_sig;
@@ -185,10 +184,10 @@ switch (state) {
                         attack_signal.y = sy_sig;
                     }
 
-                    // ★ 開始〜終了フレームの進行率に応じて image_index を手動設定
+                    // ★ sig_start〜windupTime の進行率に応じて image_index を手動設定
                     var frames_sig = sprite_get_number(S_Enemy_Attacksignal);
                     if (frames_sig > 0) {
-                        var span  = max(1, sig_end - sig_start); // 0除算防止
+                        var span  = max(1, windupTime - sig_start); // 0除算防止
                         var t_sig = clamp((shootTimer - sig_start) / span, 0, 1);
                         attack_signal.image_index = floor(t_sig * (frames_sig - 1));
                     }
@@ -196,7 +195,7 @@ switch (state) {
                     attack_signal.image_angle = 0;
 
                 } else {
-                    // ★ 指定タイミング外ではシグナルを消す
+                    // ★ 指定タイミング外（特に windupTime 以降）はシグナルを確実に消す
                     if (instance_exists(attack_signal)) {
                         with (attack_signal) instance_destroy();
                     }
