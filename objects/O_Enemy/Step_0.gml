@@ -185,12 +185,19 @@ switch (state) {
                     }
 
                     // ★ sig_start〜windupTime の進行率に応じて image_index を手動設定
-                    var frames_sig = sprite_get_number(S_Enemy_Attacksignal);
-                    if (frames_sig > 0) {
-                        var span  = max(1, windupTime - sig_start); // 0除算防止
-                        var t_sig = clamp((shootTimer - sig_start) / span, 0, 1);
-                        attack_signal.image_index = floor(t_sig * (frames_sig - 1));
-                    }
+					var frames_sig = sprite_get_number(S_Enemy_Attacksignal);
+					if (frames_sig > 0) {
+
+					    var frame_idx = shootTimer - sig_start; 
+
+					    // コマ数を超えたら最後のコマで止めてループさせない
+					    if (frame_idx >= frames_sig) {
+					        frame_idx = frames_sig - 1;
+					    }
+
+					    attack_signal.image_index = frame_idx;
+					}
+
 
                     attack_signal.image_angle = 0;
 
