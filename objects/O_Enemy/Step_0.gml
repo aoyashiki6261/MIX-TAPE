@@ -190,7 +190,7 @@ switch (state) {
             spd = 0;
 
             // --- 一時停止中でも1フレームだけ shootTimer を進行 ---
-            var do_step = (!global.gamePaused || global.stepAdvance);
+            do_step = (!global.gamePaused || global.stepAdvance);
             if (do_step) {
 
                 // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★

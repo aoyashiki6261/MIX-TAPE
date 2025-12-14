@@ -12,12 +12,12 @@
   "Folders":[
     {"$GMFolder":"","%Name":"Control","folderPath":"folders/Control.yy","name":"Control","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Entitiy","folderPath":"folders/Entitiy.yy","name":"Entitiy","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"03_Enemy","folderPath":"folders/Entitiy/03_Enemy.yy","name":"03_Enemy","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"Enemy_Sprite","folderPath":"folders/Entitiy/03_Enemy/Enemy_Sprite.yy","name":"Enemy_Sprite","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"01_Macro","folderPath":"folders/Entitiy/01_Macro.yy","name":"01_Macro","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"02_player","folderPath":"folders/Entitiy/02_player.yy","name":"02_player","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Player_Sprite","folderPath":"folders/Entitiy/02_player/Player_Sprite.yy","name":"Player_Sprite","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Player_State","folderPath":"folders/Entitiy/02_player/Player_State.yy","name":"Player_State","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"01_Macro","folderPath":"folders/Entitiy/01_Macro.yy","name":"01_Macro","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"03_Enemy","folderPath":"folders/Entitiy/03_Enemy.yy","name":"03_Enemy","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"Enemy_Sprite","folderPath":"folders/Entitiy/03_Enemy/Enemy_Sprite.yy","name":"Enemy_Sprite","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"オブジェクト","folderPath":"folders/オブジェクト.yy","name":"オブジェクト","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"スプライト","folderPath":"folders/スプライト.yy","name":"スプライト","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"ルーム","folderPath":"folders/ルーム.yy","name":"ルーム","resourceType":"GMFolder","resourceVersion":"2.0",},
@@ -27,7 +27,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.1.210",
+    "IDEVersion":"2024.14.2.212",
   },
   "name":"BLANK GAME",
   "resources":[
