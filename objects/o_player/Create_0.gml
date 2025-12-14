@@ -1,5 +1,5 @@
 event_inherited();
-walk_spd = 0.25;
+walk_spd = PLAYER_WALK_SPEED;
 facing_dir        = 0; // スプライトの向き
 
 // --- 攻撃関連 ---
@@ -18,9 +18,9 @@ enum PLAYERSTATE {
 }
 
 // --- 緊急回避関連(★緊急回避の数値を変えるのはこの部分) ---
-dodge_duration     = 10;          // 緊急回避が続くフレーム数
-dodge_speed        = 8;           // 緊急回避の移動距離
-dodge_cooldown_max = 0;           // クールダウンの長さ（60 = 1秒）
+dodge_duration     = PLAYER_DODGE_DURATION_FRAMES;
+dodge_speed        = PLAYER_DODGE_SPEED_PER_FRAME;
+dodge_cooldown_max = PLAYER_DODGE_COOLDOWN_FRAMES;
 
 // --- 緊急回避関連(×初期化用なので以下の数値は基本触らないこと) ---
 dodge_cooldown    = 0;           // カウントダウン管理用
@@ -110,7 +110,7 @@ enum ACTION {
 
 buffered_action = ACTION.NONE;   //予約中の次アクション
 buffer_timer    = 0;             //先行入力の残りフレーム
-buffer_window   = 6;             //★先行入力の受付フレーム数
+buffer_window   = PLAYER_INPUT_BUFFER_WINDOW;   //★先行入力の受付フレーム数
 
 //ステートスクリプトから参照する“先行入力のミラー”を初期化
 pressed_space_i  = false;

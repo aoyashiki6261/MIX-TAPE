@@ -6,7 +6,7 @@
   "name":"Player_StateHelpers",
   "parent":{
     "name":"Player_State",
-    "path":"folders/Entitiy/player/Player_State.yy",
+    "path":"folders/Entitiy/02_player/Player_State.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

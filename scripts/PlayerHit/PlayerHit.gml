@@ -1,16 +1,14 @@
 //ダメージ計算
 	//ダメージ作成イベント
-	function get_damaged_create(_hp = 10, _iframes = false)
+	function get_damaged_create(_hp = DMG_DEFAULT_MAX_HP, _iframes = false)
 	{
-		maxHp = _hp;
-		hp = _hp;
-		
-		//iframes(無敵時間)の取得
-		if _iframes == true
-		{
-			iframeTimer = 0;
-			iframeNumber = 90;
-		}
+	    maxHp = _hp;
+	    hp    = _hp;
+
+	    if _iframes == true {
+	        iframeTimer  = 0;
+	        iframeNumber = DMG_IFRAME_DURATION_FRAMES;
+	    }
 		
 		//ダメージリストの作成
 		if _iframes	==	false

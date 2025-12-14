@@ -40,25 +40,28 @@ function is_dead(){
     if (state == states.DEAD) return true;
 
     if (hp <= 0){
-        show_debug_message("[is_dead] state->DEAD id=" + string(id));
+        show_debug_message("[is_dead] state->DEAD id=" + string(id)
+            + " obj=" + string(object_get_name(object_index)));
         state       = states.DEAD;
         hp          = 0;
         image_index = 0;
 
-		// ★ プレイヤーが死んだときだけゲームオーバーフラグON
+        // ★ プレイヤーが死んだときだけゲームオーバーフラグON
         if (object_index == O_Player) {
             global.gameOver = true;
-        }
 
-        // ★ キル加算
-        Enemy_MarkKill();
+        } else {
+            // ★ 敵などプレイヤー以外：キルカウントを加算
+            //    Enemy_MarkKill はどこか一カ所で定義されている前提で「そのまま呼ぶ」
+            Enemy_MarkKill();
+        }
 
         //死亡時のsound設定（既存）
         switch(object_index){	
             default:   break;
             case O_Player: break;
-	
         }
+
         return true;
     }
 

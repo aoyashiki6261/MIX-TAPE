@@ -1,3 +1,22 @@
+draw_set_font(Fnt_Ui);
+
+// ★ 当たり判定デバッグ表示フラグの安全初期化
+if (!variable_global_exists("debugShowHitbox")) {
+    global.debugShowHitbox = false;
+}
+
+// ★ 当たり判定可視化モード中だけ、右上にテキスト表示
+if (global.debugShowHitbox) {
+    var gw_hit = display_get_gui_width();
+    var margin = 8;
+
+    draw_set_halign(fa_right);   // 右上
+    draw_set_valign(fa_top);
+    draw_set_color(c_yellow);
+
+    draw_text(gw_hit - margin, 4, "HITBOX DEBUG: ON");
+}
+
 // ✅ 未定義の変数を安全に初期化（必ずDrawイベントの最上部で）
 if (!variable_global_exists("enemyFireDirection")) {
     global.enemyFireDirection = 4; // OFF（初期状態）
@@ -9,12 +28,10 @@ if (!variable_global_exists("gamePaused")) {
 if (!variable_global_exists("kills")) {
     global.kills = 0;
 }
-
 // ★ 1フレーム進行フラグの安全初期化（念のため）
 if (!variable_global_exists("stepAdvance")) {
     global.stepAdvance = false;
 }
-
 // ★ ゲームオーバーフラグの安全初期化
 if (!variable_global_exists("gameOver")) {
     global.gameOver = false;
@@ -50,9 +67,6 @@ if (room_get_name(room) == "Rm_Debug" && global.gamepadDebugEnabled) {
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
 
-    // ★ デバッグテキスト用にUIフォントを固定
-    draw_set_font(Fnt_Ui);
-
     // 描画位置設定（左下から順に）
     var base_y = room_height + 420; // 一番下の行から上に積む
 
@@ -78,20 +92,13 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     draw_set_halign(fa_left);
     draw_set_valign(fa_bottom);
     draw_set_color(c_white);
-
-    // ★ ここもUI用フォントを明示
-    draw_set_font(Fnt_Ui);
-
     draw_text(0, room_height + 480, "[R3 button : debug mode]");
     
-    //キルカウンターのテキスト表示
+    //キルカウンターのテキスト表示（小さめ）
     var xx_dbg = display_get_gui_width() - 80;  //★ 右上表示のX
     var yy_dbg = 20;                             //★ Y
     var txt_dbg = string(global.kills);
     var scale_ui_dbg = 2.0;                      // ★ 拡大倍率（1=等倍, 2=2倍 など）
-
-    // ★ デバッグ用のキル数表示はキルカウンタフォントに統一
-    draw_set_font(Fnt_KillCounter);
 
     // 影付きで視認性アップ（拡大描画）
     draw_set_color(c_black);
@@ -100,39 +107,67 @@ if (room_get_name(room) == "Rm_Debug" && !global.gamepadDebugEnabled) {
     draw_text_transformed(xx_dbg, yy_dbg, txt_dbg, scale_ui_dbg, scale_ui_dbg, 0);
 }
 
-//以下はキルカウンターの描画設定
+/// --- ここから：ワープゾーンのテキスト表示（デバッグ用） ---
+/// プレイヤーが O_WarpZone に触れているときだけ、L3 でワープできることを表示
 {
-     // セーフティ：描画状態をリセット
+    var warp_hint = false;
+
+    // プレイヤーとワープゾーンが存在するか確認
+    if (instance_exists(O_Player) && instance_exists(O_WarpZone)) {
+
+        // プレイヤーは 1 体想定なので、先頭インスタンスを取得
+        var p = instance_find(O_Player, 0);
+
+        if (p != noone) {
+            // プレイヤー座標で O_WarpZone に当たっているかどうか
+            if (instance_place(p.x, p.y, O_WarpZone) != noone) {
+                warp_hint = true;
+            }
+        }
+    }
+
+    // 触れている場合だけテキストを描画
+	if (global.warpZoneHint) {
+	    var gw  = display_get_gui_width();
+	    var gh  = display_get_gui_height();
+	    var msg = "[L3 button : warp zone]";
+
+	    draw_set_font(Fnt_Ui);
+
+	    // 画面中央下に表示
+	    draw_set_halign(fa_center);
+	    draw_set_valign(fa_bottom);
+
+	    // 影付きで見やすく
+	    draw_set_color(c_black);
+	    draw_text(gw * 0.5 + 2, gh - 42, msg);
+	    draw_set_color(c_white);
+	    draw_text(gw * 0.5,     gh - 44, msg);
+	}
+}
+
+//以下はキルカウンターの描画設定（常に表示）
+{
+    // セーフティ：描画状態をリセット
     gpu_set_blendmode(bm_normal);
     draw_set_alpha(1);
     draw_set_color(c_white);
-    draw_set_halign(fa_center); // ★ 横は中央揃え
-    draw_set_valign(fa_top);    // ★ 縦は上基準
+    draw_set_halign(fa_left);
+    draw_set_valign(fa_top);
 
     var gw = display_get_gui_width();
     if (gw <= 0) gw = room_width; // 念のためフォールバック
-
-    var gh = display_get_gui_height();
-    if (gh <= 0) gh = room_height; // 念のためフォールバック
-
-    // ★ 画面の「上中央」に配置
-    var xx = gw * 0.5;  //★ 画面中央X
-    var yy = 10;        //★ 画面上からの余白ピクセル（お好みで調整）
+    var xx = gw * 0.5;            //★ 画面中央上
+    var yy = 20;                  //★ 表示位置Y
 
     var txt = string(global.kills);
+    var scale_ui = 4.0;           // ★ 拡大倍率（ここを変えれば一括で大きさ調整）
 
-    // ★ キルカウンター用のフォントを使用
-    draw_set_font(Fnt_KillCounter);
-
-    // 影付きで見やすく（等倍描画）
+    // 影付きで見やすく（拡大描画）
     draw_set_color(c_black);
-    draw_text(xx+2, yy+2, txt); // 影
+    draw_text_transformed(xx+2, yy+2, txt, scale_ui, scale_ui, 0);
     draw_set_color(c_white);
-    draw_text(xx, yy, txt);     // 本体
-
-    // 他の描画に影響しないように戻しておく（お好みで）
-    draw_set_halign(fa_left);
-    draw_set_valign(fa_top);
+    draw_text_transformed(xx, yy, txt, scale_ui, scale_ui, 0);
 }
 
 // ★ GAME OVER オーバーレイの描画（最後に描いて上からかぶせる）
@@ -155,7 +190,7 @@ if (variable_global_exists("gameOver") && global.gameOver) {
     // ★ GAME OVER用フォントに切り替え
     draw_set_font(Fnt_GameOver);
 	
-	// GAME OVER（大きく中央に）
+    // GAME OVER（大きく中央に）
     var y_go_title = gh_go * 0.4;
     draw_text(gw_go * 0.5, y_go_title, "GAME OVER");
 

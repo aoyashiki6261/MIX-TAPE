@@ -30,9 +30,10 @@ function Player_State_Attack_Slash(do_step) {
     if (hits > 0) {
         for (var i = 0; i < hits; i++) {
             var hitID = hitByAttackNow[| i];
+			
             if (ds_list_find_index(hitByAttack, hitID) == -1) {
                 ds_list_add(hitByAttack, hitID);
-                with (hitID) EnemyHit(2);
+                with (hitID) EnemyHit(PLAYER_SLASH_DAMAGE);
             }
         }
     }

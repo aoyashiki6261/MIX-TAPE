@@ -8,5 +8,5 @@ vsp = 0;
 //どれくらいの時間Entityはノックバックされているか
 knockback_time = 0;
 
-damage = 1;
+damage = DMG_INSTANCE_DAMAGE_DEFAULT;
 hitConfirm = false;

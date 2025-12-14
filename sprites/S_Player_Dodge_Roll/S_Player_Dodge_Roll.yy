@@ -27,7 +27,7 @@
   "origin":7,
   "parent":{
     "name":"Player_Sprite",
-    "path":"folders/Entitiy/player/Player_Sprite.yy",
+    "path":"folders/Entitiy/02_player/Player_Sprite.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

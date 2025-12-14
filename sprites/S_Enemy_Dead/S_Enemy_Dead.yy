@@ -2,7 +2,7 @@
   "$GMSprite":"v2",
   "%Name":"S_Enemy_Dead",
   "bboxMode":0,
-  "bbox_bottom":47,
+  "bbox_bottom":63,
   "bbox_left":16,
   "bbox_right":47,
   "bbox_top":16,
@@ -26,7 +26,7 @@
   "origin":7,
   "parent":{
     "name":"Enemy_Sprite",
-    "path":"folders/Entitiy/Enemy/Enemy_Sprite.yy",
+    "path":"folders/Entitiy/03_Enemy/Enemy_Sprite.yy",
   },
   "preMultiplyAlpha":false,
   "resourceType":"GMSprite",

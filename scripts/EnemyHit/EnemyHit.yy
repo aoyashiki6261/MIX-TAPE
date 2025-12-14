@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"EnemyHit",
   "parent":{
-    "name":"Enemy",
-    "path":"folders/Entitiy/Enemy.yy",
+    "name":"03_Enemy",
+    "path":"folders/Entitiy/03_Enemy.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

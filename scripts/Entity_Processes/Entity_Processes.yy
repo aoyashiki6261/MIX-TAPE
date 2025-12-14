@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Entity_Processes",
   "parent":{
-    "name":"Entitiy",
-    "path":"folders/Entitiy.yy",
+    "name":"Control",
+    "path":"folders/Control.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

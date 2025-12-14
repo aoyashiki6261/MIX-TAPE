@@ -22,12 +22,13 @@ function Player_ProcessAttack(argument0, argument1) {
 		{
 			//if this instance has not yet been hit by this attack, hit it
 			var hitID = hitByAttackNow[| i]
+			
 			if (ds_list_find_index(hitByAttack,hitID) == -1)
 			{
 				ds_list_add(hitByAttack,hitID);
 				with (hitID)
 				{
-					with (hitID) EnemyHit(2);
+					with (hitID) EnemyHit(PLAYER_SLASH_DAMAGE);
 				}
 			}
 		}

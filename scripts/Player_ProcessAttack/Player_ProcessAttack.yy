@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"Player_ProcessAttack",
   "parent":{
-    "name":"player",
-    "path":"folders/Entitiy/player.yy",
+    "name":"02_player",
+    "path":"folders/Entitiy/02_player.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

@@ -7,7 +7,7 @@ global.gamePaused         = false; // 最初は必ずポーズ解除
 global.stepAdvance        = false; // コマ送りフラグもクリア
 global.enemyFireDirection = 4;     // 定方向弾デバッグOFF（0〜3はON）
 global.enemyAIEnabled     = true;  // 将来用。今は参照していなくてもtrueに
-
+global.gameOver           = false; // ここで毎ルーム開始時に GAME OVER フラグもリセット
 /// --------------------------------------
 /// 2) 重複配置の敵をルーム開始時に間引く（同座標・同オブジェクト）
 /// --------------------------------------

@@ -5,7 +5,7 @@ if (id != _master) exit;
 spawn_timer--;
 
 if (spawn_timer <= 0) {
-    spawn_timer = 150; // スポーン間隔（フレーム） 例：1秒ごとにスポーン（60fps × 1秒）
+    spawn_timer = ENEMY_SPAWN_INTERVAL_LOOP; // スポーン間隔（フレーム）
 
     // スポナー一覧を作成
     var spawner_list = array_create(0);
@@ -23,7 +23,7 @@ if (spawn_timer <= 0) {
         // 選ばれたスポナーの位置からスポーン
         with (chosen_spawner) {
             // ★ 近接チェック：半径 R 以内に同種がいたらスキップ（重なり防止）
-            var R = 2; // ← 調整ポイント（広げるほど重なりにくい）
+            var R = ENEMY_SPAWN_COLLISION_RADIUS; // ← 調整ポイント（広げるほど重なりにくい）
             if (collision_circle(x, y, R, O_Enemy, false, true) == noone) {
 
                 // ★ 地形などとの重なりも避けたい場合は以下を併用

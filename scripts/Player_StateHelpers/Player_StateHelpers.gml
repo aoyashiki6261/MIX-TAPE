@@ -15,8 +15,9 @@ function choose_dodge_dir_from_input() {
     var gp = 0;
     var stick_x = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislh) : 0;
     var stick_y = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislv) : 0;
-    var mag = point_distance(0, 0, stick_x, stick_y);
-    if (mag > 0.2) { dodge_dir_x = stick_x / mag; dodge_dir_y = stick_y / mag; return true; }
+	var mag = point_distance(0, 0, stick_x, stick_y);
+	if (mag > PLAYER_STICK_DEADZONE_DODGE) { 
+		dodge_dir_x = stick_x / mag; dodge_dir_y = stick_y / mag; return true; }
 
     var dir_x = right - left, dir_y = down - up;
     var len = point_distance(0,0,dir_x,dir_y);

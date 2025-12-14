@@ -1,26 +1,14 @@
-/// 敵を一体倒したときに一度だけキル数を加算する
+/// @description この敵のキルを一度だけ加算する
 function Enemy_MarkKill() {
 
-    // プレイヤーはキル対象にしない
-    if (object_index == O_Player) {
-        return;
-    }
+    // ★ 既にカウント済み or まだインスタンスが有効でないなら何もしない
+    if (kill_counted) return;
 
-    // すでにカウント済みなら何もしない
-    if (!variable_instance_exists(id, "killCounted")) {
-        killCounted = false;
-    }
+    // ★ キル数を加算（最大9999まで）
+    global.kills = min(global.kills + 1, 9999);
+    kill_counted = true;
 
-    if (!killCounted) {
-        killCounted = true;
-
-        // ★ 表示と合わせて global.kills を使う
-        if (!variable_global_exists("kills")) {
-            global.kills = 0;
-        }
-        global.kills += 1;
-
-        show_debug_message("[Enemy_MarkKill] kills=" + string(global.kills)
-            + " id=" + string(id));
-    }
+    // ★ デバッグ（原因追跡用）
+    show_debug_message("[KILL] id=" + string(id)
+        + " total=" + string(global.kills));
 }

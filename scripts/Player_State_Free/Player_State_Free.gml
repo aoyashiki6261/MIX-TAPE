@@ -4,7 +4,7 @@ function Calc_movement(do_step) {
     if (!do_step) return;
 
     // --- スティック遊び値の設定 ---
-    var deadzone = 0.1;              // 0.1＝10% まで入力を無視したい場合
+	var deadzone = PLAYER_STICK_DEADZONE_MOVE;
     var gp       = 0;
     var sx       = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislh) : 0;
     var sy       = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislv) : 0;
@@ -34,8 +34,12 @@ function Calc_movement(do_step) {
         vmove = 0;
     }
 
-    // 向き更新
-    if (hmove != 0) facing = hmove;
+    // 向き更新（-1：左 / +1：右）＋当たり判定用の image_xscale も同期
+    if (hmove != 0) {
+        facing      = sign(hmove);  // -1 or +1 に正規化
+        image_xscale = facing;      // ★ マスクもこの向きで左右反転させる
+    }
+
 
     // 移動適用
     x += hmove;
@@ -72,8 +76,14 @@ function anim(do_step) {
     if (!do_step) return;
 
     // --- スケールリセット（縦横比固定） ---
-    image_xscale = 1;
-    image_yscale = 1;
+    image_yscale = 1; // 縦は常に等倍
+
+    // 横方向は facing に従って維持（-1: 左 / +1: 右）
+    if (facing < 0) {
+        image_xscale = -1;
+    } else {
+        image_xscale = 1;
+    }
 
     if (hmove != 0 || vmove != 0) {
         sprite_index = S_Player_Walk;

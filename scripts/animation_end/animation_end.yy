@@ -5,8 +5,8 @@
   "isDnD":false,
   "name":"animation_end",
   "parent":{
-    "name":"Entitiy",
-    "path":"folders/Entitiy.yy",
+    "name":"Control",
+    "path":"folders/Control.yy",
   },
   "resourceType":"GMScript",
   "resourceVersion":"2.0",

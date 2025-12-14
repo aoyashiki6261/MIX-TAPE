@@ -4,7 +4,7 @@ event_inherited();
 draw_scale = 1; // スプライトサイズ
 
 dir = 0;
-spd = 4.5;
+spd = ARROW_SPEED;  // ★ マクロ化
 hsp = 0;
 vsp = 0;
 

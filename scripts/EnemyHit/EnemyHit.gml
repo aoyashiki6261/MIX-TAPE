@@ -1,8 +1,15 @@
-function EnemyHit(argument0) {
-    var _damage = argument0;
+function EnemyHit(_damage) {
 
-    // ★ すでに死亡しているなら何もしない（多重ヒット防止）
-    if (state == states.DEAD || kill_counted) return;
+    // ★ この関数を呼んだインスタンスが「state」を持っていないなら、何もしないで終了
+    //    → プレイヤーや弾などから誤って呼ばれても安全
+    if (!variable_instance_exists(self, "state")) {
+        return;
+    }
+
+    // ★ すでに死亡ステートの敵には、これ以上ダメージ処理を行わない
+    if (state == states.DEAD) {
+        return;
+    }
 
     hp -= _damage;
     flash = true;

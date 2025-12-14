@@ -1,0 +1,13 @@
+{
+  "$GMScript":"v1",
+  "%Name":"Mcr_Enemy",
+  "isCompatibility":false,
+  "isDnD":false,
+  "name":"Mcr_Enemy",
+  "parent":{
+    "name":"01_Macro",
+    "path":"folders/Entitiy/01_Macro.yy",
+  },
+  "resourceType":"GMScript",
+  "resourceVersion":"2.0",
+}
