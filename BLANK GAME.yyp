@@ -92,9 +92,9 @@
   "resourceType":"GMProject",
   "resourceVersion":"2.0",
   "RoomOrderNodes":[
-    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
-    {"roomId":{"name":"Rm_Title","path":"rooms/Rm_Title/Rm_Title.yy",},},
     {"roomId":{"name":"Rm_Main","path":"rooms/Rm_Main/Rm_Main.yy",},},
+    {"roomId":{"name":"Rm_Title","path":"rooms/Rm_Title/Rm_Title.yy",},},
+    {"roomId":{"name":"Rm_Debug","path":"rooms/Rm_Debug/Rm_Debug.yy",},},
   ],
   "templateType":"game",
   "TextureGroups":[

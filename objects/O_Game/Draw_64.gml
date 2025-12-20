@@ -14,7 +14,7 @@ if (global.debugShowHitbox) {
     draw_set_valign(fa_top);
     draw_set_color(c_yellow);
 
-    draw_text(gw_hit - margin, 4, "HITBOX DEBUG: ON");
+    draw_text(gw_hit - margin, 4, "HIT BOX : ON");
 }
 
 // ✅ Drawイベントでは global 初期化は行わず、参照だけにする
