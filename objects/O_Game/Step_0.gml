@@ -31,7 +31,6 @@ if (!variable_global_exists("enemyFireDirection")) {
 // -----------------------------
 if (gamepad_button_check_pressed(0, gp_select)) { //－ボタン
     global.debugShowHitbox = !global.debugShowHitbox;
-    show_debug_message("Debug Hitbox: " + string(global.debugShowHitbox));
 }
 
 // ゲームパッドデバッグフラグ（R3でトグル）
@@ -56,4 +55,15 @@ if (keyboard_check_pressed(ord("R"))
 
     // ★ 共通リセット関数にまとめる
     Game_Reset_NewGame(false); // false = 現在のルームを再スタート
+}
+
+
+// 左スティック押し込み（L3）でデバッグメニュー
+if (gamepad_button_check_pressed(0, gp_stickl)) {
+
+    if (!instance_exists(O_DebugMenu)) {
+        instance_create_layer(0, 0, "GUI", O_DebugMenu);
+    } else {
+        with (O_DebugMenu) instance_destroy();
+    }
 }

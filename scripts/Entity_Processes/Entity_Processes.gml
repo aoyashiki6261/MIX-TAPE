@@ -19,7 +19,6 @@ function damage_entity( _tid, _sid, _damage, _time){
 	
 	with(_tid){
 		hp -= _damage;
-		show_debug_message("[damage/entity] hp=" + string(hp) + " id=" + string(id));
 		var _dead = is_dead();
 		path_end();
 		//ノックバック距離を設定

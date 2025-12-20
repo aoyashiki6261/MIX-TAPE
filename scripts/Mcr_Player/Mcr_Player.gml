@@ -24,22 +24,19 @@
 // プレイヤーに限らず、何も指定しなかったときの最大HP。
 #macro DMG_DEFAULT_MAX_HP              1         // maxHp / hp の初期値（汎用）
 
-// ダメージインスタンスのデフォルトダメージ。
-// O_Entity_Par, O_DamageParent で damage = 1; としている部分の共通値。
-#macro DMG_INSTANCE_DAMAGE_DEFAULT     1          // 弾など1発あたりの基本ダメージ
-
 // --------------------------------------------------
 // プレイヤーの基本ステータス / 移動
 // （O_Player の Create イベント用）
 // --------------------------------------------------
 
 // プレイヤーの通常歩き速度（O_Player.walk_spd）
-#macro PLAYER_WALK_SPEED               0.25       // walk_spd の初期値
+#macro PLAYER_WALK_SPEED               1       // walk_spd の初期値
 
 // アナログスティックのデッドゾーン（移動用）
 // Calc_movement() 内の deadzone = 0.1; に対応。
 // これより小さいスティック入力は無視して、意図しない微振れを消す。
-#macro PLAYER_STICK_DEADZONE_MOVE      0.1        // 移動入力として受け取るスティックの最小強さ
+// スティックの遊び値（0..1） 例:0.2=20%
+#macro PLAYER_STICK_DEADZONE_MOVE        0.10
 
 
 // --------------------------------------------------
@@ -66,11 +63,7 @@
 // 回避後のクールダウン（dodge_cooldown_max）
 // Player_StartDodge() で dodge_cooldown = dodge_cooldown_max; に使う。
 // 0 ならクールダウン無し。60 なら約1秒の待ち時間（60fps想定）。
-#macro PLAYER_DODGE_COOLDOWN_FRAMES    0          // 回避終了後の待機フレーム数
-
-// 回避方向を決めるときのスティック入力のデッドゾーン。
-// これより弱い入力では回避方向が決まらない（＝回避自体が不発になる）。
-#macro PLAYER_STICK_DEADZONE_DODGE     0.2        // 回避方向を決める最小スティック強さ
+#macro PLAYER_DODGE_COOLDOWN_FRAMES    20          // 回避終了後の待機フレーム数
 
 // --------------------------------------------------
 // 先行入力（入力バッファ）
@@ -80,12 +73,3 @@
 // 攻撃・回避の先行入力を何フレーム保持するか。
 // 大きくすると「ボタン連打でかなり先まで予約」しやすくなる。
 #macro PLAYER_INPUT_BUFFER_WINDOW      6          // 先行入力受付フレーム数
-
-
-// --------------------------------------------------
-// プレイヤー死亡演出
-// （Player_State_Dead 用）
-// --------------------------------------------------
-
-// プレイヤーが死んでから消えるまでのフレーム数。
-#macro PLAYER_DEATH_DESPAWN_FRAMES     900        // 死亡後にインスタンスを消すまでの時間

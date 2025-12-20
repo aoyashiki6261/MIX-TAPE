@@ -1,29 +1,36 @@
-// 親の処理（あれば）を実行
+// ※ 親が Draw を持っているなら、これは必須
 event_inherited();
 
-// 通常の見た目を描画
+// 通常描画
 draw_self();
 
 // ------------------------------------
-// ★ デバッグ：矢の当たり判定可視化
-//  ・global.debugShowHitbox == true のときだけ
-//  ・左右反転などは mask / bbox に任せる
+// ★ デバッグ：矢の当たり判定（実形状）可視化
 // ------------------------------------
 if (variable_global_exists("debugShowHitbox")
- && global.debugShowHitbox) {
+ && global.debugShowHitbox
+ && mask_index != -1) {
 
-    // 現在の描画状態を退避
+    // 状態退避
     var _old_alpha = draw_get_alpha();
     var _old_color = draw_get_color();
 
-    // 少し透過した色で枠線を描画（色はお好みで）
-    draw_set_alpha(0.6);
-    draw_set_color(c_aqua); // 矢用にプレイヤー・敵と色を変えておく
+    draw_set_alpha(0.5);
+    draw_set_color(c_aqua);
 
-    // 現在の mask_index / sprite に基づく当たり判定矩形
-    draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, false);
+    // ★ scale は 1 固定（重要）
+    draw_sprite_ext(
+        mask_index,        // ← 当たり判定用スプライト
+        image_index,       // 現在のフレーム
+        x, y,
+        image_xscale,
+        image_yscale,
+        image_angle,       // ← これが超重要（回転一致）
+        c_red,
+        1
+    );
 
-    // 元の描画状態に戻す
+    // 復元
     draw_set_alpha(_old_alpha);
     draw_set_color(_old_color);
 }

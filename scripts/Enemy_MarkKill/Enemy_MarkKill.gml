@@ -7,8 +7,4 @@ function Enemy_MarkKill() {
     // ★ キル数を加算（最大9999まで）
     global.kills = min(global.kills + 1, 9999);
     kill_counted = true;
-
-    // ★ デバッグ（原因追跡用）
-    show_debug_message("[KILL] id=" + string(id)
-        + " total=" + string(global.kills));
 }

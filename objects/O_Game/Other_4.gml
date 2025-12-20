@@ -2,15 +2,27 @@
 /// O_Game Room Start イベント
 /// --------------------------------------
 
-// 1) デバッグ系グローバルを毎ルーム開始時に「安全な初期値」に戻す
-global.gamePaused         = false; // 最初は必ずポーズ解除
-global.stepAdvance        = false; // コマ送りフラグもクリア
-global.enemyFireDirection = 4;     // 定方向弾デバッグOFF（0〜3はON）
-global.enemyAIEnabled     = true;  // 将来用。今は参照していなくてもtrueに
-global.gameOver           = false; // ここで毎ルーム開始時に GAME OVER フラグもリセット
-/// --------------------------------------
-/// 2) 重複配置の敵をルーム開始時に間引く（同座標・同オブジェクト）
-/// --------------------------------------
+// ★ デバッグ系グローバルは上書きしない
+// 代わりに O_DebugController の初回生成を行う
+if (!instance_exists(O_DebugController)) {
+    // 安全のため、レイヤーが存在するか確認
+    var dbg_layer = "Controller";
+    if (!layer_exists(dbg_layer)) {
+        dbg_layer = "Instances"; // 念のため、必ず存在するレイヤーにフォールバック
+        show_debug_message("Layer 'Controller' が存在しません。O_DebugController を 'Instances' に生成します。");
+    }
+    var dbg = instance_create_layer(0, 0, dbg_layer, O_DebugController);
+    dbg.persistent = true; // Room切替やリスタートでも破棄されない
+}
+
+// ここからゲーム進行用のリセットのみ
+global.gameOver = false;   // ルーム開始時はGAME OVER解除
+global.kills    = 0;
+global.killCount = 0;
+
+// --------------------------------------
+// 2) 重複配置の敵をルーム開始時に間引く（同座標・同オブジェクト）
+// --------------------------------------
 
 // ※ _seen はインスタンス変数として作る（var を付けない）
 if (variable_instance_exists(id, "_seen")) {

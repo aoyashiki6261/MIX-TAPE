@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"S_Enemy_Walk",
-  "bboxMode":0,
+  "bboxMode":2,
   "bbox_bottom":79,
   "bbox_left":6,
   "bbox_right":48,

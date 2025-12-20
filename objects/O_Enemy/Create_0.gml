@@ -12,10 +12,6 @@ draw_scale = 1; // スプライトサイズ
 
 orig_blend = image_blend;  // ← 元のブレンド色を保存
 
-// ★ 当たり判定専用マスクを固定する
-mask_index = S_Enemy_Mask;
-
-
 hsp = 0;
 vsp = 0;
 xp  = x;

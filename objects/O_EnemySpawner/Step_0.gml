@@ -1,3 +1,6 @@
+// ★ プレイヤー死亡時は敵を出現させない
+if (global.playerDead) exit;
+
 // ★ 同期ガード：一番若いIDのスポナーだけが処理を担当（マスター制）
 var _master = instance_find(O_EnemySpawner, 0);
 if (id != _master) exit;
@@ -22,6 +25,10 @@ if (spawn_timer <= 0) {
 
         // 選ばれたスポナーの位置からスポーン
         with (chosen_spawner) {
+
+            // ★ プレイヤー死亡時は敵を出現させない（念のための二重ガード）
+            if (global.playerDead) exit;
+
             // ★ 近接チェック：半径 R 以内に同種がいたらスキップ（重なり防止）
             var R = ENEMY_SPAWN_COLLISION_RADIUS; // ← 調整ポイント（広げるほど重なりにくい）
             if (collision_circle(x, y, R, O_Enemy, false, true) == noone) {

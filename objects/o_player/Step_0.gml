@@ -84,5 +84,8 @@ if (do_step) {
 // ★ プレイヤーが死亡ステートになっていたら GAME OVER フラグを立てる
 //   （一時停止中でも毎フレームチェックする）
 if (state == PLAYERSTATE.DEAD) {
-    global.gameOver = true;
+    if (!global.playerDead) {
+        global.playerDead = true;
+        global.gameOver  = true;
+    }
 }

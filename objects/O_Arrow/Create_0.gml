@@ -18,3 +18,5 @@ destroy = false;
 playerDestroy = true;
 
 image_angle = dir;	//角度を見た目にも反映
+
+mask_index = S_Arrow_Mask;

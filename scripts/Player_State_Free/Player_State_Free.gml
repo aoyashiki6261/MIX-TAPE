@@ -1,59 +1,79 @@
 /// @description Calc_movement + collision + anim（Player_State_Free用）
+/// 遊び値（デッドゾーン）を超えたときから速度計算を開始する仕様
 function Calc_movement(do_step) {
-    // --- 一時停止対応 ---
     if (!do_step) return;
 
-    // --- スティック遊び値の設定 ---
-	var deadzone = PLAYER_STICK_DEADZONE_MOVE;
-    var gp       = 0;
-    var sx       = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislh) : 0;
-    var sy       = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislv) : 0;
-    var mag      = point_distance(0, 0, sx, sy);
+    // --- アナログスティック設定 ---
+    var deadzone = PLAYER_STICK_DEADZONE_MOVE; // 遊び値（デッドゾーン） 例: 0.2 = 20%
+    var gp = 0;
+    var sx = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislh) : 0;  // 左スティックX軸
+    var sy = gamepad_is_connected(gp) ? gamepad_axis_value(gp, gp_axislv) : 0;  // 左スティックY軸
 
-    // まずデジタル入力（A/D/W/S または D-Pad）を取得
-    var dx = right - left;
-    var dy = down  - up;
+    // 入力の強さ（0..1）
+    var mag = point_distance(0, 0, sx, sy);  // スティックの傾きの大きさ
+
+    // デジタル入力（キーボード / D-Pad）
+    var dx = keyboard_check(vk_right) - keyboard_check(vk_left);
+    var dy = keyboard_check(vk_down) - keyboard_check(vk_up);
+
+    var hmove_local = 0;
+    var vmove_local = 0;
 
     if (mag > deadzone) {
-        // デッドゾーン超えた分を 0…1 に再マッピング
+        // --- 遊び値を超えた分だけを速度に反映 ---
+        var ang = point_direction(0, 0, sx, sy);  // スティックの方向
+
+        // 遊び値分を差し引き、残りを 0..1 に正規化
         var adj = (mag - deadzone) / (1 - deadzone);
-        var ang = point_direction(0, 0, sx, sy);
-        // walk_spd に adj を乗じて滑らかに加速
-        hmove = lengthdir_x(walk_spd * adj, ang);
-        vmove = lengthdir_y(walk_spd * adj, ang);
-    }
-    else if (dx != 0 || dy != 0) {
-        // デジタル入力があれば従来どおり定速移動
+        adj = clamp(adj, 0, 1);  // 正規化して0..1の範囲にする
+
+        // 遊び値を超えた部分から徐々に速度が上がる
+        hmove_local = lengthdir_x(walk_spd * adj, ang);
+        vmove_local = lengthdir_y(walk_spd * adj, ang);
+
+    } else if (dx != 0 || dy != 0) {
+        // デジタル入力の場合は従来どおり定速移動
         var ang2 = point_direction(0, 0, dx, dy);
-        hmove = lengthdir_x(walk_spd, ang2);
-        vmove = lengthdir_y(walk_spd, ang2);
-    }
-    else {
-        // 入力なし
-        hmove = 0;
-        vmove = 0;
+        hmove_local = lengthdir_x(walk_spd, ang2);
+        vmove_local = lengthdir_y(walk_spd, ang2);
     }
 
-    // 向き更新（-1：左 / +1：右）＋当たり判定用の image_xscale も同期
-    if (hmove != 0) {
-        facing      = sign(hmove);  // -1 or +1 に正規化
-        image_xscale = facing;      // ★ マスクもこの向きで左右反転させる
+    // 向き更新（左/右）＋マスクも左右反転
+    if (hmove_local != 0) {
+        facing = sign(hmove_local);
+        image_xscale = facing;
     }
 
+    // ------------------------
+    // 衝突処理
+    // ------------------------
+    if (object_exists(O_Solid)) {
+        if (place_meeting(x + hmove_local, y, O_Solid)) hmove_local = 0;
+        if (place_meeting(x, y + vmove_local, O_Solid)) vmove_local = 0;
+    }
 
+    // ------------------------
     // 移動適用
-    x += hmove;
-    y += vmove;
+    // ------------------------
+    x += hmove_local;
+    y += vmove_local;
 
+    // ------------------------
+    // アニメーション切替（移動時は歩きスプライト）
+    // ------------------------
+    if (hmove_local != 0 || vmove_local != 0) {
+        sprite_index = S_Player_Walk; // 歩きのスプライト
+    } else {
+        sprite_index = S_Player_Idle; // アイドルのスプライト
+    }
 }
 
 function collision(do_step = true) {
-    // --- 一時停止対応 ---
     if (!do_step) return;
 
     var _tx = x, _ty = y;
     // まず前フレーム位置に戻す
-    x = xprevious; 
+    x = xprevious;
     y = yprevious;
     var _disx = abs(_tx - x);
     var _disy = abs(_ty - y);
@@ -72,10 +92,9 @@ function collision(do_step = true) {
 }
 
 function anim(do_step) {
-    // --- 一時停止対応 ---
     if (!do_step) return;
 
-    // --- スケールリセット（縦横比固定） ---
+    // スケールリセット（縦横比固定）
     image_yscale = 1; // 縦は常に等倍
 
     // 横方向は facing に従って維持（-1: 左 / +1: 右）
@@ -84,24 +103,9 @@ function anim(do_step) {
     } else {
         image_xscale = 1;
     }
-
-    if (hmove != 0 || vmove != 0) {
-        sprite_index = S_Player_Walk;
-    } else {
-        sprite_index = S_Player_Idle;
-    }
-
-    // 追加のキーアニメ（必要なら）
-    if (keyboard_check_pressed(vk_space)) {
-        // 回避などのアニメ対応
-    }
 }
 
-/// （移動の方向処理・アニメ―ション反映・回避入力）
-/// @param {bool} do_step デバッグ用：一時停止中でも1フレーム進めるときに trueとする。
-
 function Player_State_Free(do_step) {
-    // --- 一時停止対応 ---
     if (!do_step) return;
 
     // 通常移動処理: 入力に応じて移動と衝突補正
@@ -110,7 +114,7 @@ function Player_State_Free(do_step) {
     // アニメ更新（※既存の実装をそのまま呼ぶ）
     anim(do_step);
 
-    //直近の移動方向を更新（入力があるフレームだけ）
+    // 直近の移動方向を更新（入力があるフレームだけ）
     {
         var _dx = right - left;
         var _dy = down  - up;
@@ -124,22 +128,24 @@ function Player_State_Free(do_step) {
     }
 
     // --- 回避入力判定 ---
-   if (dash && dodge_cooldown <= 0) {
+    if (dash) {
+        // クールダウンが残っていれば回避しない
+        if (dodge_cooldown <= 0) {
 
-        // ★ 方向決定は共通ヘルパに一本化（方向なし＝単押しは回避しない）
-        if (!choose_dodge_dir_from_input()) {
-            dash = false;   // 入力は消費（お好みで）
-            return;         // DODGEへ遷移しない
+            // ★ 方向決定は共通ヘルパに一本化（方向なし＝単押しは回避しない）
+            if (choose_dodge_dir_from_input()) {
+                // ★ 念のためゼロ方向対策（安全網）
+                var _m = point_distance(0,0,dodge_dir_x,dodge_dir_y);
+                if (_m > 0.0001) {
+                    // 回避発動
+                    Player_StartDodge();
+                    dash = false;           // ★ 発動した瞬間に入力フラグ消費
+                    return;
+                }
+            }
         }
 
-        // ★ 念のためゼロ方向対策（安全網）
-        var _m = point_distance(0,0,dodge_dir_x,dodge_dir_y);
-        if (_m <= 0.0001) {
-            dash = false;
-            return;
-        }
-
-        // ★ 初期化は共通関数へ
-        Player_StartDodge();
+        // 発動できなかった場合も入力を消費して再連打を防ぐ
+        dash = false;
     }
 }

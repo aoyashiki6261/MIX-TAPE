@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"S_Enemy_Idle",
-  "bboxMode":2,
+  "bboxMode":0,
   "bbox_bottom":79,
   "bbox_left":8,
   "bbox_right":45,

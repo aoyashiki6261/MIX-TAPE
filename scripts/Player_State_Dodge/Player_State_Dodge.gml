@@ -43,22 +43,22 @@ function Player_State_Dodge(do_step) {
                 return;
             }
             else if (buffered_action == ACTION.DODGE) {
-		    // ★ 実行フレーム時点で方向入力が無ければ回避を発生させない
-		    if (!choose_dodge_dir_from_input()) {
-		        buffer_clear();
-		        state         = PLAYERSTATE.FREE;
-		        invincible    = false;
-		        sprite_index  = S_Player_Idle;
-		        image_index   = 0;
-		        image_speed   = 1;
-		        return;
-		    }
+                // ★ クールダウン中なら回避せずバッファ消去
+                if (dodge_cooldown > 0 || !choose_dodge_dir_from_input()) {
+                    buffer_clear();
+                    state         = PLAYERSTATE.FREE;
+                    invincible    = false;
+                    sprite_index  = S_Player_Idle;
+                    image_index   = 0;
+                    image_speed   = 1;
+                    return;
+                }
 
-		    buffer_clear();
-		    // ★ 初期化は共通関数へ
-		    Player_StartDodge();
-		    return;
-		}
+                buffer_clear();
+                // ★ 初期化は共通関数へ
+                Player_StartDodge();
+                return;
+            }
 
             // 予約なしならFREEへ
             state         = PLAYERSTATE.FREE;

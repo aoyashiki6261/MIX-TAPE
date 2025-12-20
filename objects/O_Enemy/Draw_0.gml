@@ -1,32 +1,32 @@
-// まずは通常描画
-draw_sprite_ext(
-    sprite_index,
-    image_index,
-    x, y,
-    image_xscale,
-    1,
-    image_angle,
-    image_blend,
-    image_alpha
-);
 
-// ★ デバッグ：敵ボディの当たり判定を可視化
-//  ・global.debugShowHitbox が true のときだけ
-//  ・敵がまだ死亡ステートではないときだけ
+// 通常の見た目
+draw_self();
+
+// ------------------------------------
+// ★ デバッグ：敵の bbox（四角）を可視化
+// ------------------------------------
 if (variable_global_exists("debugShowHitbox")
- && global.debugShowHitbox
- && state != states.DEAD) {
+&& global.debugShowHitbox
+&& state != states.DEAD) {
 
-    // 描画状態の一時退避（必要なら）
+    // 描画状態を退避
     var _old_alpha = draw_get_alpha();
     var _old_color = draw_get_color();
 
-    // 半透明の枠でヒットボックスを描画
-    draw_set_alpha(0.6);
-    draw_set_color(c_red);  // 赤色（見やすければ他色でも可）
-    draw_rectangle(bbox_left, bbox_top, bbox_right, bbox_bottom, false);
+    // 半透明の四角
+    draw_set_alpha(0.5);
+    draw_set_color(c_red);
 
-    // 元の描画設定に戻す
+    // ★ bbox をそのまま描画
+    draw_rectangle(
+        bbox_left,
+        bbox_top,
+        bbox_right,
+        bbox_bottom,
+        false
+    );
+
+    // 復元
     draw_set_alpha(_old_alpha);
     draw_set_color(_old_color);
 }

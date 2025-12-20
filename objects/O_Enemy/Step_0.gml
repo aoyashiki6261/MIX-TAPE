@@ -156,208 +156,192 @@ switch (state) {
 	    Enemy_anim();
 	break;
 
-            case states.ATTACK:
-        if (!global.gamePaused || global.stepAdvance) {
+            // -------------------------
+			// ATTACK：溜め → 発射 → 硬直
+			// -------------------------
+			case states.ATTACK:
+			{
+			    // --- 一時停止 / コマ送り対応（このフレームを進めるか？） ---
+			    var do_step_attack = (!global.gamePaused || global.stepAdvance);
+			    if (!do_step_attack) break;  // ポーズ中＆stepAdvanceなしなら何もしない
 
-            // ★ デバッグ用：固定方向発射モードかどうか（Rm_Debug かつ enemyFireDirection != OFF）
-            var use_fixed_fire = false;
-            if (room_get_name(room) == "Rm_Debug"
-             && variable_global_exists("enemyFireDirection")
-             && global.enemyFireDirection != 4) {
-                use_fixed_fire = true;
-            }
+			    // ★ デバッグ用：固定方向発射モードかどうか（Rm_Debug かつ enemyFireDirection != OFF）
+			    var use_fixed_fire = false;
+			    if (room_get_name(room) == "Rm_Debug"
+			     && variable_global_exists("enemyFireDirection")
+			     && global.enemyFireDirection != 4) {
+			        use_fixed_fire = true;
+			    }
 
-            // ★ 攻撃中もエイム方向を更新
-            if (use_fixed_fire) {
-                // ZLデバッグ用：UP/LEFT/DOWN/RIGHT に応じて dir を固定
-                switch (global.enemyFireDirection) {
-                    case 0: dir = 90;  break; // UP
-                    case 1: dir = 180; break; // LEFT
-                    case 2: dir = 270; break; // DOWN
-                    case 3: dir = 0;   break; // RIGHT
-                }
-                // dir に合わせて左右反転だけ揃える（0±90度=右、それ以外=左）
-                facing = (abs(angle_difference(dir, 0)) <= 90) ? 1 : -1;
-            } else {
-                // ★ 通常時：プレイヤー方向にエイムを合わせておく（最終発射方向のベース）
-                if (instance_exists(O_Player)) {
-                    dir = point_direction(x, y, O_Player.x, O_Player.y);
-                    // 攻撃中も左右反転（image_xscale）を更新する
-                    check_facing();
-                }
-            }
+			    // ★ エイム方向更新（通常 or 固定発射）
+			    if (use_fixed_fire) {
+			        // ZLデバッグ用：UP/LEFT/DOWN/RIGHT に応じて dir を固定
+			        switch (global.enemyFireDirection) {
+			            case 0: dir = 90;  break; // UP
+			            case 1: dir = 180; break; // LEFT
+			            case 2: dir = 270; break; // DOWN
+			            case 3: dir = 0;   break; // RIGHT
+			        }
+			        // dir に合わせて左右反転だけ揃える（0±90度=右、それ以外=左）
+			        facing = (abs(angle_difference(dir, 0)) <= 90) ? 1 : -1;
+			    } else {
+			        // 通常時：プレイヤー方向にエイム
+			        if (instance_exists(O_Player)) {
+			            dir = point_direction(x, y, O_Player.x, O_Player.y);
+			            check_facing(); // dir に応じて image_xscale 更新
+			        }
+			    }
 
-            spd = 0;
+			    // 移動は止めておく
+			    spd = 0;
 
-            // --- 一時停止中でも1フレームだけ shootTimer を進行 ---
-            do_step = (!global.gamePaused || global.stepAdvance);
-            if (do_step) {
+			    // ------------------------------------
+			    // ★ シグナル生成：このフレームだけ 1 回
+			    // ------------------------------------
+			    if (shootTimer == signal_start_frame) {
 
-                // ★ 攻撃シグナル（S_Enemy_Attacksignal）の制御 ★
-                //    → signal_start_frame ～ windupTime の少し手前まで表示
-                //    → 終わりは必ず「矢が出る瞬間（windupTime）」で消える
-                var sig_start = signal_start_frame; // ← Create で決めた開始フレーム
+			        // 既に古いシグナルが残っていたら掃除
+			        if (instance_exists(attack_signal)) {
+			            with (attack_signal) instance_destroy();
+			        }
 
-                if (shootTimer >= sig_start && shootTimer < windupTime) {
+			        // 向きに応じてオフセットを決定（O_Enemy のインスタンス変数を利用）
+			        var sx_sig, sy_sig;
+			        if (facing >= 0) {
+			            // 右向き
+			            sx_sig = x + signal_offset_right_x;
+			            sy_sig = y + signal_offset_right_y;
+			        } else {
+			            // 左向き
+			            sx_sig = x + signal_offset_left_x;
+			            sy_sig = y + signal_offset_left_y;
+			        }
 
-                    // シグナルの表示位置（左右で別のオフセットを使う）
-                    var sx_sig, sy_sig;
+			        // シグナルを 1 回だけ生成
+			        var sig = instance_create_depth(sx_sig, sy_sig, depth - 1, O_Enemy_AttackSignal);
 
-                    var _is_left_sig = false;
-                    if (instance_exists(O_Player)) {
-                        _is_left_sig = (O_Player.x < x); // プレイヤーが左側にいるかどうか
-                    }
+			        // どの敵のシグナルか紐付け（追従用）
+			        sig.owner          = id;
+			        sig.offset_right_x = signal_offset_right_x;
+			        sig.offset_right_y = signal_offset_right_y;
+			        sig.offset_left_x  = signal_offset_left_x;
+			        sig.offset_left_y  = signal_offset_left_y;
 
-                    if (_is_left_sig) {
-                        // 左向き側
-                        sx_sig = x + signal_offset_left_x;
-                        sy_sig = y + signal_offset_left_y;
-                    } else {
-                        // 右向き側
-                        sx_sig = x + signal_offset_right_x;
-                        sy_sig = y + signal_offset_right_y;
-                    }
+			        attack_signal = sig;
+			        // 以降は O_Enemy_AttackSignal 側が寿命管理（アニメ終わりで自滅）を担当
+			    }
 
-                    // シグナル生成（まだ無ければ作る）
-                    if (!instance_exists(attack_signal)) {
-                        attack_signal = instance_create_depth(sx_sig, sy_sig, depth - 1, O_Enemy_AttackSignal);
-                        attack_signal.image_speed = 0; // ★ ループさせたくないので自動再生は止める
-                    } else {
-                        attack_signal.x = sx_sig;
-                        attack_signal.y = sy_sig;
-                    }
+			    // ------------------------------------
+			    // ここから下は「溜め → Shot → 硬直」の既存処理
+			    // ※ シグナルにはもう触らない
+			    // ------------------------------------
 
-                    // ★ sig_start〜windupTime の進行率に応じて image_index を手動設定
-                    var frames_sig = sprite_get_number(S_Enemy_Attacksignal);
-                    if (frames_sig > 0) {
-                        var frame_idx = shootTimer - sig_start;
+			    // Shotスプライトを見せるフレーム数
+			    var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
 
-                        // コマ数を超えたら最後のコマで止めてループさせない
-                        if (frame_idx >= frames_sig) {
-                            frame_idx = frames_sig - 1;
-                        }
+			    // 1) 溜め中：S_Enemy_Charge を手動フレーム進行（ループさせない）
+			    if (shootTimer < windupTime) {
+			        if (sprite_index != S_Enemy_Charge) {
+			            sprite_index = S_Enemy_Charge;
+			            image_index  = 0;
+			            image_speed  = 0;   // 自動再生を止める（ループ防止）
+			        }
 
-                        attack_signal.image_index = frame_idx;
-                    }
+			        var _frames = max(1, sprite_get_number(S_Enemy_Charge));
+			        var _t = clamp(shootTimer, 0, windupTime - 1);
+			        image_index = min(_frames - 1, floor(_t * _frames / windupTime));
 
-                    attack_signal.image_angle = 0;
+			        // （この時点では矢はまだ存在しない）
+			    }
+			    // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
+			    else if (shootTimer == windupTime) {
 
-                } else {
-                    // ★ 指定タイミング外（特に windupTime 以降）はシグナルを確実に消す
-                    if (instance_exists(attack_signal)) {
-                        with (attack_signal) instance_destroy();
-                    }
-                    attack_signal = noone;
-                }
+			        // Shotスプライトに切り替え
+			        if (sprite_index != S_Enemy_Shot) {
+			            sprite_index = S_Enemy_Shot;
+			            image_index  = 0;
+			            image_speed  = 1;
+			        }
 
-                // ★この下は「溜め／Shot／硬直」の処理。今まで書いていたものをそのまま残してOK
-                // Shotスプライトを見せるフレーム数
-                var _shot_frames_to_show = max(30, (sprite_exists(S_Enemy_Shot) ? sprite_get_number(S_Enemy_Shot) : 1));
+			        // 発射方向を決定（通常時：プレイヤー方向 / 固定発射時：ZLの方向）
+			        var _final_dir;
 
-                // 1) 溜め中：S_Enemy_Charge を手動フレーム進行（ループさせない）
-                if (shootTimer < windupTime) {
-                    if (sprite_index != S_Enemy_Charge) {
-                        sprite_index = S_Enemy_Charge;
-                        image_index = 0;
-                        image_speed = 0;   // 自動再生を止める（ループ防止）
-                    }
+			        if (use_fixed_fire) {
+			            switch (global.enemyFireDirection) {
+			                case 0: _final_dir = 90;  break; // UP
+			                case 1: _final_dir = 180; break; // LEFT
+			                case 2: _final_dir = 270; break; // DOWN
+			                case 3: _final_dir = 0;   break; // RIGHT
+			            }
+			        } else {
+			            _final_dir = dir;
+			            if (instance_exists(O_Player)) {
+			                _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
+			            }
+			        }
 
-                    var _frames = max(1, sprite_get_number(S_Enemy_Charge));
-                    var _t = clamp(shootTimer, 0, windupTime - 1);
-                    image_index = min(_frames - 1, floor(_t * _frames / windupTime));
+			        // 矢の出現基準位置（左右別オフセット）
+			        var bx, by;
+			        if (image_xscale >= 0) {
+			            // 右向き
+			            bx = x + arrow_offset_right_x;
+			            by = y + arrow_offset_right_y;
+			        } else {
+			            // 左向き
+			            bx = x + arrow_offset_left_x;
+			            by = y + arrow_offset_left_y;
+			        }
 
-                    // ★ここではもう矢は存在しない（事前出現をやめる）
+			        // 手の位置から、矢の向きに arrow_forward 分だけ前に出す
+			        var _sx = bx + lengthdir_x(arrow_forward, _final_dir);
+			        var _sy = by + lengthdir_y(arrow_forward, _final_dir);
 
-                }
-                // 2) 発射の瞬間：S_Enemy_Shot に切替えて「このフレームで矢を生成＆発射」
-                else if (shootTimer == windupTime) {
+			        // ここで矢を生成＆即発射状態にする
+			        myball = instance_create_depth(_sx, _sy, depth, O_Arrow);
+			        myball.dir         = _final_dir;
+			        myball.image_angle = _final_dir;
+			        myball.state       = 1; // 発射状態
+			    }
+			    // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける
+			    else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
+			        if (sprite_index != S_Enemy_Shot) {
+			            sprite_index = S_Enemy_Shot;
+			            image_index  = 0;
+			            image_speed  = 1;
+			        }
+			        // 矢はすでに飛んでいるので特に処理なし
+			    }
+			    // 4) 発射後～硬直：Idle（Recover的な時間）
+			    else if (shootTimer > (windupTime + _shot_frames_to_show)
+			          && shootTimer <= windupTime + recoverTime) {
 
-                    // Shotスプライトに切り替え
-                    if (sprite_index != S_Enemy_Shot) {
-                        sprite_index = S_Enemy_Shot;
-                        image_index = 0;
-                        image_speed = 1;
-                    }
+			        if (sprite_index != S_Enemy_Idle) {
+			            sprite_index = S_Enemy_Idle;
+			            image_index  = 0;
+			            image_speed  = 1;
+			        }
+			    }
 
-                    // ★ 発射方向を決定（通常時：プレイヤー方向 / 固定発射時：ZLの方向）
-                    var _final_dir;
+			    // 5) 硬直終了 → 移動へ戻る
+			    if (shootTimer > windupTime + recoverTime) {
 
-                    if (use_fixed_fire) {
-                        switch (global.enemyFireDirection) {
-                            case 0: _final_dir = 90;  break; // UP
-                            case 1: _final_dir = 180; break; // LEFT
-                            case 2: _final_dir = 270; break; // DOWN
-                            case 3: _final_dir = 0;   break; // RIGHT
-                        }
-                    } else {
-                        _final_dir = dir;
-                        if (instance_exists(O_Player)) {
-                            _final_dir = point_direction(x, y, O_Player.x, O_Player.y);
-                        }
-                    }
+			        // 念のため攻撃シグナルもここで消す（Animation End 側で消えていれば何もしない）
+			        if (instance_exists(attack_signal)) {
+			            with (attack_signal) instance_destroy();
+			        }
+			        attack_signal = noone;
 
-                    // ★ 基準となる「矢の位置」（左右別オフセット）
-                    var bx, by;
-                    if (image_xscale >= 0) {
-                        // 右向き時の矢の出現基準
-                        bx = x + arrow_offset_right_x;
-                        by = y + arrow_offset_right_y;
-                    } else {
-                        // 左向き時の矢の出現基準
-                        bx = x + arrow_offset_left_x;
-                        by = y + arrow_offset_left_y;
-                    }
+			        state       = states.MOVE;
+			        shootTimer  = 0;
+			        myball      = noone;
 
-                    // ★ 手の位置から、矢の向きに arrow_forward 分だけ前に出す
-                    var _sx = bx + lengthdir_x(arrow_forward, _final_dir);
-                    var _sy = by + lengthdir_y(arrow_forward, _final_dir);
+			        calc_path_timer = 0;
+			        Check_For_Player();
+			    }
 
-                    // ★ここで初めて矢を生成＆即発射状態にする
-                    myball = instance_create_depth(_sx, _sy, depth, O_Arrow);
-                    myball.dir         = _final_dir;
-                    myball.image_angle = _final_dir;
-                    myball.state       = 1; // 発射状態（O_Arrow側で移動開始）
-                }
-                // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける
-                else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
-                    if (sprite_index != S_Enemy_Shot) {
-                        sprite_index = S_Enemy_Shot;
-                        image_index = 0;
-                        image_speed = 1;
-                    }
-                    // ここでは矢はすでに飛んでいるので、何もしない
+			    // ★ 最後に shootTimer を進める
+			    shootTimer++;
+			}
+			break;
 
-                }
-                // 4) 発射後～硬直：Idle（Recover的な時間）
-                else if (shootTimer > (windupTime + _shot_frames_to_show) && shootTimer <= windupTime + recoverTime) {
-
-                    if (sprite_index != S_Enemy_Idle) {
-                        sprite_index = S_Enemy_Idle;
-                        image_index = 0;
-                        image_speed = 1;
-                    }
-                }
-
-                // 5) 硬直終了 → 移動へ戻る
-                if (shootTimer > windupTime + recoverTime) {
-
-                    // ★ 念のため攻撃シグナルもここで消す
-                    if (instance_exists(attack_signal)) {
-                        with (attack_signal) instance_destroy();
-                    }
-                    attack_signal = noone;
-
-                    state = states.MOVE;
-                    shootTimer = 0;
-                    myball = noone;
-
-                    calc_path_timer = 0;
-                    Check_For_Player(); // 追跡用のパス/方向更新
-                }
-
-                // フレーム末尾で進める
-                shootTimer++;
-            }
-        }
-        break;
 }

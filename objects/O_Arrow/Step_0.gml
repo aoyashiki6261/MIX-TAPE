@@ -110,3 +110,4 @@ if (place_meeting(x, y, O_Solid)) {
 if (destroy == true) {
     instance_destroy();
 }
+

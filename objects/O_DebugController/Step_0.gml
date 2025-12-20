@@ -1,15 +1,21 @@
-/// O_debugcontroller Step
+// -----------------------------
+// デバッグルーム以外では処理を無効化 & 一時停止解除
+// -----------------------------
+if (room_get_name(room) != "Rm_Debug") {
+    // デバッグルームを離れたら一時停止状態をリセット
+    global.gamePaused       = false;
+    global.stepAdvance      = false;
+    global.stepAdvanceFrames = 0;
+    global.stepAdvanceTimer  = 0;
+    exit; 
+}
 
 // -----------------------------
 // Pキー / ZR：敵AI ON/OFF（デバッグルーム限定）
 // -----------------------------
-if (room_get_name(room) == "Rm_Debug") {
-    if (keyboard_check_pressed(ord("P"))
-     || (global.gamepadDebugEnabled && gamepad_button_check_pressed(0, gp_shoulderrb))) { // ZR
-
-        global.enemyAIEnabled = !global.enemyAIEnabled;
-        show_debug_message("Enemy AI: " + string(global.enemyAIEnabled));
-    }
+if (keyboard_check_pressed(ord("P"))
+ || (global.gamepadDebugEnabled && gamepad_button_check_pressed(0, gp_shoulderrb))) { // ZR
+    global.enemyAIEnabled = !global.enemyAIEnabled;
 }
 
 // -----------------------------
@@ -17,10 +23,8 @@ if (room_get_name(room) == "Rm_Debug") {
 // -----------------------------
 if (keyboard_check_pressed(ord("O"))
  || (global.gamepadDebugEnabled && gamepad_button_check_pressed(0, gp_shoulderlb))) { // ZL
-
     global.enemyFireDirection = (global.enemyFireDirection + 1) mod 5;
     var dir_names = ["上", "左", "下", "右", "OFF"];
-    show_debug_message("敵弾の発射方向を変更: " + dir_names[global.enemyFireDirection]);
 }
 
 // -----------------------------
@@ -37,8 +41,6 @@ if (keyboard_check_pressed(ord("T"))
         global.stepAdvanceFrames = 0;
         global.stepAdvanceTimer  = 0;
     }
-
-    show_debug_message("ゲーム " + (global.gamePaused ? "一時停止" : "再開"));
 }
 
 // -----------------------------
@@ -53,7 +55,6 @@ if (global.gamePaused) {
 
         global.stepAdvanceFrames += 1;
         global.stepAdvanceTimer   = 0;
-        show_debug_message("▶ 1フレーム進行予約（残り:" + string(global.stepAdvanceFrames) + "）");
     }
     // 2) 長押し：一定時間後、数フレームごとに追加予約
     else if (keyboard_check(ord("Y"))
@@ -62,7 +63,6 @@ if (global.gamePaused) {
         global.stepAdvanceTimer++;
         if (global.stepAdvanceTimer > 15 && global.stepAdvanceTimer mod 4 == 0) {
             global.stepAdvanceFrames += 1;
-            show_debug_message("▶ 1フレーム進行予約（残り:" + string(global.stepAdvanceFrames) + "）");
         }
     }
     // 3) Y / R1 を離したらタイマーだけリセット
@@ -75,10 +75,5 @@ if (global.gamePaused) {
 // R3：ゲームパッドデバッグ ON/OFF トグル
 // -----------------------------
 if (gamepad_button_check_pressed(0, gp_stickr)) {
-
     global.gamepadDebugEnabled = !global.gamepadDebugEnabled;
-
-    show_debug_message("ゲームパッドデバッグ: "
-        + (global.gamepadDebugEnabled ? "ON" : "OFF")
-        + " / value=" + string(global.gamepadDebugEnabled));
 }

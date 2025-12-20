@@ -23,7 +23,6 @@ function EnemyHit(_damage) {
     }
 
     // ★ ここから死亡。死亡処理は is_dead() に一本化して呼ぶだけ
-    show_debug_message("敵が死亡しました");
     is_dead(); // ← state=DEAD、キル加算は is_dead() 側で実行
     return;
 }

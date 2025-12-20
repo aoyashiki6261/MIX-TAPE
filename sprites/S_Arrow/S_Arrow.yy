@@ -1,7 +1,7 @@
 {
   "$GMSprite":"v2",
   "%Name":"S_Arrow",
-  "bboxMode":0,
+  "bboxMode":2,
   "bbox_bottom":17,
   "bbox_left":2,
   "bbox_right":29,
