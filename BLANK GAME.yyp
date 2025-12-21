@@ -19,6 +19,7 @@
     {"$GMFolder":"","%Name":"03_Enemy","folderPath":"folders/Entitiy/03_Enemy.yy","name":"03_Enemy","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Enemy_Sprite","folderPath":"folders/Entitiy/03_Enemy/Enemy_Sprite.yy","name":"Enemy_Sprite","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"オブジェクト","folderPath":"folders/オブジェクト.yy","name":"オブジェクト","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"sound","folderPath":"folders/sound.yy","name":"sound","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"スプライト","folderPath":"folders/スプライト.yy","name":"スプライト","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"ルーム","folderPath":"folders/ルーム.yy","name":"ルーム","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
@@ -27,7 +28,7 @@
   "isEcma":false,
   "LibraryEmitters":[],
   "MetaData":{
-    "IDEVersion":"2024.14.2.212",
+    "IDEVersion":"2024.14.2.213",
   },
   "name":"BLANK GAME",
   "resources":[
@@ -67,6 +68,8 @@
     {"id":{"name":"Player_State_Free","path":"scripts/Player_State_Free/Player_State_Free.yy",},},
     {"id":{"name":"Player_StateHelpers","path":"scripts/Player_StateHelpers/Player_StateHelpers.yy",},},
     {"id":{"name":"PlayerHit","path":"scripts/PlayerHit/PlayerHit.yy",},},
+    {"id":{"name":"snd_bgm1","path":"sounds/snd_bgm1/snd_bgm1.yy",},},
+    {"id":{"name":"snd_bgm2","path":"sounds/snd_bgm2/snd_bgm2.yy",},},
     {"id":{"name":"S_Arrow_Mask","path":"sprites/S_Arrow_Mask/S_Arrow_Mask.yy",},},
     {"id":{"name":"S_Arrow","path":"sprites/S_Arrow/S_Arrow.yy",},},
     {"id":{"name":"S_Attack1","path":"sprites/S_Attack1/S_Attack1.yy",},},
