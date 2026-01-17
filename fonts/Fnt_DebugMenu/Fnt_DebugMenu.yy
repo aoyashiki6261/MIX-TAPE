@@ -138,7 +138,7 @@
   "name":"Fnt_DebugMenu",
   "parent":{
     "name":"オブジェクト",
-    "path":"folders/オブジェクト.yy",
+    "path":"folders/sound/オブジェクト.yy",
   },
   "pointRounding":0,
   "ranges":[

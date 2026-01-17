@@ -19,7 +19,7 @@
     {"$GMFolder":"","%Name":"03_Enemy","folderPath":"folders/Entitiy/03_Enemy.yy","name":"03_Enemy","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"Enemy_Sprite","folderPath":"folders/Entitiy/03_Enemy/Enemy_Sprite.yy","name":"Enemy_Sprite","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"sound","folderPath":"folders/sound.yy","name":"sound","resourceType":"GMFolder","resourceVersion":"2.0",},
-    {"$GMFolder":"","%Name":"オブジェクト","folderPath":"folders/オブジェクト.yy","name":"オブジェクト","resourceType":"GMFolder","resourceVersion":"2.0",},
+    {"$GMFolder":"","%Name":"オブジェクト","folderPath":"folders/sound/オブジェクト.yy","name":"オブジェクト","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"スプライト","folderPath":"folders/スプライト.yy","name":"スプライト","resourceType":"GMFolder","resourceVersion":"2.0",},
     {"$GMFolder":"","%Name":"ルーム","folderPath":"folders/ルーム.yy","name":"ルーム","resourceType":"GMFolder","resourceVersion":"2.0",},
   ],
