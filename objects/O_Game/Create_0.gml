@@ -39,7 +39,7 @@ display_set_gui_maximize();
 
 // すでに流れているBGMを一旦全部止めて新しいBGMを再生する
 audio_stop_all();
-audio_play_sound(snd_bgm1, 1, true);
+audio_play_sound(Snd_Bgm_Battle, 1, true);
 
 // -----------------------------
 // New Game相当の初期化（キル数リセット＋シーン切替）

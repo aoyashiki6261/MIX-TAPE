@@ -7,13 +7,18 @@ function Player_State_Dead(do_step) {
     hmove  = 0;
     vmove  = 0;
 
-    // 初回のみ死亡アニメを開始
+  // 初回のみ死亡アニメを開始
     if (!deadanimstarted) {
+        audio_play_sound(Snd_PlayerDead, 1, false); // 死亡時に1回だけ鳴らす
+		
+		audio_play_sound(Snd_Gameover, 1, false);
+		
         sprite_index    = S_Player_Dead;
         image_index     = 0;
         image_speed     = 1;
         deadanimstarted = true;
     }
+
 
     // ポーズ中はアニメ進行しない
     if (!do_step) return;

@@ -72,4 +72,4 @@
 
 // 攻撃・回避の先行入力を何フレーム保持するか。
 // 大きくすると「ボタン連打でかなり先まで予約」しやすくなる。
-#macro PLAYER_INPUT_BUFFER_WINDOW      6          // 先行入力受付フレーム数
+#macro PLAYER_INPUT_BUFFER_WINDOW      6

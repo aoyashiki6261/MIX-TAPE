@@ -2,6 +2,10 @@ event_inherited();
 walk_spd = PLAYER_WALK_SPEED;
 facing_dir        = 0; // スプライトの向き
 
+// --- サウンド関連 ---
+dead_sfx_played = false;
+
+
 // --- 攻撃関連 ---
 mouseAttack = false;
 hitByAttack = ds_list_create();

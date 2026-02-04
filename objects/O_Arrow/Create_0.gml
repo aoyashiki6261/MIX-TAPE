@@ -20,3 +20,5 @@ playerDestroy = true;
 image_angle = dir;	//角度を見た目にも反映
 
 mask_index = S_Arrow_Mask;
+
+audio_play_sound(Snd_EnemyShot, 1, false)//発射音を流す

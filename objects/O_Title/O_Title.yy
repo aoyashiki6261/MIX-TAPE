@@ -11,7 +11,7 @@
   "overriddenProperties":[],
   "parent":{
     "name":"オブジェクト",
-    "path":"folders/sound/オブジェクト.yy",
+    "path":"folders/オブジェクト.yy",
   },
   "parentObjectId":null,
   "persistent":false,

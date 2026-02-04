@@ -39,6 +39,11 @@ if (do_step) {
     buffer_update();
 }
 
+// DEAD以外のときは「死亡アニメ開始フラグ」を戻しておく（次回死亡でも1回だけ鳴らすため）
+if (state != PLAYERSTATE.DEAD) {
+    deadanimstarted = false;
+}
+
 // --- ステートマシン ---
 if (do_step) {
     switch (state) {
@@ -59,7 +64,7 @@ if (do_step) {
             break;
     }
 
-    // ★攻撃マスク切り替え：攻撃アニメ 5フレーム中の 3〜4 フレームだけHBを使う
+    // 攻撃マスク切り替え：攻撃アニメ 5フレーム中の 3〜4 フレームだけHBを使う
     if (state == PLAYERSTATE.ATTACK_SLASH) {
         var frame = floor(image_index); // 0〜4 のどれかになる想定
 
@@ -81,7 +86,7 @@ if (do_step) {
     }
 }
 
-// ★ プレイヤーが死亡ステートになっていたら GAME OVER フラグを立てる
+//  プレイヤーが死亡ステートになっていたら GAME OVER フラグを立てる
 //   （一時停止中でも毎フレームチェックする）
 if (state == PLAYERSTATE.DEAD) {
     if (!global.playerDead) {

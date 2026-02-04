@@ -35,6 +35,11 @@ if (!doStep) {
     exit;
 }
 
+// ★ 追加：SEフラグが未定義なら初期化（Createでやるのが理想だがStep内でも安全にする）
+if (!variable_instance_exists(id, "shotSEPlayed")) {
+    shotSEPlayed = false;
+}
+
 
 // === ステートマシン ===
 switch (state) {
@@ -55,6 +60,12 @@ switch (state) {
     // 1: 弾の発射 / 移動
     // -------------------------
     case 1:
+        // ★ 追加：発射開始の瞬間に1回だけ鳴らす
+        if (!shotSEPlayed) {
+            audio_play_sound(Snd_EnemyShot, 1, false);
+            shotSEPlayed = true;
+        }
+
         // 移動量を計算
         hsp = lengthdir_x(spd, dir);
         vsp = lengthdir_y(spd, dir);
@@ -110,4 +121,3 @@ if (place_meeting(x, y, O_Solid)) {
 if (destroy == true) {
     instance_destroy();
 }
-

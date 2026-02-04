@@ -1,5 +1,10 @@
 /// @description 回避を開始（初期化を共通化）
 function Player_StartDodge() {
+	
+	    // ★Snd＿Dodgeを再生
+    audio_play_sound(Snd_Dodge, 1, false);
+
+	
     state          = PLAYERSTATE.DODGE;
     sprite_index   = S_Player_Dodge_Start;
     image_index    = 0;

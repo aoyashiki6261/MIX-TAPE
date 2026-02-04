@@ -843,7 +843,7 @@
   "name":"Fnt_Title",
   "parent":{
     "name":"オブジェクト",
-    "path":"folders/sound/オブジェクト.yy",
+    "path":"folders/オブジェクト.yy",
   },
   "pointRounding":0,
   "ranges":[

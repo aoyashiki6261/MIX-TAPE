@@ -551,7 +551,7 @@
   "name":"Fnt_Ui",
   "parent":{
     "name":"オブジェクト",
-    "path":"folders/sound/オブジェクト.yy",
+    "path":"folders/オブジェクト.yy",
   },
   "pointRounding":0,
   "ranges":[
