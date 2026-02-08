@@ -69,6 +69,14 @@ function Player_State_Dodge(do_step) {
                 }
 
                 // ★重要：方向は「バッファに保存したもの」を採用（取り直さない）
+				
+				if (!variable_instance_exists(id, "buffered_dodge_dir_x")) buffered_dodge_dir_x = 0;
+				if (!variable_instance_exists(id, "buffered_dodge_dir_y")) buffered_dodge_dir_y = 0;
+
+				if (point_distance(0, 0, buffered_dodge_dir_x, buffered_dodge_dir_y) < 0.0001) {
+				    buffered_dodge_dir_x = last_move_dir_x;
+				    buffered_dodge_dir_y = last_move_dir_y;
+				}
                 dodge_dir_x = buffered_dodge_dir_x;
                 dodge_dir_y = buffered_dodge_dir_y;
 
@@ -78,11 +86,6 @@ function Player_State_Dodge(do_step) {
                     dodge_dir_x = last_move_dir_x;
                     dodge_dir_y = last_move_dir_y;
                 }
-
-                // ★ログ（RUN：バッファ消費からの回避）
-                show_debug_message("RUN DODGE(dir from BUFFER) dir=("
-                    + string(dodge_dir_x) + "," + string(dodge_dir_y)
-                    + ") facing=" + string(facing) + " prev_state=DODGE");
 
                 if (variable_instance_exists(id, "buffer_clear")) buffer_clear();
 

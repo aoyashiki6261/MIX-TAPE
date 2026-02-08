@@ -9,7 +9,6 @@ if (!instance_exists(O_DebugController)) {
     var dbg_layer = "Controller";
     if (!layer_exists(dbg_layer)) {
         dbg_layer = "Instances"; // 念のため、必ず存在するレイヤーにフォールバック
-        show_debug_message("Layer 'Controller' が存在しません。O_DebugController を 'Instances' に生成します。");
     }
     var dbg = instance_create_layer(0, 0, dbg_layer, O_DebugController);
     dbg.persistent = true; // Room切替やリスタートでも破棄されない

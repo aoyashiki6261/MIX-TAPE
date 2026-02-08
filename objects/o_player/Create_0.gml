@@ -36,6 +36,9 @@ last_move_dir_x   = 1;           //  直近の移動方向を保持（移動時�
 last_move_dir_y   = 0;           //  直近の移動方向を保持（移動時のみ緊急回避）２
 invincible        = false;       // 無敵状態かどうか
 dash              = false;
+buffered_dodge_dir_x = 0;
+buffered_dodge_dir_y = 0;
+
 
 sprite_index = S_Player_Idle;
 

@@ -71,6 +71,7 @@
     {"id":{"name":"Snd_Bgm_Battle","path":"sounds/Snd_Bgm_Battle/Snd_Bgm_Battle.yy",},},
     {"id":{"name":"Snd_Bgm_Title","path":"sounds/Snd_Bgm_Title/Snd_Bgm_Title.yy",},},
     {"id":{"name":"Snd_Dodge","path":"sounds/Snd_Dodge/Snd_Dodge.yy",},},
+    {"id":{"name":"Snd_EnemyDead","path":"sounds/Snd_EnemyDead/Snd_EnemyDead.yy",},},
     {"id":{"name":"Snd_EnemyShot","path":"sounds/Snd_EnemyShot/Snd_EnemyShot.yy",},},
     {"id":{"name":"Snd_Gameover","path":"sounds/Snd_Gameover/Snd_Gameover.yy",},},
     {"id":{"name":"Snd_PlayerDead","path":"sounds/Snd_PlayerDead/Snd_PlayerDead.yy",},},

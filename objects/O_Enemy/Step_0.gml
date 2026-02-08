@@ -50,6 +50,14 @@ if (room_get_name(room) == "Rm_Debug"
 if (!do_step) {
     return;
 }
+
+// ★追加：クールダウン進行（処理が進むフレームだけ）
+if (state != states.ATTACK && state != states.DEAD) {
+    if (cooldownTimer < cooldownTime) {
+        cooldownTimer++;
+    }
+}
+
 // （必要なら）orig_blend の保持だけ残してOK
 if (!variable_instance_exists(id, "orig_blend")) {
     orig_blend = image_blend;
@@ -79,6 +87,12 @@ if (state == states.DEAD) {
 
     // 死亡スプライト・アニメーションをセット（最初のみ）
     if (sprite_index != S_Enemy_Dead) {
+		
+		// ★追加：死亡した瞬間にSEを鳴らす（最初の1回だけ）
+	    if (audio_exists(Snd_EnemyDead)) {
+	        audio_play_sound(Snd_EnemyDead, 0, false);
+	    }
+		
         sprite_index = S_Enemy_Dead;
         image_index  = 0;
         image_speed  = 0.2; // 死亡アニメ進行速度（止めないこと）
@@ -117,13 +131,33 @@ switch (state) {
     // IDLE：プレイヤーを見つけたらMOVEへ
     // -------------------------
     case states.IDLE:
-        Enemy_anim(); // 待機アニメ
+    Enemy_anim(); // 待機アニメ
 
-        if (instance_exists(O_Player)) {
-            // とりあえずプレイヤーがいればMOVEに移行
-            state = states.MOVE;
-        }
-    break;
+    if (instance_exists(O_Player)) {
+        // とりあえずプレイヤーがいればMOVEに移行
+
+        // ★追加：距離とクールダウンで行動を分岐
+        var _dis = point_distance(x, y, O_Player.x, O_Player.y);
+
+        if (_dis <= attack_dis) {
+            // ★追加：範囲内は「止まって待つ」＝IDLE維持
+            spd = 0;
+            hsp = 0;
+            vsp = 0;
+            path_end();
+
+            // ★追加：クールダウンが終わっていればATTACKへ
+            if (cooldownTimer >= cooldownTime) {
+                cooldownTimer = 0; // ★ここで消費（次の攻撃まで待つ）
+                shootTimer = 0;
+                state = states.ATTACK;
+	            }
+	        } else {
+	            // ★追加：範囲外なら追いかける
+	            state = states.MOVE;
+	        }
+	    }
+	break;
 
     // -------------------------
     // MOVE：プレイヤーに向かって直進で追尾
@@ -137,11 +171,25 @@ switch (state) {
 	        dir = _dir;
 	        check_facing();
 
-	        // 攻撃可能距離に入ったらATTACKへ
-	        if (_dis <= attack_dis) {
-	            path_end();     // 古いパスが残っていても一応終了
-	            shootTimer = 0;
-	            state = states.ATTACK;
+	       // 攻撃可能距離に入ったらATTACKへ
+        if (_dis <= attack_dis) {
+
+            // ★追加：距離に入ったら「移動を止めて待機」する（重なり防止）
+            spd = 0;
+            hsp = 0;
+            vsp = 0;
+            path_end();
+
+            // ★追加：クールダウンが終わっていればATTACKへ
+            if (cooldownTimer >= cooldownTime) {
+                cooldownTimer = 0; // ★ここで消費（次の攻撃まで待つ）
+                shootTimer = 0;
+                state = states.ATTACK;
+            } else {
+		        // ★追加：MOVE中に範囲へ入った場合はIDLEへ遷移して待機する
+		        state = states.IDLE;
+            }
+
 	        } else {
 	            // ★シンプル追尾移動★
 	            var move_speed = ENEMY_CHASE_MOVE_SPEED; // 足の速さ。お好みで調整
@@ -261,6 +309,8 @@ switch (state) {
 			            sprite_index = S_Enemy_Shot;
 			            image_index  = 0;
 			            image_speed  = 1;
+						//発射した瞬間にクールダウンを消費（満タン方式の起点）
+						cooldownTimer = 0;
 			        }
 
 			        // 発射方向を決定（通常時：プレイヤー方向 / 固定発射時：ZLの方向）
@@ -302,6 +352,8 @@ switch (state) {
 			        myball.image_angle = _final_dir;
 			        myball.state       = 1; // 発射状態
 			    }
+				
+				
 			    // 3) 発射後：S_Enemy_Shot を数フレームだけ見せ続ける
 			    else if (shootTimer > windupTime && shootTimer <= (windupTime + _shot_frames_to_show)) {
 			        if (sprite_index != S_Enemy_Shot) {

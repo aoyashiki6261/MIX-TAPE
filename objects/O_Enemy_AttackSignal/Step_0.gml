@@ -21,7 +21,7 @@ if (!do_step) {
 // 進めるフレームでは、スプライト側FPSに戻す
 var spd = sprite_get_speed(sprite_index);
 var typ = sprite_get_speed_type(sprite_index);
-image_speed = (typ == spritespeed_framespersecond) ? (spd / room_speed) : spd;
+image_speed = (typ == spritespeed_framespersecond) ? (spd / game_get_speed(gamespeed_fps)) : spd;
 
 // ワンショット終了判定：最後まで行ったら消す
 // image_speed で進むので image_index を見て判定する

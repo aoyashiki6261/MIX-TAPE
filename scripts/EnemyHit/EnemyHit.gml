@@ -15,7 +15,6 @@ function EnemyHit(_damage) {
     flash = true;
 
     if (hp > 0) {
-		show_debug_message("[damage/EnemyHit] hp<=0 id=" + string(id));
         state  = states.HIT;
         hitNow = true;
         return; // ★ 生存中はここで終了

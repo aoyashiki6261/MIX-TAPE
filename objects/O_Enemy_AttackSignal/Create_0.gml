@@ -8,7 +8,7 @@ var typ = sprite_get_speed_type(sprite_index);
 
 // sprite speed が「フレーム/秒」なら room_speed 基準の image_speed に変換
 // 「フレーム/ゲームフレーム」ならそのまま
-image_speed = (typ == spritespeed_framespersecond) ? (spd / room_speed) : spd;
+image_speed = (typ == spritespeed_framespersecond) ? (spd / game_get_speed(gamespeed_fps)) : spd;
 
 // オフセット（敵からの相対位置）
 if (!variable_instance_exists(id, "offset_right_x")) offset_right_x = ENEMY_SIGNAL_OFFSET_RIGHT_X;

@@ -41,9 +41,12 @@ path_position = 0;
 //ステートマシン
 state = 0;
 
-//矢の発射ステータス
-cooldownTime = ENEMY_COOLDOWN_TIME_FRAMES;
-shootTimer   = irandom(cooldownTime);
+cooldownTime  = ENEMY_COOLDOWN_TIME_FRAMES;
+cooldownTimer = cooldownTime; // ★最初の攻撃だけ即可能にする（最初から満タン）
+shootTimer    = 0;// ★注意：shootTimer は ATTACK の「溜め/発射/硬直」用なので、ここでは触らない
+
+// ★次に攻撃できるまでのクールダウン
+cooldown_timer = irandom(ENEMY_COOLDOWN_TIME_FRAMES);
 
 //★矢を撃つまでの構える時間
 windupTime   = ENEMY_WINDUP_TIME;

@@ -39,8 +39,6 @@ function is_dead(){
     if (state == states.DEAD) return true;
 
     if (hp <= 0){
-        show_debug_message("[is_dead] state->DEAD id=" + string(id)
-            + " obj=" + string(object_get_name(object_index)));
         state       = states.DEAD;
         hp          = 0;
         image_index = 0;

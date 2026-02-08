@@ -11,7 +11,6 @@ function Player_State_Free(do_step) {
     } else {
         static _warn_move = false;
         if (!_warn_move) {
-            show_debug_message("ERROR: Calc_movement が未定義です（Createで代入されていない）→ Freeでフォールバック移動します");
             _warn_move = true;
         }
 
@@ -107,10 +106,6 @@ function Player_State_Free(do_step) {
                 dodge_dir_y = last_move_dir_y;
             }
 
-            show_debug_message("RUN DODGE(dir from BUFFER) dir=("
-                + string(dodge_dir_x) + "," + string(dodge_dir_y)
-                + ") facing=" + string(facing) + " prev_state=FREE");
-
             // バッファ消去（buffer_clear があれば使う／無ければ直消し）
             if (variable_instance_exists(id, "buffer_clear")) {
                 buffer_clear();
@@ -187,10 +182,7 @@ function Player_State_Free(do_step) {
 
             var _m1 = point_distance(0, 0, dodge_dir_x, dodge_dir_y);
             if (_m1 > 0.0001) {
-                show_debug_message("RUN DODGE(dir from INPUT) dir=("
-                    + string(dodge_dir_x) + "," + string(dodge_dir_y)
-                    + ") facing=" + string(facing) + " prev_state=FREE");
-
+             
                 Player_StartDodge();
                 dash = false;
                 return;
